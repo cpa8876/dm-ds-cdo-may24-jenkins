@@ -1,0 +1,19 @@
+# /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/Jenkins_devops_exams/docker-compose.yml
+version: '3'
+name: <dm-jenkins-cpa-infra>
+
+services:
+  jenkins:
+    image: jenkins/jenkins:lts
+    privileged: true
+    user: root
+    ports:
+      - 8280:8080
+      - 50000:50000
+    container_name: jenkins
+    restart: always
+    volumes:
+      - /opt/jenkins-training/jenkins_compose/jenkins_configuration:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /usr/bin/docker:/usr/bin/docker
+
