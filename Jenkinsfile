@@ -13,8 +13,8 @@ pipeline {
         script {
           sh '''
             //sudo docker rm -f jenkins
-            sudo docker rm -f my-ctnr-ds-fastapi
-            sudo docker build -t $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG .
+            docker rm -f my-ctnr-ds-fastapi
+            docker build -t $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG .
             sleep 6
           '''
         }
@@ -26,7 +26,7 @@ pipeline {
         script {
           sh '''
             //sudo docker run -d -p 80:80 --name jenkins $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG
-            sudo docker run -d -p 80:80 --name my-ctnr-ds-fastapi $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG
+            docker run -d -p 80:80 --name my-ctnr-ds-fastapi $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG
             sleep 10
           '''
         }
@@ -51,8 +51,8 @@ pipeline {
       steps {
         script {
           sh '''
-            sudo docker login -u $DOCKER_ID -p $DOCKER_PASS
-            sudo docker push $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG
+            docker login -u $DOCKER_ID -p $DOCKER_PASS
+            docker push $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG
           '''
         }
       }
@@ -72,7 +72,7 @@ pipeline {
             cp fastapi/values.yaml values.yml
             cat values.yml
             sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
-            sudo helm upgrade --install app fastapi --values=values.yml --namespace dev
+            helm upgrade --install app fastapi --values=values.yml --namespace dev
           '''
         }
       }
@@ -92,7 +92,7 @@ pipeline {
             cp fastapi/values.yaml values.yml
             cat values.yml
             sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
-            sudo helm upgrade --install app fastapi --values=values.yml --namespace staging
+            helm upgrade --install app fastapi --values=values.yml --namespace staging
           '''
         }
       }
@@ -118,7 +118,7 @@ pipeline {
             cp fastapi/values.yaml values.yml
             cat values.yml
             sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
-            sudo helm upgrade --install app fastapi --values=values.yml --namespace prod
+            helm upgrade --install app fastapi --values=values.yml --namespace prod
           '''
         }
       }
