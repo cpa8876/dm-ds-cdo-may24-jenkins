@@ -33,9 +33,9 @@ pipeline {
 
     stage('Test Acceptance'){ // we launch the curl command to validate that the container responds to the request
       steps {
-        script {
+        script {//curl localhost
           sh '''
-            curl localhost
+            curl 127.0.0.1
           '''
         }
       }
