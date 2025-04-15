@@ -35,7 +35,7 @@ pipeline {
       steps {
         script {//curl localhost or curl 127.0.0.1:8480 "curl -svo /dev/null http://localhost" or docker exec -it my-ctnr-ds-fastapi curl localhost
           sh '''
-            curl localhost
+            curl my-ctnr-ds-fastapi
           '''
         }
       }
