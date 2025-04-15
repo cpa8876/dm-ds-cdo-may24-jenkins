@@ -24,7 +24,7 @@ pipeline {
       steps {
         script {
           sh '''
-            docker run --network=my-net -d -p 80:80 --name my-ctnr-ds-fastapi $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG
+            docker run --network=dm-jenkins-cpa-infra_my-net -d -p 80:80 --name my-ctnr-ds-fastapi $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG
             sleep 10
           '''
         }
