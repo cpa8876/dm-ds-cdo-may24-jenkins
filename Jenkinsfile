@@ -3,8 +3,8 @@ pipeline {
   environment { // Declaration of environment variables
     DOCKER_ID = "cpa8876" // replace this with your docker-id
     DOCKER_IMAGE = "ds-fastapi"
-    //#DOCKER_TAG = "v.${BUILD_ID}.0" // we will tag our images with the current build in order to increment the value by 1 with each new build
-    DOCKER_TAG="latest"
+    DOCKER_TAG = "v.${BUILD_ID}.0" // we will tag our images with the current build in order to increment the value by 1 with each new build
+    //DOCKER_TAG="latest"
 }
   agent any // Jenkins will be able to select all available agents
   stages {
@@ -12,8 +12,8 @@ pipeline {
       steps {
         script {
           sh '''
-            docker rm -f jenkins
-            docker build -t $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG .
+            sudo docker rm -f jenkins
+            sudo docker build -t $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG .
             sleep 6
           '''
         }
@@ -24,7 +24,7 @@ pipeline {
       steps {
         script {
           sh '''
-            docker run -d -p 80:80 --name jenkins $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG
+            sudo docker run -d -p 80:80 --name jenkins $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG
             sleep 10
           '''
         }
@@ -49,8 +49,8 @@ pipeline {
       steps {
         script {
           sh '''
-            docker login -u $DOCKER_ID -p $DOCKER_PASS
-            docker push $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG
+            sudo docker login -u $DOCKER_ID -p $DOCKER_PASS
+            sudo docker push $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG
           '''
         }
       }
@@ -70,7 +70,7 @@ pipeline {
             cp fastapi/values.yaml values.yml
             cat values.yml
             sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
-            helm upgrade --install app fastapi --values=values.yml --namespace dev
+            sudo helm upgrade --install app fastapi --values=values.yml --namespace dev
           '''
         }
       }
@@ -90,7 +90,7 @@ pipeline {
             cp fastapi/values.yaml values.yml
             cat values.yml
             sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
-            helm upgrade --install app fastapi --values=values.yml --namespace staging
+            sudo helm upgrade --install app fastapi --values=values.yml --namespace staging
           '''
         }
       }
@@ -116,7 +116,7 @@ pipeline {
             cp fastapi/values.yaml values.yml
             cat values.yml
             sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
-            helm upgrade --install app fastapi --values=values.yml --namespace prod
+            sudo helm upgrade --install app fastapi --values=values.yml --namespace prod
           '''
         }
       }
