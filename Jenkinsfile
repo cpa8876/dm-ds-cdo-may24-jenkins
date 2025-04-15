@@ -12,7 +12,6 @@ pipeline {
       steps {
         script {
           sh '''
-            // sudo docker rm -f jenkins
             docker rm -f my-ctnr-ds-fastapi
             docker build -t $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG .
             sleep 6
@@ -25,7 +24,6 @@ pipeline {
       steps {
         script {
           sh '''
-            // sudo docker run -d -p 80:80 --name jenkins $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG
             docker run -d -p 80:80 --name my-ctnr-ds-fastapi $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG
             sleep 10
           '''
