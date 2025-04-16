@@ -48,13 +48,10 @@ pipeline {
         }
       steps {
         script {
-          withKubeConfig(caCertificate: '', clusterName: 'k3d-mycluster', contextName: 'k3d-mycluster', credentialsId: 'k8s-jenkins-secret', namespace: '', restrictKubeConfigAccess: false, serverUrl: 'https://0.0.0.0:41521') {
-    // some block
           sh '''
             docker login -u $DOCKER_ID -p $DOCKER_PASS
             docker push $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG
           '''
-          }
         }
       }
     }
@@ -65,16 +62,15 @@ pipeline {
       }
       steps {
         script {
+          withKubeConfig(caCertificate: '', clusterName: 'k3d-mycluster', contextName: 'k3d-mycluster', credentialsId: 'k8s-jenkins-secret', namespace: '', restrictKubeConfigAccess: false, serverUrl: 'https://0.0.0.0:41521') {
+    // some block
           sh '''
-            rm -Rf .kube
-            mkdir .kube
-            ls
-            cat $KUBECONFIG > .kube/config
             cp fastapi/values.yaml values.yml
             cat values.yml
             sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
             helm upgrade --install app fastapi --values=values.yml --namespace dev
           '''
+        }
         }
       }
     }
