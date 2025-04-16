@@ -48,10 +48,13 @@ pipeline {
         }
       steps {
         script {
+          withKubeConfig(caCertificate: '', clusterName: 'k3d-mycluster', contextName: 'k3d-mycluster', credentialsId: 'k8s-jenkins-secret', namespace: '', restrictKubeConfigAccess: false, serverUrl: 'https://0.0.0.0:41521') {
+    // some block
           sh '''
             docker login -u $DOCKER_ID -p $DOCKER_PASS
             docker push $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG
           '''
+          }
         }
       }
     }

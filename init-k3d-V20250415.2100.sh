@@ -24,7 +24,6 @@ sudo docker image rmi -f $(sudo docker images -q)
 sudo docker volume ls
 sudo docker volume rm -f $(sudo docker volume ls -q) 
 
-sudo docker network ls
 sudo docker volume ls
 sudo docker images
 sudo docker ps -a
