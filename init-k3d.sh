@@ -361,8 +361,8 @@ cat ./datas/data-k3d/k3s_v2.yaml
 
 ###############
 
-#####          3.1.1) Delete and recreate directory [./datas/data-k3d] to restart without existant file [./datas/data-k3d/k3s.yaml]
-sudo docker cp ./datas/data-k3d/k3s.yaml jenkins:/datas/data-k3d/k3s.yaml
+#####          3.1.4) git commit -m "update Jenkinsfile to deploy the fastapi on the k3s cluster from the ./datas/Data-k3d/k"s_v2.yaml"
+###### sudo docker cp ./datas/data-k3d/k3s_v2.yaml jenkins:/datas/data-k3d/k3s.yaml
 ###############################
 
 
