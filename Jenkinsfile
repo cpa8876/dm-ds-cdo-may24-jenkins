@@ -2,6 +2,7 @@
 pipeline {
   environment { // Declaration of environment variables
     DOCKER_ID = "cpa8876" // replace this with your docker-id
+    DOCKER_IMAGE = "fastapi"
     DOCKER_IMAGE1 = "movie-ds-fastapi"
     DOCKER_IMAGE2 = "casts-ds-fastapi"
     DOCKER_TAG = "v.${BUILD_ID}.0" // we will tag our images with the current build in order to increment the value by 1 with each new build
@@ -15,11 +16,7 @@ pipeline {
           sh '''
             cd Jenkins_devops_exams/movie-service
             docker rm -f movie-ds-fastapi
-            docker build -t $DOCKER_ID/$DOCKER_IMAGE1:$DOCKER_TAG .
-            sleep 6
-            cd Jenkins_devops_exams/cast-service
-            docker rm -f casts-ds-fastapi
-            docker build -t $DOCKER_ID/$DOCKER_IMAGE2:$DOCKER_TAG .
+            docker build -t $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG .
             sleep 6
           '''
         }
