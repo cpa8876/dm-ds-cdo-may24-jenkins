@@ -2,7 +2,8 @@
 pipeline {
   environment { // Declaration of environment variables
     DOCKER_ID = "cpa8876" // replace this with your docker-id
-    DOCKER_IMAGE = "ds-fastapi"
+    DOCKER_IMAGE1 = "movie-ds-fastapi"
+    DOCKER_IMAGE2 = "casts-ds-fastapi"
     DOCKER_TAG = "v.${BUILD_ID}.0" // we will tag our images with the current build in order to increment the value by 1 with each new build
     //DOCKER_TAG="latest"
 }
@@ -12,8 +13,13 @@ pipeline {
       steps {
         script {
           sh '''
-            docker rm -f my-ctnr-ds-fastapi
-            docker build -t $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG .
+            cd Jenkins_devops_exams/movie-service
+            docker rm -f movie-ds-fastapi
+            docker build -t $DOCKER_ID/$DOCKER_IMAGE1:$DOCKER_TAG .
+            sleep 6
+            cd Jenkins_devops_exams/cast-service
+            docker rm -f casts-ds-fastapi
+            docker build -t $DOCKER_ID/$DOCKER_IMAGE2:$DOCKER_TAG .
             sleep 6
           '''
         }
@@ -24,7 +30,9 @@ pipeline {
       steps {
         script {
           sh '''
-            docker run --network=dm-jenkins-cpa-infra_my-net -d -p 80:80 --name my-ctnr-ds-fastapi $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG
+            docker run --network=dm-jenkins-cpa-infra_my-net -d -p 80:80 --name my-movie-ds-fastapi $DOCKER_ID/$DOCKER_IMAGE1:$DOCKER_TAG
+            sleep 10
+            docker run --network=dm-jenkins-cpa-infra_my-net -d -p 80:80 --name my-casts-ds-fastapi $DOCKER_ID/$DOCKER_IMAGE1:$DOCKER_TAG
             sleep 10
           '''
         }
@@ -64,6 +72,7 @@ pipeline {
         script {
           // withKubeConfig(caCertificate: '', clusterName: 'k3d-mycluster', contextName: 'k3d-mycluster', credentialsId: 'k8s-jenkins-secret', namespace: '', restrictKubeConfigAccess: false, serverUrl: 'https://0.0.0.0:41521') {
     // some block
+                // helm upgrade --install app fastapi --values=values.yml --namespace dev
           sh '''
             rm -Rf .kube
             mkdir .kube
@@ -72,7 +81,7 @@ pipeline {
             cp fastapi/values.yaml values.yml
             cat values.yml
             sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
-            helm upgrade --install app fastapi --values=values.yml --namespace dev
+            helm upgrade --install fastapi ./app --namespace dev --create-namespace
           '''
         //}
         }
@@ -93,7 +102,7 @@ pipeline {
             cp fastapi/values.yaml values.yml
             cat values.yml
             sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
-            helm upgrade --install app fastapi --values=values.yml --namespace staging
+            helm upgrade --install fastapi ./app --namespace staging --create-namespace
           '''
         }
       }
@@ -119,7 +128,7 @@ pipeline {
             cp fastapi/values.yaml values.yml
             cat values.yml
             sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
-            helm upgrade --install app fastapi --values=values.yml --namespace prod
+           helm upgrade --install fastapi ./app --namespace prod --create-namespace
           '''
         }
       }

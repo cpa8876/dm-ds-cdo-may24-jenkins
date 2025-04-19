@@ -63,13 +63,6 @@ sudo docker volume ls
 sudo docker images
 sudo docker ps -a
 
-### 0.2) Deploy docker compose jenkins servesudor
-sudo docker compose up -d
-
-sleep 6
-#ip_jenkins=$(sudo docker exec -it jenkins hostname -i)
-# echo $ip_jenkins
-#sudo docker exec -it jenkins hostname -i > foo && sed -e 's/^M//g' foo && ip_jenkins=`cat foo` && echo $ip_jenkins && rm foo
 
 
 ################################################################
@@ -121,6 +114,16 @@ sudo kubectl version --client
 
 #####          1.1.5) Test 1 to ensure the version you installed is up-to-date:
 sudo kubectl version --client --output=yaml
+###############
+
+#####          1.1.6) Deploy docker compose jenkins servesudor
+sudo docker compose up -d
+
+sleep 6
+#ip_jenkins=$(sudo docker exec -it jenkins hostname -i)
+# echo $ip_jenkins
+#sudo docker exec -it jenkins hostname -i > foo && sed -e 's/^M//g' foo && ip_jenkins=`cat foo` && echo $ip_jenkins && rm foo
+
 ###############################
 
 
@@ -182,14 +185,16 @@ echo "$(cat checksums.txt | grep k3d-linux-amd | awk '{ print $1 }') k3d-linux-a
 
 #####          1.3.3)  Find the helm binary in the unpacked directory, and move it to its desired destination (mv linux-amd64/helm /usr/local/bin/helm)
 sudo mv k3d-linux-amd64 /usr/local/bin/k3d
+sudo chmod 744 /usr/local/bin/k3d
 ls -lha /usr/local/bin/k3d
 ##### => -rwx------ 1 cpa cpa 24M 17 avril 17:29 /usr/local/bin/k3d
 ###############
 
 #####          1.3.4) Test 1 to ensure the version you installed is up-to-date:
-sudo mv k3d-linux-amd64 /usr/local/bin/k3d
-##### => k3d version v5.8.3
-##### => k3s version v1.31.5-k3s1 (default)
+sudo k3d version
+###### cpa@debiana8:~/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins3$ sudo k3d --version
+####### => k3d version v5.8.3
+####### => k3s version v1.31.5-k3s1 (default)
 ################################################################
 
 
@@ -263,7 +268,7 @@ sudo kubectl cluster-info
 
 ###############################
 ###    2.4) List the 3 nodes of cluster k3s [my-cluster] composed with one ctl master and 2 workers
-sudo kubectl cluster-info
+sudo kubectl get nodes
 ####  cpa@debiana8:~/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins2$ sudo kubectl get nodes -o wide
 ##### => NAME                     STATUS   ROLES                  AGE   VERSION        INTERNAL-IP   EXTERNAL-IP   OS-IMAGE           KERNEL-##### => VERSION   CONTAINER-RUNTIME
 ##### => k3d-mycluster-agent-0    Ready    <none>                 13m   v1.31.5+k3s1   172.21.0.5    <none>        K3s v1.31.5+k3s1   6.8.12-9-pve     containerd://1.7.23-k3s2
@@ -369,8 +374,8 @@ cat ./datas/data-k3d/k3s_v2.yaml
 ###############################
 
 ##    3.2)  You can check the nodes using
-sudo kubectl get nodes
-sudo docker exec -it jenkins kubectl get nodes
+### sudo kubectl get nodes
+### sudo docker exec -it jenkins kubectl get nodes
 ################################################################
 
 
@@ -431,7 +436,7 @@ sudo kubectl apply -f rancher.yaml
 
 
 ################################################################
-### 7.) Verification
+### 6.) Verification
 #      6.1) Display all VM docker
 sudo docker images
 sudo docker volume ls -a
@@ -439,13 +444,13 @@ sudo docker ps -a
 ###############################
 
 ###############################
-#      7.2) Display all nodes of the k3s cluster
+#      6.2) Display all nodes of the k3s cluster
 sudo kubectl get nodes -o wide
 sudo kubectl get all -A
 ###############################
 
 ###############################
-#      7.3) Display the password rancher monitoring k3s cluster
+#      6.3) Display the password rancher monitoring k3s cluster
 #kubectl get secret --namespace cattle-system bootstrap-secret -o go-template='{{.data.bootstrapPassword|base64decode}}{{"\n"}}'
 ################################################################
 
