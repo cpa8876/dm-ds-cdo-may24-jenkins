@@ -21,7 +21,9 @@ pipeline {
         }
       }
     }
-
+// sudo docker network create dm-jenkins-cpa-infra_my-net
+// sudo docker network ls
+// ssh-add /home/cpa/Documents/.ssh/ssh-key-github-cpa8876
     stage('Docker run'){ // run container from our builded image
       steps {
         script {
