@@ -1,22 +1,7 @@
-from fastapi import FastAPI, Request
-
+# Exemple cours jenkins ds
+from typing import Union
+from fastapi import FastAPI
 app = FastAPI()
-
-
-@app.get("/api/v1/checkapi")
-async def checkapi():
-    return {"message": "Hello World..."}
-
-@app.get("/api/v1/get")
-async def getsomething():
-    return {"method": "get"}
-@app.post("/api/v1/post")
-async def postsomething(info : Request):    
-    return {
-        "status" : "SUCCESS",
-        "data" : {
-        "id": 100,
-        "name": "sajjad",
-        "city":"Tehran"
-        }
-    }
+@app.get("/")
+def read_root():
+    return {"Hello": "We Love Devops !!"}
