@@ -12,11 +12,12 @@ services:
       - 50000:50000
     container_name: jenkins
     restart: always
-    # environment:
-     # - KUBECONFIG="/datas/data-k3d/k3s.yaml"
+    environment:
+      - KUBECONFIG="/usr/local/k3s.yaml
 
     volumes:
      # - /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins2/datas/data-k3d:/datas/data-k3d
+      - /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins3/datas/data-k3d/k3s_v2.yaml:/usr/local/k3s.yaml
       - /opt/jenkins-training/jenkins_compose/jenkins_configuration:/var/jenkins_home
       - /var/run/docker.sock:/var/run/docker.sock
       - /var/run/kubectl.sock:/var/run/kubectl.sock
@@ -24,12 +25,16 @@ services:
       - /usr/bin/docker:/usr/bin/docker
       - /usr/local/bin/kubectl:/usr/local/bin/kubectl
       - /usr/local/bin/helm:/usr/local/bin/helm
+
+# https://forums.docker.com/t/docker-compose-cant-connect-to-existing-network/94370/13
     networks:
-      - my-net
+      #- my-net
+      - dm-jenkins-cpa-infra_my-net
 
     #command: ["/bin/bash", "-c", "./init-k3d.sh"]
 
 networks:
-  my-net:
+  dm-jenkins-cpa-infra_my-net:
+    external: true
     driver: bridge
 

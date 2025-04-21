@@ -116,13 +116,11 @@ sudo kubectl version --client
 sudo kubectl version --client --output=yaml
 ###############
 
-#####          1.1.6) Deploy docker compose jenkins servesudor
-sudo docker compose up -d
-
-sleep 6
-#ip_jenkins=$(sudo docker exec -it jenkins hostname -i)
-# echo $ip_jenkins
-#sudo docker exec -it jenkins hostname -i > foo && sed -e 's/^M//g' foo && ip_jenkins=`cat foo` && echo $ip_jenkins && rm foo
+#####          1.1.6) Delete and recreate docker network delete / create
+sudo docker network delete dm-jenkins-cpa-infra_my-net
+sudo docker network create dm-jenkins-cpa-infra_my-net
+sudo docker network ls
+###############suydo
 
 ###############################
 
@@ -430,9 +428,20 @@ EOF
 ###############################
 
 ###############################
-#    5.2) Then apply it using
+##    5.2) Then apply it using
 sudo kubectl apply -f rancher.yaml
+sleep 15
 ################################################################
+
+
+################################################################
+# 6) Deploy docker compose jenkins servesudor
+sudo docker compose up -d
+
+sleep 6
+#ip_jenkins=$(sudo docker exec -it jenkins hostname -i)
+# echo $ip_jenkins
+#sudo docker exec -it jenkins hostname -i > foo && sed -e 's/^M//g' foo && ip_jenkins=`cat foo` && echo $ip_jenkins && rm foo
 
 
 ################################################################
@@ -447,6 +456,7 @@ sudo docker ps -a
 #      6.2) Display all nodes of the k3s cluster
 sudo kubectl get nodes -o wide
 sudo kubectl get all -A
+sudo docker exec -it jenkins kubectl get nodes
 ###############################
 
 ###############################
