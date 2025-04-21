@@ -39,7 +39,8 @@ pipeline {
       steps {
         script {//curl localhost or curl 127.0.0.1:8480 "curl -svo /dev/null http://localhost" or docker exec -it my-ctnr-ds-fastapi curl localhost
           sh '''
-            curl my-ctnr-ds-fastapi
+            apt update -y && apt full-upgrade-y && apt install curl -y
+            curl my-ctnr-ds-fastapi:8000/api/v1/checkapi
           '''
         }
       }
