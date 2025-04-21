@@ -5,7 +5,7 @@ app = FastAPI()
 
 @app.get("/api/v1/checkapi")
 async def checkapi():
-    return {"message": "Hello World..."}
+    return {"message": "Hello World... from cpa"}
 
 @app.get("/api/v1/get")
 async def getsomething():
