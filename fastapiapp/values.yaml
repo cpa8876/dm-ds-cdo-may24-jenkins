@@ -6,12 +6,12 @@ replicaCount: 3
 
 image:
 #  repository: sajjadhz/fastapiapp
-  repository: cpa8876/fastapiapp
+  repository: cpa8876/ds-fastapi
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: "latest"
 
-imagePullSecrets: 
+imagePullSecrets:
   - name: "regcred"
 nameOverride: ""
 fullnameOverride: ""
@@ -41,7 +41,7 @@ securityContext: {}
 service:
   type: NodePort
   port: 80
-  nodePort: 30007  
+  nodePort: 30009
   targetPort: 8000
 
 ingress:
