@@ -97,10 +97,10 @@ pipeline {
             mkdir .kube
             ls
             cat $KUBECONFIG > .kube/config
-            cp fastapi/values.yaml values.yml
+            cp /fastapi/values.yaml values.yml
             cat values.yml
             sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
-            helm upgrade --install fastapi /fastapiapp --namespace staging --create-namespace
+            helm upgrade --kubeconfig /usr/local/k3s.yaml --install fastapi /fastapiapp --namespace staging --create-namespace
           '''
         }
       }
@@ -123,10 +123,10 @@ pipeline {
             mkdir .kube
             ls
             cat $KUBECONFIG > .kube/config
-            cp fastapi/values.yaml values.yml
+            cp /fastapi/values.yaml values.yml
             cat values.yml
             sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
-           helm upgrade --install fastapi /fastapiapp --namespace prod --create-namespace
+           helm upgrade --kubeconfig /usr/local/k3s.yaml --install fastapi /fastapiapp --namespace prod --create-namespace
           '''
         }
       }
