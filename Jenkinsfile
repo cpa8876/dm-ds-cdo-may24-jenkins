@@ -70,15 +70,16 @@ pipeline {
           // withKubeConfig(caCertificate: '', clusterName: 'k3d-mycluster', contextName: 'k3d-mycluster', credentialsId: 'k8s-jenkins-secret', namespace: '', restrictKubeConfigAccess: false, serverUrl: 'https://0.0.0.0:41521') {
     // some block
                 // helm upgrade --install app fastapi --values=values.yml --namespace dev
+                // cf B52 helm --kubeconfig : https://helm.sh/docs/helm/helm/
           sh '''
             rm -Rf .kube
             mkdir .kube
             ls
             cat $KUBECONFIG > .kube/config
-            cp fastapi/values.yaml values.yml
+            cp /fastapi/values.yaml values.yml
             cat values.yml
             sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
-            helm upgrade --install fastapi ./app --namespace dev --create-namespace
+            helm upgrade --kubeconfig /usr/local/k3s.yaml --install fastapi /fastapiapp --namespace dev --create-namespace
           '''
         //}
         }
@@ -99,7 +100,7 @@ pipeline {
             cp fastapi/values.yaml values.yml
             cat values.yml
             sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
-            helm upgrade --install fastapi ./app --namespace staging --create-namespace
+            helm upgrade --install fastapi /fastapiapp --namespace staging --create-namespace
           '''
         }
       }
@@ -125,7 +126,7 @@ pipeline {
             cp fastapi/values.yaml values.yml
             cat values.yml
             sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
-           helm upgrade --install fastapi ./app --namespace prod --create-namespace
+           helm upgrade --install fastapi /fastapiapp --namespace prod --create-namespace
           '''
         }
       }

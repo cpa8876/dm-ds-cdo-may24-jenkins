@@ -445,22 +445,22 @@ sleep 6
 
 
 ################################################################
-### 6.) Verification
-#      6.1) Display all VM docker
+### 7.) Verification
+#      7.1) Display all VM docker
 sudo docker images
 sudo docker volume ls -a
 sudo docker ps -a
 ###############################
 
 ###############################
-#      6.2) Display all nodes of the k3s cluster
+#      7.2) Display all nodes of the k3s cluster
 sudo kubectl get nodes -o wide
 sudo kubectl get all -A
-sudo docker exec -it jenkins kubectl get nodes
+sudo docker exec -it jenkins kubectl --kubeconfig /usr/local/k3s.yaml get nodes
 ###############################
 
 ###############################
-#      6.3) Display the password rancher monitoring k3s cluster
+#      7.3) Display the password rancher monitoring k3s cluster
 #kubectl get secret --namespace cattle-system bootstrap-secret -o go-template='{{.data.bootstrapPassword|base64decode}}{{"\n"}}'
 ################################################################
 
