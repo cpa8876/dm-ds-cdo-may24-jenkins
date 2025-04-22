@@ -76,7 +76,7 @@ pipeline {
             mkdir .kube
             ls
             cat $KUBECONFIG > .kube/config
-            cp /fastapi/values-dev.yaml /fastapiappvalues.yml
+            cp /fastapi/values-dev.yaml /fastapiapp/values.yml
             cat values.yml
             sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
             helm upgrade --kubeconfig /usr/local/k3s.yaml --install fastapi /fastapiapp --namespace dev --create-namespace
