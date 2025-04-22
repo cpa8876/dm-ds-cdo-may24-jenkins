@@ -79,6 +79,7 @@ pipeline {
             cp /fastapi/values-dev.yaml values.yml
             cat values.yml
             sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
+            kubectl --kubeconfig /usr/local/k3s.yaml delete namespace dev
             helm upgrade --kubeconfig /usr/local/k3s.yaml --install fastapi-dev /fastapiapp --namespace dev --create-namespace
           '''
         //}
@@ -100,6 +101,7 @@ pipeline {
             cp /fastapi/values-staging.yaml values.yml
             cat values.yml
             sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
+            kubectl --kubeconfig /usr/local/k3s.yaml delete namespace staging
             helm upgrade --kubeconfig /usr/local/k3s.yaml --install fastapi-staging /fastapiapp --namespace staging --create-namespace
           '''
         }
@@ -126,6 +128,7 @@ pipeline {
             cp /fastapi/values-prod.yaml values.yml
             cat values.yml
             sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
+            kubectl --kubeconfig /usr/local/k3s.yaml delete namespace prod
             helm upgrade --kubeconfig /usr/local/k3s.yaml --install fastapi /fastapiapp-prod --namespace prod --create-namespace
           '''
         }
