@@ -76,7 +76,7 @@ pipeline {
             mkdir .kube
             ls
             cat $KUBECONFIG > .kube/config
-            cp /fastapi/values.yaml values.yml
+            cp /fastapi/values-dev.yaml values.yml
             cat values.yml
             sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
             helm upgrade --kubeconfig /usr/local/k3s.yaml --install fastapi /fastapiapp --namespace dev --create-namespace
@@ -97,7 +97,7 @@ pipeline {
             mkdir .kube
             ls
             cat $KUBECONFIG > .kube/config
-            cp /fastapi/values.yaml values.yml
+            cp /fastapi/values-staging.yaml values.yml
             cat values.yml
             sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
             helm upgrade --kubeconfig /usr/local/k3s.yaml --install fastapi /fastapiapp --namespace staging --create-namespace
@@ -123,10 +123,10 @@ pipeline {
             mkdir .kube
             ls
             cat $KUBECONFIG > .kube/config
-            cp /fastapi/values.yaml values.yml
+            cp /fastapi/values-prod.yaml values.yml
             cat values.yml
             sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
-           helm upgrade --kubeconfig /usr/local/k3s.yaml --install fastapi /fastapiapp --namespace prod --create-namespace
+            helm upgrade --kubeconfig /usr/local/k3s.yaml --install fastapi /fastapiapp --namespace prod --create-namespace
           '''
         }
       }
@@ -136,7 +136,7 @@ pipeline {
   // ..
     failure {
       echo "This will run if the job failed"
-      mail to: "fall-lewis.y@datascientest.com",
+      mail to: "cristofe.pascale@gmail.com",
         subject: "${env.JOB_NAME} - Build # ${env.BUILD_ID} has failed",
         body: "For more info on the pipeline failure, check out the console output at ${env.BUILD_URL}"
     }
