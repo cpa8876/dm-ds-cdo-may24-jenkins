@@ -2,21 +2,21 @@
 
 ## Prequies
 
-### Step 1) Create Github account and a repository for homework
+### Step 1)  Create a directory for the homework
+  3.1) mkdir -p DM-SP04-C04-JENKINS-CPA-MAY2024
+  3.2) cd   ./DM-SP04-C04-JENKINS-CPA-MAY2024
+  
+### Step 2) Create Github account and a repository for homework
   1.1) Url  repo github of homework : https://github.com/cpa8876/ 
   1.2) Url to clone this repo  : 
 git clone https://github.com/cpa8876/dm-ds-cdo-may24-jenkins.git 
   1.3) sshgen a pair of ssh keys to connect to the Github account and save this pair on the ./.ssh/ssh-key-github-cpa8876 and ssh-key-github-cpa8876.pub
 
-### Step 2) Create Dockerhub account
+### Step 3) Create Dockerhub account
    2.1) docker push dmcpa8876/dm-jenkins-cpa8876-fastapi:tagname
 https://hub.docker.com/repositories/dmcpa8876 
 
-### Step 3)  Create a directory for the homework
-  3.1) mkdir -p DM-SP04-C04-JENKINS-CPA-MAY2024
-  3.2) cd   ./DM-SP04-C04-JENKINS-CPA-MAY2024
-
-### Step 4) Clone repo github jenkins homeworks 
+### Step 4) Clone repo github jenkins datascientest homeworks
   4.1) git  clone https://github.com/DataScientest/Jenkins_devops_exams.git
 
 ### Step 5) Clone personnal Github repo for homework
@@ -31,7 +31,10 @@ drwxr-xr-x  7 cpa cpa 4,0K 24 avril 16:06 dm-ds-cdo-may24-jenkins
 drwxr-xr-x  6 cpa cpa 4,0K 15 avril 23:24 Jenkins_devops_exams
 drwxr-xr-x  5 cpa cpa 4,0K 25 mars  22:00 .ssh'''
 
-####  Step 6)  Delete all docker containers and images 
+####  Step 6)  Create the first version of README.md to test Github cpa8876/dm-ds-cdo-may24-jenkins
+ 
+
+####  Step 7)  Delete all docker containers and images 
 '''sudo docker compose down
 
 sudo docker ps -a
