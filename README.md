@@ -38,8 +38,7 @@ drwxr-xr-x  5 cpa cpa 4,0K 24 avril 16:05 .
 drwxr-xr-x 16 cpa cpa 4,0K 24 avril 16:04 ..
 drwxr-xr-x  7 cpa cpa 4,0K 24 avril 16:06 dm-ds-cdo-may24-jenkins
 drwxr-xr-x  6 cpa cpa 4,0K 15 avril 23:24 Jenkins_devops_exams
-drwxr-xr-x  5 cpa cpa 4,0K 25 mars  22:00 .ssh
-```
+drwxr-xr-x  5 cpa cpa 4,0K 25 mars  22:00 .ssh```
 
 ####  Step 6)  Create the first version of README.md to test Github cpa8876/dm-ds-cdo-may24-jenkins
  `git  status  `
@@ -52,6 +51,7 @@ drwxr-xr-x  5 cpa cpa 4,0K 25 mars  22:00 .ssh
 
 
 ####  Step 7)  Delete all docker containers and images 
+ 
  ````md
 sudo  docker compose down
 
@@ -71,5 +71,4 @@ sudo docker network rm $(sudo docker network ls -q)
 sudo docker network ls
 sudo docker volume ls
 sudo docker images
-sudo docker ps -a
- ```
+sudo docker ps -a ```
