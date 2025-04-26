@@ -203,18 +203,20 @@ k3d-mycluster-server-0   Ready    control-plane,master   4m7s    v1.31.5+k3s1
 3. Pipeline stage view
 4.  Email Extension Plugin Version 1876.v28d8d38315b_d 
 
-Screenshots of installed plugins
+#### S-7.3) Install pluginsScreenshots of installed plugins
 ![ ](img/jenkins-plugins-installed.png)
-#### Step 8 : Create a docker for the server jenkins and a specific network. 
 
-##### S-8.1) Create a docker network "dm-jenkins-cpa-infra_my-net", that will be used by the containers of "jenkins" server and the cluster k3d composed with a control master and 2 worker and a loadbalancer
+
+### Step 8 : Create a docker for the server jenkins and a specific network. 
+
+#### S-8.1) Create a docker network "dm-jenkins-cpa-infra_my-net", that will be used by the containers of "jenkins" server and the cluster k3d composed with a control master and 2 worker and a loadbalancer
 ```md
 sudo docker network rm d dm-jenkins-cpa-infra_my-net
 sudo docker network create dm-jenkins-cpa-infra_my-net
  sudo docker network ls
 ```
 
-##### S-8.2) Create the docker infrastructure composed by a server jenkins, a cluster k3d composed one loadbalancer server, a control master and 2 workers
+#####S-8.2) Create the docker infrastructure composed by a server jenkins, a cluster k3d composed one loadbalancer server, a control master and 2 workers
 ```md
 sudo docker compose down
 sudo docker compose up -d
@@ -242,9 +244,165 @@ exit
 ```
 
 
+### Step 9)  Test fastapi applications with ./dr01-python-microservices6/docker-compose .yaml
+#### S-9.1) Execute : « docker compose up -d » from /dr01-python-microservices6/
+```md
+cd dr01-python-microservices6/
+sudo docker compose up -d
+```
 
+#### S-9.2)  Test movies api from 192.168.20.1:8001
+- Test curl 
+```md
+ curl http://192.168.20.1:8001/api/v1/movies/docs 
 
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swagger-ui-dist@3/swagger-ui.css">
+    <link rel="shortcut icon" href="https://fastapi.tiangolo.com/img/favicon.png">
+    <title>FastAPI - Swagger UI</title>
+    </head>
+    <body>
+    <div id="swagger-ui">
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@3/swagger-ui-bundle.js"></script>
+    <!-- `SwaggerUIBundle` is now available on the page -->
+    <script>
+    const ui = SwaggerUIBundle({
+        url: '/api/v1/movies/openapi.json',
+    oauth2RedirectUrl: window.location.origin + '/docs/oauth2-redirect',
+        dom_id: '#swagger-ui',
+        presets: [
+        SwaggerUIBundle.presets.apis,
+        SwaggerUIBundle.SwaggerUIStandalonePreset
+        ],
+        layout: "BaseLayout",
+        deepLinking: true
+    })
+    </script>
+    </body>
+    </html>
+```
 
+- Screenshot from firefox
+http://192.168.20.1:8001/api/v1/movies/docs 
+![ ](img/8001-api-v1-movies-docs.png)
+
+#### S-9.3)  Test movies api from 192.168.20.1:8080
+- Test curl 
+```md
+curl http://192.168.20.1:8080/api/v1/movies/docs
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swagger-ui-dist@3/swagger-ui.css">
+    <link rel="shortcut icon" href="https://fastapi.tiangolo.com/img/favicon.png">
+    <title>FastAPI - Swagger UI</title>
+    </head>
+    <body>
+    <div id="swagger-ui">
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@3/swagger-ui-bundle.js"></script>
+    <!-- `SwaggerUIBundle` is now available on the page -->
+    <script>
+    const ui = SwaggerUIBundle({
+        url: '/api/v1/movies/openapi.json',
+    oauth2RedirectUrl: window.location.origin + '/docs/oauth2-redirect',
+        dom_id: '#swagger-ui',
+        presets: [
+        SwaggerUIBundle.presets.apis,
+        SwaggerUIBundle.SwaggerUIStandalonePreset
+        ],
+        layout: "BaseLayout",
+        deepLinking: true
+    })
+    </script>
+    </body>
+    </html>
+```
+
+- Screenshot from firefox
+http://192.168.20.1:8080/api/v1/movies/docs 
+![ ](img/8080-api-v1-movies-docs.png)
+
+#### S-9.3)  Test casts api from 192.168.20.1:8002
+- Test curl 
+```md
+curl http://192.168.20.1:8002/api/v1/casts/docs 
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swagger-ui-dist@3/swagger-ui.css">
+    <link rel="shortcut icon" href="https://fastapi.tiangolo.com/img/favicon.png">
+    <title>FastAPI - Swagger UI</title>
+    </head>
+    <body>
+    <div id="swagger-ui">
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@3/swagger-ui-bundle.js"></script>
+    <!-- `SwaggerUIBundle` is now available on the page -->
+    <script>
+    const ui = SwaggerUIBundle({
+        url: '/api/v1/casts/openapi.json',
+    oauth2RedirectUrl: window.location.origin + '/docs/oauth2-redirect',
+        dom_id: '#swagger-ui',
+        presets: [
+        SwaggerUIBundle.presets.apis,
+        SwaggerUIBundle.SwaggerUIStandalonePreset
+        ],
+        layout: "BaseLayout",
+        deepLinking: true
+    })
+    </script>
+    </body>
+    </html>
+```
+
+- Screenshot from firefox
+http://192.168.20.1:8002/api/v1/casts/docs
+![ ](img/8002-api-v1-casts-docs.png) 
+
+#### S-9.4)  Test casts api from 192.168.20.1:8080
+- Test curl 
+```md
+curl http://192.168.20.1:8080/api/v1/casts/docs
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swagger-ui-dist@3/swagger-ui.css">
+    <link rel="shortcut icon" href="https://fastapi.tiangolo.com/img/favicon.png">
+    <title>FastAPI - Swagger UI</title>
+    </head>
+    <body>
+    <div id="swagger-ui">
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@3/swagger-ui-bundle.js"></script>
+    <!-- `SwaggerUIBundle` is now available on the page -->
+    <script>
+    const ui = SwaggerUIBundle({
+        url: '/api/v1/casts/openapi.json',
+    oauth2RedirectUrl: window.location.origin + '/docs/oauth2-redirect',
+        dom_id: '#swagger-ui',
+        presets: [
+        SwaggerUIBundle.presets.apis,
+        SwaggerUIBundle.SwaggerUIStandalonePreset
+        ],
+        layout: "BaseLayout",
+        deepLinking: true
+    })
+    </script>
+    </body>
+```
+
+- Screenshot from firefox
+http://192.168.20.1:8080/api/v1/casts/docs 
+![ ](img/8080-api-v1-casts-docs.png)
+
+- Test curl 
 ```md
 
 
