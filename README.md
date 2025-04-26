@@ -88,7 +88,7 @@ git commit -m "Create README to explain architecture of my homework Jenkins vers
 git push origin main
 ```
 
-#### S-4.2) the other time
+#### S-4.2) Connect to github personal repository for the homework the second time and after
 ```md
 cd ~/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins
 ssh-add ../.ssh/ssh-key-github-cpa8876
@@ -192,10 +192,19 @@ k3d-mycluster-agent-1    Ready    <none>                 3m58s   v1.31.5+k3s1
 k3d-mycluster-server-0   Ready    control-plane,master   4m7s    v1.31.5+k3s1
 ```
 
-#### Step 7)  Connect with firefox on the jenkins server http://192.168.20.1:8280
+### Step 7)  Connect with firefox on the jenkins server http://192.168.20.1:8280
+
+#### S-7.1) Access on jenkins server
 ![ ](img/jenkins-login.png)
 
+#### S-7.2) Install plugins
+1. plugins suggered on initialisation of jenkins server
+2. Github integration
+3. Pipeline stage view
+4.  Email Extension Plugin Version 1876.v28d8d38315b_d 
 
+Screenshots of installed plugins
+![ ](img/jenkins-plugins-installed.png)
 #### Step 8 : Create a docker for the server jenkins and a specific network. 
 
 ##### S-8.1) Create a docker network "dm-jenkins-cpa-infra_my-net", that will be used by the containers of "jenkins" server and the cluster k3d composed with a control master and 2 worker and a loadbalancer
