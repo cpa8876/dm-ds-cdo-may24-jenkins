@@ -7,15 +7,24 @@ pipeline {
     DOCKER_IMAGE2 = "casts-ds-fastapi"
     DOCKER_TAG = "v.${BUILD_ID}.0" // we will tag our images with the current build in order to increment the value by 1 with each new build
     //DOCKER_TAG="latest"
+    //DOCKER_ID="cpa8876" // replace this with your docker-id
+    //DOCKER_IMAGE="ds-fastapi"
+    //DOCKER_IMAGE1="movie-ds-fastapi"
+    //DOCKER_IMAGE2="casts-ds-fastapi"
 }
   agent any // Jenkins will be able to select all available agents
   stages {
     stage('Docker Build'){ // docker build image stage
+    // docker rm -f my-ctnr-ds-fastapi
       steps {
         script {
           sh '''
-            docker rm -f my-ctnr-ds-fastapi
-            docker build -t $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG .
+            cd /app
+            docker rm -f $DOCKER_ID/$DOCKER_IMAGE1
+            docker build -t $DOCKER_ID/$DOCKER_IMAGE1:$DOCKER_TAG ./movie-service
+            docker rm -f $DOCKER_ID/$DOCKER_IMAGE2
+            docker build -t $DOCKER_ID/$DOCKER_IMAGE2:$DOCKER_TAG ./cast-service
+            docker image ls -a | grep fastapi
             sleep 6
           '''
         }
@@ -26,9 +35,9 @@ pipeline {
 // ssh-add /home/cpa/Documents/.ssh/ssh-key-github-cpa8876
     stage('Docker run'){ // run container from our builded image
       steps {
-        script {
+        script {// docker run --network=dm-jenkins-cpa-infra_my-net -d -p 8800:8000 --name my-ctnr-ds-fastapi $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG
           sh '''
-            docker run --network=dm-jenkins-cpa-infra_my-net -d -p 8800:8000 --name my-ctnr-ds-fastapi $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG
+            docker compose up -d
             sleep 10
           '''
         }

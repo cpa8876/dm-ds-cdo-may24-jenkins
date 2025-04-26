@@ -16,16 +16,19 @@ services:
       - KUBECONFIG="/usr/local/k3s.yaml
 
     volumes:
-     # - /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins2/datas/data-k3d:/datas/data-k3d
-      - /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins3/datas/data-k3d/k3s_v2.yaml:/usr/local/k3s.yaml
-      - /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins3/app:/app
-      - /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins3/fastapi:/fastapi
-      - /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins3/fastapiapp:/fastapiapp
+     # - /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/dm-ds-cdo-may24-jenkins5/datas/data-k3d:/datas/data-k3d
+      - ./init-k3d.sh:/app/init-k3d.sh
+      - /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/dm-ds-cdo-may24-jenkins5/datas/data-k3d/k3s_v2.yaml:/usr/local/k3s.yaml
+      - /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/dm-ds-cdo-may24-jenkins5/dr01-python-microservices6:/app
+      - /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/dm-ds-cdo-may24-jenkins5/fastapi:/fastapi
+      - /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/dm-ds-cdo-may24-jenkins5/fastapiapp:/fastapiapp
       - /opt/jenkins-training/jenkins_compose/jenkins_configuration:/var/jenkins_home
       - /var/run/docker.sock:/var/run/docker.sock
+      - /var/run/docker-compose.sock:/var/run/docker-compose.sock
       - /var/run/kubectl.sock:/var/run/kubectl.sock
       - /var/run/helm.sock:/var/run/helm.sock
       - /usr/bin/docker:/usr/bin/docker
+      - /usr/bin/docker-compose:/usr/bin/docker-compose
       - /usr/local/bin/kubectl:/usr/local/bin/kubectl
       - /usr/local/bin/helm:/usr/local/bin/helm
 
@@ -34,7 +37,7 @@ services:
       #- my-net
       - dm-jenkins-cpa-infra_my-net
 
-    #command: ["/bin/bash", "-c", "./init-k3d.sh"]
+    # command: ["/app/init-k3d.sh"]
 
 networks:
   dm-jenkins-cpa-infra_my-net:
