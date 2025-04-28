@@ -452,6 +452,12 @@ sleep 15
 # sudo docker network ls
 
 # ssh-add /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/.ssh/ssh-key-github-cpa8876
+# git branch -a
+# git status
+# git add .
+# git commit -m "update final version of Jenkinsfile step 1 buil images"
+# git push origin main
+
 
 sudo docker compose up -d
 
