@@ -3,7 +3,7 @@ pipeline {
   environment { // Declaration of environment variables
     DOCKER_ID = "cpa8876" // replace this with your docker-id
     DOCKER_IMAGE = "ds-fastapi"
-    DOCKER_IMAGE1 = "movie-ds-fastapi"
+    DOCKER_IMAGE1 = "movies-ds-fastapi"
     DOCKER_IMAGE2 = "casts-ds-fastapi"
     DOCKER_TAG = "v.${BUILD_ID}.0" // we will tag our images with the current build in order to increment the value by 1 with each new build
     //DOCKER_TAG="latest"
@@ -30,7 +30,27 @@ pipeline {
         }
       }
     }
+    stage('Docker run'){ // run container from our builded image
+      steps {
+        script {// docker run --network=dm-jenkins-cpa-infra_my-net -d -p 8800:8000 --name my-ctnr-ds-fastapi $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG
+          sh '''
+            docker compose up -d
+            sleep 10
+          '''
+        }
+      }
+    }
 
+    stage('Test Acceptance'){ // we launch the curl command to validate that the container responds to the request
+      steps {
+        script {//curl localhost or curl 127.0.0.1:8480 "curl -svo /dev/null http://localhost" or docker exec -it my-ctnr-ds-fastapi curl localhost
+          sh '''
+            apt update -y && apt full-upgrade-y && apt install curl -y
+            curl my-ctnr-ds-fastapi:8000/api/v1/checkapi
+          '''
+        }
+      }
+    }
 
   post { // send email when the job has failed
   // ..

@@ -1,7 +1,7 @@
 {
   "ref": "refs/heads/main",
-  "before": "f073aa70dc145e467cd617a48a1173853fef7a6d",
-  "after": "1b3e51425ac9b932accbaf6e2f1d9a378256be3c",
+  "before": "1b3e51425ac9b932accbaf6e2f1d9a378256be3c",
+  "after": "9137cf90a9cd50388ee77791cd91dc4dbc928b24",
   "repository": {
     "id": 953138023,
     "node_id": "R_kgDOOM-7Zw",
@@ -72,14 +72,14 @@
     "releases_url": "https://api.github.com/repos/cpa8876/dm-ds-cdo-may24-jenkins/releases{/id}",
     "deployments_url": "https://api.github.com/repos/cpa8876/dm-ds-cdo-may24-jenkins/deployments",
     "created_at": 1742662294,
-    "updated_at": "2025-04-26T21:24:18Z",
-    "pushed_at": 1745829790,
+    "updated_at": "2025-04-28T08:43:15Z",
+    "pushed_at": 1745835852,
     "git_url": "git://github.com/cpa8876/dm-ds-cdo-may24-jenkins.git",
     "ssh_url": "git@github.com:cpa8876/dm-ds-cdo-may24-jenkins.git",
     "clone_url": "https://github.com/cpa8876/dm-ds-cdo-may24-jenkins.git",
     "svn_url": "https://github.com/cpa8876/dm-ds-cdo-may24-jenkins",
     "homepage": null,
-    "size": 58791,
+    "size": 58800,
     "stargazers_count": 0,
     "watchers_count": 0,
     "language": "Shell",
@@ -136,15 +136,15 @@
   "deleted": false,
   "forced": false,
   "base_ref": null,
-  "compare": "https://github.com/cpa8876/dm-ds-cdo-may24-jenkins/compare/f073aa70dc14...1b3e51425ac9",
+  "compare": "https://github.com/cpa8876/dm-ds-cdo-may24-jenkins/compare/1b3e51425ac9...9137cf90a9cd",
   "commits": [
     {
-      "id": "1b3e51425ac9b932accbaf6e2f1d9a378256be3c",
-      "tree_id": "238ffc08c56598256dc5fb4791d14ed75f666620",
+      "id": "9137cf90a9cd50388ee77791cd91dc4dbc928b24",
+      "tree_id": "08cd881d79399592054e474d0c60493d80c72a5a",
       "distinct": true,
-      "message": "update final version of Jenkinsfile step 1 buil images",
-      "timestamp": "2025-04-28T10:42:40+02:00",
-      "url": "https://github.com/cpa8876/dm-ds-cdo-may24-jenkins/commit/1b3e51425ac9b932accbaf6e2f1d9a378256be3c",
+      "message": "update2",
+      "timestamp": "2025-04-28T12:23:50+02:00",
+      "url": "https://github.com/cpa8876/dm-ds-cdo-may24-jenkins/commit/9137cf90a9cd50388ee77791cd91dc4dbc928b24",
       "author": {
         "name": "cpa8876",
         "email": "cristofe.pascale@free.fr",
@@ -156,46 +156,23 @@
         "username": "cpa8876"
       },
       "added": [
-        ".init-k3d.sh.kate-swp",
-        "Jenkinsfile_V1_all",
-        "Readme.webhook-site.md",
-        "dr01-python-microservices6/charts/.helmignore",
-        "dr01-python-microservices6/charts/Chart.yaml",
-        "dr01-python-microservices6/charts/README.md",
-        "dr01-python-microservices6/charts/templates/NOTES.txt",
-        "dr01-python-microservices6/charts/templates/_helpers.tpl",
-        "dr01-python-microservices6/charts/templates/deployment.yaml",
-        "dr01-python-microservices6/charts/templates/hpa.yaml",
-        "dr01-python-microservices6/charts/templates/ingress.yaml",
-        "dr01-python-microservices6/charts/templates/service.yaml",
-        "dr01-python-microservices6/charts/templates/serviceaccount.yaml",
-        "dr01-python-microservices6/charts/templates/tests/test-connection.yaml",
-        "dr01-python-microservices6/charts/values.yaml",
-        "fastapi_postgres_k8s"
+        "file.json"
       ],
       "removed": [
-        "checksums.txt",
-        "helm-v3.17.3-linux-amd64.tar.gz",
-        "helm-v3.17.3-linux-amd64.tar.gz.sha256sum",
-        "kubectl",
-        "kubectl.sha256"
+        ".init-k3d.sh.kate-swp"
       ],
       "modified": [
-        "Jenkinsfile",
-        "README.md",
-        "datas/data-k3d/k3s.yaml",
-        "datas/data-k3d/k3s_v2.yaml",
         "init-k3d.sh"
       ]
     }
   ],
   "head_commit": {
-    "id": "1b3e51425ac9b932accbaf6e2f1d9a378256be3c",
-    "tree_id": "238ffc08c56598256dc5fb4791d14ed75f666620",
+    "id": "9137cf90a9cd50388ee77791cd91dc4dbc928b24",
+    "tree_id": "08cd881d79399592054e474d0c60493d80c72a5a",
     "distinct": true,
-    "message": "update final version of Jenkinsfile step 1 buil images",
-    "timestamp": "2025-04-28T10:42:40+02:00",
-    "url": "https://github.com/cpa8876/dm-ds-cdo-may24-jenkins/commit/1b3e51425ac9b932accbaf6e2f1d9a378256be3c",
+    "message": "update2",
+    "timestamp": "2025-04-28T12:23:50+02:00",
+    "url": "https://github.com/cpa8876/dm-ds-cdo-may24-jenkins/commit/9137cf90a9cd50388ee77791cd91dc4dbc928b24",
     "author": {
       "name": "cpa8876",
       "email": "cristofe.pascale@free.fr",
@@ -207,38 +184,13 @@
       "username": "cpa8876"
     },
     "added": [
-      ".init-k3d.sh.kate-swp",
-      "Jenkinsfile_V1_all",
-      "Readme.webhook-site.md",
-      "dr01-python-microservices6/charts/.helmignore",
-      "dr01-python-microservices6/charts/Chart.yaml",
-      "dr01-python-microservices6/charts/README.md",
-      "dr01-python-microservices6/charts/templates/NOTES.txt",
-      "dr01-python-microservices6/charts/templates/_helpers.tpl",
-      "dr01-python-microservices6/charts/templates/deployment.yaml",
-      "dr01-python-microservices6/charts/templates/hpa.yaml",
-      "dr01-python-microservices6/charts/templates/ingress.yaml",
-      "dr01-python-microservices6/charts/templates/service.yaml",
-      "dr01-python-microservices6/charts/templates/serviceaccount.yaml",
-      "dr01-python-microservices6/charts/templates/tests/test-connection.yaml",
-      "dr01-python-microservices6/charts/values.yaml",
-      "fastapi_postgres_k8s"
+      "file.json"
     ],
     "removed": [
-      "checksums.txt",
-      "helm-v3.17.3-linux-amd64.tar.gz",
-      "helm-v3.17.3-linux-amd64.tar.gz.sha256sum",
-      "kubectl",
-      "kubectl.sha256"
+      ".init-k3d.sh.kate-swp"
     ],
     "modified": [
-      "Jenkinsfile",
-      "README.md",
-      "datas/data-k3d/k3s.yaml",
-      "datas/data-k3d/k3s_v2.yaml",
       "init-k3d.sh"
     ]
   }
 }
-
-
