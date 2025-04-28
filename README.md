@@ -244,7 +244,7 @@ exit
 ```
 
 
-### Step 9)  Test fastapi applications with ./dr01-python-microservices6/docker-compose .yaml
+### Step 9)  Test docker compose fastapi applications with ./dr01-python-microservices6/docker-compose .yaml
 #### S-9.1) Execute : « docker compose up -d » from /dr01-python-microservices6/
 ```md
 cd dr01-python-microservices6/
@@ -402,6 +402,8 @@ curl http://192.168.20.1:8080/api/v1/casts/docs
 http://192.168.20.1:8080/api/v1/casts/docs 
 ![ ](img/8080-api-v1-casts-docs.png)
 
+
+### Step 10)  Test des charts helm fastapi applications with /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins/dr01-python-microservices6/charts/Chart.yaml
 - Test curl 
 ```md
 

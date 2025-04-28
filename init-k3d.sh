@@ -120,7 +120,11 @@ sudo kubectl version --client --output=yaml
 sudo docker network delete dm-jenkins-cpa-infra_my-net
 sudo docker network create dm-jenkins-cpa-infra_my-net
 sudo docker network ls
-###############suydo
+###############
+
+#####          1.1.7) Delete file imported and unusefull
+sudo rm kubectl kubectl.sha256
+###############
 
 ###############################
 
@@ -149,10 +153,13 @@ tar -zxvf helm-v3.17.3-linux-amd64.tar.gz
 #####          1.2.4)  Find the helm binary in the unpacked directory, and move it to its desired destination (mv linux-amd64/helm /usr/local/bin/helm)
 sudo mv linux-amd64/helm /usr/local/bin/helm
 
-
 #####          1.2.5) Test 1 to ensure the version you installed is up-to-date:
 sudo helm version
 ##### => version.BuildInfo{Version:"v3.17.3", GitCommit:"e4da49785aa6e6ee2b86efd5dd9e43400318262b", GitTreeState:"clean", GoVersion:"go1.23.7"}
+
+
+#####          1.2.6)  Delete file imported and unusefull
+sudo rm helm-v3.17.3-linux-amd64.tar.gz helm-v3.17.3-linux-amd64.tar.gz.sha256sum
 ###############################
 
 
@@ -190,6 +197,9 @@ ls -lha /usr/local/bin/k3d
 
 #####          1.3.4) Test 1 to ensure the version you installed is up-to-date:
 sudo k3d version
+
+#####          1.3.5) Delete file imported and unusefull
+sudo rm checksums.txt
 ###### cpa@debiana8:~/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins3$ sudo k3d --version
 ####### => k3d version v5.8.3
 ####### => k3s version v1.31.5-k3s1 (default)
@@ -435,7 +445,14 @@ sleep 15
 
 
 ################################################################
-# 6) Deploy docker compose jenkins servesudor
+# 6) Deploy docker compose jenkins server
+# cd /home/cpa//Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins
+
+# sudo docker network create dm-jenkins-cpa-infra_my-net
+# sudo docker network ls
+
+# ssh-add /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/.ssh/ssh-key-github-cpa8876
+
 sudo docker compose up -d
 
 sleep 6
