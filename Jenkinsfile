@@ -19,11 +19,12 @@ pipeline {
       steps {
         script {
           sh '''
-            cd /app
+            cd /app/movie-service
             docker rm -f $DOCKER_ID/$DOCKER_IMAGE1
-            docker build -t $DOCKER_ID/$DOCKER_IMAGE1:$DOCKER_TAG ./movie-service
+            docker build -t $DOCKER_ID/$DOCKER_IMAGE1:$DOCKER_TAG .
+            cd /app/cast-service
             docker rm -f $DOCKER_ID/$DOCKER_IMAGE2
-            docker build -t $DOCKER_ID/$DOCKER_IMAGE2:$DOCKER_TAG ./cast-service
+            docker build -t $DOCKER_ID/$DOCKER_IMAGE2:$DOCKER_TAG .
             docker image ls -a | grep fastapi
             sleep 6
           '''
@@ -33,9 +34,23 @@ pipeline {
     stage('Docker run'){ // run container from our builded image
       steps {
         script {// docker run --network=dm-jenkins-cpa-infra_my-net -d -p 8800:8000 --name my-ctnr-ds-fastapi $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG
+        //docker run -d --name test_loadbalancer_fastapi --net dm-jenkins-cpa-infra_my-net -p 8080:8080 -v /app/nginx_config.conf:/etc/nginx/conf.d/default.conf nginx:latest
           sh '''
-            docker compose up -d
-            sleep 10
+            cd /app
+            docker network create -d bridge app-network
+            docker volume create postgres_data_movie
+            docker volume create postgres_data_cast
+            docker run -d --name cast_db --net dm-jenkins-cpa-infra_my-net -v postgres_data_cast:/var/lib/postgresql/data/ -e POSTGRES_USER=cast_db_username -e POSTGRES_PASSWORD=cast_db_password -e POSTGRES_DB=cast_db_dev --health-cmd "CMD-SHELL,pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}" --health-interval 10s --health-retries 5 --health-start-period 30s --health-timeout 10s postgres:12.1-alpine
+            sleep 6
+            docker run -d --name cast_service --net dm-jenkins-cpa-infra_my-net -p 8002:8000 -e DATABASE_URI=postgresql://cast_db_username:cast_db_password@cast_db/cast_db_dev cpa8876/casts-ds-fastapi:v.4.0 uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+            sleep 2
+            docker run -d  --name movie_db --net dm-jenkins-cpa-infra_my-net -v postgres_data_movie:/var/lib/postgresql/data/ -e POSTGRES_USER=movie_db_username -e POSTGRES_PASSWORD=movie_db_password -e POSTGRES_DB=movie_db_dev --health-cmd "CMD-SHELL,pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}" --health-interval 10s --health-retries 5 --health-start-period 30s --health-timeout 10s postgres:12.1-alpine &
+            sleep 6
+            docker run -d --name movie_service --net dm-jenkins-cpa-infra_my-net -p 8001:8000 -e DATABASE_URL=postgresql://movie_db_username:movie_db_password@movie_db/movie_db_dev -e CAST_SERVICE_HOST_URL=http://cast_service:8000/api/v1/casts/ cpa8876/movies-ds-fastapi:v.4.0 uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+            sleep 2
+            docker run -d --name nginx --net dm-jenkins-cpa-infra_my-net -p 8080:8080 nginx:latest
+            docker cp nginx_config.conf nginx:/etc/nginx/conf.d/default.conf
+            docker restart nginx
           '''
         }
       }
@@ -46,7 +61,11 @@ pipeline {
         script {//curl localhost or curl 127.0.0.1:8480 "curl -svo /dev/null http://localhost" or docker exec -it my-ctnr-ds-fastapi curl localhost
           sh '''
             apt update -y && apt full-upgrade-y && apt install curl -y
-            curl my-ctnr-ds-fastapi:8000/api/v1/checkapi
+            docker exec cast_db psql -h localhost -p 5432 -U cast_db_username -d cast_db_dev -c "select * from pg_database"
+            curl $(docker exec test_casts_fastapi hostname -i):8000/api/v1/casts/docs
+            docker exec movie_db psql -h localhost -p 5432 -U movie_db_username -d movie_db_dev -c "select * from pg_database"
+            curl $(docker exec movie_service hostname -i):8000/api/v1/movies/docs
+            docker rm -f nginx movie_service movie_db cast_service casts_db
           '''
         }
       }

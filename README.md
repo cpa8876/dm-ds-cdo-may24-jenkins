@@ -206,6 +206,7 @@ k3d-mycluster-server-0   Ready    control-plane,master   4m7s    v1.31.5+k3s1
 #### S-7.3) Install pluginsScreenshots of installed plugins
 ![ ](img/jenkins-plugins-installed.png)
 
+#### S-7.4) Add a token for the webhook github received by Jenkins
 
 ### Step 8 : Create a docker for the server jenkins and a specific network. 
 
