@@ -61,7 +61,7 @@ pipeline {
           sh '''
             apt update -y && apt full-upgrade-y && apt install curl -y
             docker exec cast_db psql -h localhost -p 5432 -U cast_db_username -d cast_db_dev -c "select * from pg_database"
-            curl $(docker exec test_casts_fastapi hostname -i):8000/api/v1/casts/docs
+            curl $(docker exec cast_service hostname -i):8000/api/v1/casts/docs
             docker exec movie_db psql -h localhost -p 5432 -U movie_db_username -d movie_db_dev -c "select * from pg_database"
             curl $(docker exec movie_service hostname -i):8000/api/v1/movies/docs
             curl $(docker exec nginx hostname -i):8080/api/v1/movies/docs
