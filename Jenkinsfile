@@ -62,12 +62,19 @@ pipeline {
         script {//curl localhost or curl 127.0.0.1:8480 "curl -svo /dev/null http://localhost" or docker exec -it my-ctnr-ds-fastapi curl localhost
           sh '''
             apt update -y && apt full-upgrade-y && apt install curl -y
+            echo -e "\n Test-01 : Sql query on cast_db : select * from pg_database :"
             docker exec cast_db psql -h localhost -p 5432 -U cast_db_username -d cast_db_dev -c "select * from pg_database"
+            echo -e "\n\n Test-02 : curl on ip-cast_service:8000/api/v1/casts/docs"
             curl $(docker exec cast_service hostname -i):8000/api/v1/casts/docs
+            echo -e "\n Test-03 : Sql query on movie_db : select * from pg_database :"
             docker exec movie_db psql -h localhost -p 5432 -U movie_db_username -d movie_db_dev -c "select * from pg_database"
+            echo -e "\n\n Test-04 : curl on ip-movie_service:8000/api/v1/casts/docs"
             curl $(docker exec movie_service hostname -i):8000/api/v1/movies/docs
+            echo -e "\n\n Test-05 : curl on ip-nginx:8080/api/v1/movies/docs"
             curl $(docker exec nginx hostname -i):8080/api/v1/movies/docs
+            echo -e "\n\n Test-06 : curl on ip-nginx:8080/api/v1/casts/docs"
             curl $(docker exec nginx hostname -i):8080/api/v1/casts/docs
+            echo -e "\n\n Test-07 : curl -X POST on ip-nginx::8080/api/v1/movies/ for id=1 Star wars IX"
             curl -X 'POST'   $(docker exec nginx hostname -i):8080/api/v1/movies/   -H 'accept: application/json'   -H 'Content-Type: application/json'   -d '{
   "id": 1,
   "name": "Star Wars: Episode IX - The Rise of Skywalker",
@@ -85,7 +92,7 @@ pipeline {
    5
   ]
 }'
-
+            echo -e "\n\n Test-08 : curl -X POST on ip-nginx::8080/api/v1/movies/ for id=2 Star wars VI"
             curl -X 'POST'   $(docker exec nginx hostname -i):8080/api/v1/movies/   -H 'accept: application/json'   -H 'Content-Type: application/json'   -d '{
   "id": 2,
   "name": "Star Wars: Episode VI - Return of the Jedi",
@@ -101,7 +108,7 @@ pipeline {
    5
   ]
 }'
-
+            echo -e "\n\n Test-09 : curl -X POST on ip-nginx::8080/api/v1/movies/ for id=3 Star wars V"
             curl -X 'POST'   $(docker exec nginx hostname -i):8080/api/v1/movies/   -H 'accept: application/json'   -H 'Content-Type: application/json'   -d '{
  "id": 3,
   "name": "Star Wars: Episode V - The Empire Strikes Back",
@@ -117,12 +124,15 @@ pipeline {
     5
   ]
 }'
+            echo -e "\n\n Test-09 : curl -X GET ALL on ip-nginx::8080/api/v1/movies/"
             curl -X 'GET' \
   $(docker exec nginx hostname -i):8080/api/v1/movies/ \
   -H 'accept: application/json'
+            echo -e "\n\n Test-10 : curl -X GET id=1 on ip-nginx::8080/api/v1/movies/1"
             curl -X 'GET' \
-  '$(docker exec nginx hostname -i):8080/api/v1/movies/1/' \
+  $(docker exec nginx hostname -i):8080/api/v1/movies/1/ \
   -H 'accept: application/json'
+            echo -e "\n\n Test-11 : curl -X PUT update id=1 on ip-nginx::8080/api/v1/movies/1"
             curl -X 'PUT' \
   $(docker exec nginx hostname -i):8080/api/v1/movies/1 \
   -H 'accept: application/json' \
@@ -140,12 +150,15 @@ pipeline {
    1
   ]
 }'
+            echo -e "\n\n Test-12 : curl -X GET ALL on ip-nginx::8080/api/v1/movies/"
             curl -X 'GET' \
   $(docker exec nginx hostname -i):8080/api/v1/movies/1/ \
   -H 'accept: application/json'
+            echo -e "\n\n Test-13 : curl -X DELETE id=1 on ip-nginx::8080/api/v1/movies/1"
             curl -X 'DELETE' \
   '$(docker exec nginx hostname -i):8080/api/v1/movies/1' \
   -H 'accept: application/json'
+            echo -e "\n\n Test-14 : curl -X GET ALL on ip-nginx::8080/api/v1/movies/"
             curl -X 'GET' \
   $(docker exec nginx hostname -i):8001/api/v1/movies/ \
   -H 'accept: application/json'
