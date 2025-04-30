@@ -18,7 +18,6 @@ services:
     volumes:
      # - /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/dm-ds-cdo-may24-jenkins5/datas/data-k3d:/datas/data-k3d
       - ./init-k3d.sh:/app/init-k3d.sh
-      -
       - /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/dm-ds-cdo-may24-jenkins5/datas/data-k3d/k3s_v2.yaml:/usr/local/k3s.yaml
       - /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/dm-ds-cdo-may24-jenkins5/dr01-python-microservices6:/app
       - /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/dm-ds-cdo-may24-jenkins5/fastapi:/fastapi

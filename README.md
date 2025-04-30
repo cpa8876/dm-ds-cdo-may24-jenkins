@@ -1,13 +1,14 @@
 # dm-ds-cdo-may24-jenkins
 
 ## Prerequisites
-P1.) The folow softwares must be installed on the  local machine,:
+### P1) The folow softwares must be installed on the  local machine:  
+
 1. git
 2. docker and his plugin docker compose
 3. k3d
-4. helm 
+4. helm  
 
-Verify all these softwares are well installed
+### P2) Verify all these softwares are well installed
 ```md
 sudo git version 
 
@@ -28,27 +29,31 @@ cd   ./DM-SP04-C04-JENKINS-CPA-MAY2024
 ```
 
 ### Step 2) Create Dockerhub account
-2.1) Create a repository Docker hub : "cpa8876"
+#### 2.1) Create a repository Docker hub : "cpa8876"
 
-2.2) Create this docker images
-2.2.1)  docker image for the application fastapi to manage movies :
-sudo docker push cpa8876/movies-dm-ds-jenkins-fastapi:tagname
+#### 2.2) Create this docker images
+##### 2.2.1)  docker image for the application fastapi to manage movies :
+`sudo docker push cpa8876/movies-dm-ds-jenkins-fastapi:tagname`
 
-2.2.2)  docker image for th database useb by movies-dm-ds-jenkins-fastap:
-sudo docker push cpa8876/db-movies-dm-ds-jenkins-fastapi:tagname
+##### 2.2.2)  docker image for th database useb by movies-dm-ds-jenkins-fastap:
+`sudo docker push cpa8876/db-movies-dm-ds-jenkins-fastapi:tagname`
 
-2.2.3)  application fastapi to manage casts :
-sudo docker push cpa8876/casts-dm-ds-jenkins-fastapi:tagname
+##### 2.2.3)  application fastapi to manage casts :
+`sudo docker push cpa8876/casts-dm-ds-jenkins-fastapi:tagname`
 
-2.2.2)  docker image for th database useb by casts-dm-ds-jenkins-fastapi:
+##### 2.2.2)  docker image for th database useb by casts-dm-ds-jenkins-fastapi:
+```md 
 sudo docker push cpa8876/db-casts-dm-ds-jenkins-fastapi:tagname
-`docker push dmcpa8876/dm-jenkins-cpa8876-fastapi:tagname https://hub.docker.com/repositories/dmcpa8876 `
+docker push dmcpa8876/dm-jenkins-cpa8876-fastapi:tagname \
+https://hub.docker.com/repositories/dmcpa8876
+```
 
 
 ### Step 3) Create Github account and a repository for homework
-3.1) Url  repo github of homework : https://github.com/cpa8876/ 
+#### 3.1) Url  repo github of homework :
+[github cpa8876 for jenkins homework]( https://github.com/cpa8876/) 
   
-3.2) Url to clone this repo  : 
+#### 3.2) Url to clone this repo  : 
 `git clone https://github.com/cpa8876/dm-ds-cdo-may24-jenkins.git`
 
 3.3) sshgen a pair of ssh keys to connect to the Github account and save this pair on the ./.ssh/ssh-key-github-cpa8876 and ssh-key-github-cpa8876.pub`
@@ -206,7 +211,36 @@ k3d-mycluster-server-0   Ready    control-plane,master   4m7s    v1.31.5+k3s1
 #### S-7.3) Install pluginsScreenshots of installed plugins
 ![ ](img/jenkins-plugins-installed.png)
 
-#### S-7.4) Add a token for the webhook github received by Jenkins
+#### S-7.4) Create a Jenkins API token
+Create a Jenkins API token
+First, we going to generate a Jenkins API token which will be used by the webhook to communicate with the Jenkins build job.
+Go to Jenkins home page > Click on your name > Configure > Add new token
+Give the new token a name and remember to copy and save the API token.
+
+http://192.168.20.1:8280/job/dm-jenkins-ci-cd/configure
+Jeton d'authentification:  wh-cpa8876
+
+#### S-7.5) Configure personnal access token access to dockerhub  in secret variable system on jenkins
+
+https://app.docker.com/settings/personal-access-tokens 
+Access token description
+DAT
+Expires on
+Never
+Access permissions
+Read, Write, Delete
+![ ](img/dockerhub-token.png)
+
+
+#### S-7.6) Configure the token dockerhub in secret variable system on jenkins
+
+http://192.168.20.1:8280/manage/credentials/store/system/domain/_/newCredentials
+Type : Secret text
+Portée Global (Jenkins, agent, items,etc…)
+Secret : 
+id : token_dockerhub
+Description : token_dockerhub for the dm Jenkins
+![ ](img/secret-token-dockerhub.png)
 
 ### Step 8 : Create a docker for the server jenkins and a specific network. 
 
