@@ -68,7 +68,7 @@ pipeline {
             curl $(docker exec movie_service hostname -i):8000/api/v1/movies/docs
             curl $(docker exec nginx hostname -i):8080/api/v1/movies/docs
             curl $(docker exec nginx hostname -i):8080/api/v1/casts/docs
-            curl -X 'POST'   "$(docker exec nginx hostname -i):8080/api/v1/movies/"   -H 'accept: application/json'   -H 'Content-Type: application/json'   -d '{
+            curl -X 'POST'   $(docker exec nginx hostname -i):8080/api/v1/movies/   -H 'accept: application/json'   -H 'Content-Type: application/json'   -d '{
   "id": 1,
   "name": "Star Wars: Episode IX - The Rise of Skywalker",
   "plot": "The surviving members of the resistance face the First Order once again.",
@@ -86,7 +86,7 @@ pipeline {
   ]
 }'
 
-            curl -X 'POST'   '$(docker exec nginx hostname -i):8080/api/v1/movies/'   -H 'accept: application/json'   -H 'Content-Type: application/json'   -d '{
+            curl -X 'POST'   $(docker exec nginx hostname -i):8080/api/v1/movies/   -H 'accept: application/json'   -H 'Content-Type: application/json'   -d '{
   "id": 2,
   "name": "Star Wars: Episode VI - Return of the Jedi",
   "plot": "The evil Galactic Empire is building a new Death Star space station to permanently destroy the Rebel Alliance, its main opposition.",
@@ -102,7 +102,7 @@ pipeline {
   ]
 }'
 
-            curl -X 'POST'   '$(docker exec nginx hostname -i):8080/api/v1/movies/'   -H 'accept: application/json'   -H 'Content-Type: application/json'   -d '{
+            curl -X 'POST'   $(docker exec nginx hostname -i):8080/api/v1/movies/   -H 'accept: application/json'   -H 'Content-Type: application/json'   -d '{
  "id": 3,
   "name": "Star Wars: Episode V - The Empire Strikes Back",
   "plot": "Set three years after the events of Star Wars, the film recounts the battle between the malevolent Galactic Empire, ",
@@ -118,13 +118,13 @@ pipeline {
   ]
 }'
             curl -X 'GET' \
-  '$(docker exec nginx hostname -i):8080/api/v1/movies/' \
+  $(docker exec nginx hostname -i):8080/api/v1/movies/ \
   -H 'accept: application/json'
             curl -X 'GET' \
   '$(docker exec nginx hostname -i):8080/api/v1/movies/1/' \
   -H 'accept: application/json'
             curl -X 'PUT' \
-  '$(docker exec nginx hostname -i):8080/api/v1/movies/1' \
+  $(docker exec nginx hostname -i):8080/api/v1/movies/1 \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{
@@ -141,13 +141,13 @@ pipeline {
   ]
 }'
             curl -X 'GET' \
-  '$(docker exec nginx hostname -i):8080/api/v1/movies/1/' \
+  $(docker exec nginx hostname -i):8080/api/v1/movies/1/ \
   -H 'accept: application/json'
             curl -X 'DELETE' \
   '$(docker exec nginx hostname -i):8080/api/v1/movies/1' \
   -H 'accept: application/json'
             curl -X 'GET' \
-  '$(docker exec nginx hostname -i):8001/api/v1/movies/' \
+  $(docker exec nginx hostname -i):8001/api/v1/movies/ \
   -H 'accept: application/json'
 
             docker rm -f nginx movie_service movie_db cast_service cast_db
