@@ -117,7 +117,7 @@ curl -X 'POST'   'http://127.0.0.1:8080/api/v1/movies/'   -H 'accept: applicatio
     5
   ]
 }'
-            docker rm -f nginx movie_service movie_db cast_service casts_db
+            docker rm -f nginx movie_service movie_db cast_service cast_db
             docker ps -a
           '''
         }
