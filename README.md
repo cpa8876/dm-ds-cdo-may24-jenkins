@@ -699,12 +699,760 @@ pipeline {
 #### S-11.2) Screenshots after execute the pipeline with Jenkinsfile: « ./Jenkinsfile » from /dr01-python-microservices6/  
 <br>
 -  Stage view from Jenkinsfile
-![Screenshot from dashborad on pipeline Jenkins dm2 jenkins](./img/tdb-test22-dm2-jenkins.png  "Dashborad dm2-jenkins pipeline")
+![Screenshot from dashborad on pipeline Jenkins dm2 jenkins](./img/tdb-test24-dm2-jenkins.png  "Dashboard test24dm2-jenkins pipeline")
 <br>
 <br>
--  Console output Tableau de bord / dm2-jenkins #22 view from Jenkinsfile : console-output-test22-dm2-jenkins.png
-![Extract frome test acceptance from console-output-test22-dm2-jenkins.png](./img/console-output-test22-dm2-jenkins.png  "Scrennshot extract from consople output test22-dm2")
+-  Screenshot of the console output Tableau de bord / dm2-jenkins #24 view from Jenkinsfile : console-output-test24-dm2-jenkins.png
+![Extract frome test acceptance from console-output-test24-dm2-jenkins.png](./img/console-output-test24-dm2-jenkins.png  "Scrennshot extract from consople output test24-dm2")
 
-
+- Terminal execution pipeline 24
 ```md
+Started by user cpa
+Obtained Jenkinsfile from git https://github.com/cpa8876/dm-ds-cdo-may24-jenkins.git
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on Jenkins in /var/jenkins_home/workspace/dm2-jenkins
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Declarative: Checkout SCM)
+[Pipeline] checkout
+The recommended git tool is: git
+No credentials specified
+ > git rev-parse --resolve-git-dir /var/jenkins_home/workspace/dm2-jenkins/.git # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url https://github.com/cpa8876/dm-ds-cdo-may24-jenkins.git # timeout=10
+Fetching upstream changes from https://github.com/cpa8876/dm-ds-cdo-may24-jenkins.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.39.5'
+ > git fetch --tags --force --progress -- https://github.com/cpa8876/dm-ds-cdo-may24-jenkins.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git rev-parse refs/remotes/origin/main^{commit} # timeout=10
+Checking out Revision 51f1f303e3fcdb7bb934ac72120700be34b60ab6 (refs/remotes/origin/main)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 51f1f303e3fcdb7bb934ac72120700be34b60ab6 # timeout=10
+Commit message: "update file Jenkinsfile to add Tests acceptance CRUD casts fastapi application"
+ > git rev-list --no-walk 9f118b060dde41a63df43daca1fece4229129f44 # timeout=10
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Docker Build)
+[Pipeline] script
+[Pipeline] {
+[Pipeline] sh
++ cd /app/movie-service
++ docker rm -f cpa8876/movies-ds-fastapi
+Error response from daemon: No such container: cpa8876/movies-ds-fastapi
++ docker build -t cpa8876/movies-ds-fastapi:v.24.0 .
+DEPRECATED: The legacy builder is deprecated and will be removed in a future release.
+            Install the buildx component to build images with BuildKit:
+            https://docs.docker.com/go/buildx/
+
+Sending build context to Docker daemon   25.6kB
+
+Step 1/6 : FROM python:3.8-slim
+ ---> b5f62925bd0f
+Step 2/6 : WORKDIR /app
+ ---> Using cache
+ ---> 4c8b39cf70f0
+Step 3/6 : COPY ./requirements.txt /app/requirements.txt
+ ---> Using cache
+ ---> a6ebcc85c827
+Step 4/6 : RUN apt-get update     && apt-get install gcc -y     && apt-get clean
+ ---> Using cache
+ ---> 45b551dd00e1
+Step 5/6 : RUN pip install -r /app/requirements.txt     && rm -rf /root/.cache/pip
+ ---> Using cache
+ ---> ce5a5e48b597
+Step 6/6 : COPY . /app/
+ ---> Using cache
+ ---> cae8f07ecd77
+Successfully built cae8f07ecd77
+Successfully tagged cpa8876/movies-ds-fastapi:v.24.0
++ cd /app/cast-service
++ docker rm -f cpa8876/casts-ds-fastapi
+Error response from daemon: No such container: cpa8876/casts-ds-fastapi
++ docker build -t cpa8876/casts-ds-fastapi:v.24.0 .
+DEPRECATED: The legacy builder is deprecated and will be removed in a future release.
+            Install the buildx component to build images with BuildKit:
+            https://docs.docker.com/go/buildx/
+
+Sending build context to Docker daemon  20.99kB
+
+Step 1/6 : FROM python:3.8-slim
+ ---> b5f62925bd0f
+Step 2/6 : WORKDIR /app
+ ---> Using cache
+ ---> 4c8b39cf70f0
+Step 3/6 : COPY ./requirements.txt /app/requirements.txt
+ ---> Using cache
+ ---> 8b9d7b1abc7d
+Step 4/6 : RUN apt-get update     && apt-get install gcc -y     && apt-get clean
+ ---> Using cache
+ ---> f364ed3dab48
+Step 5/6 : RUN pip install -r /app/requirements.txt     && rm -rf /root/.cache/pip
+ ---> Using cache
+ ---> b074cae8898e
+Step 6/6 : COPY . /app/
+ ---> Using cache
+ ---> 13c6753885ff
+Successfully built 13c6753885ff
+Successfully tagged cpa8876/casts-ds-fastapi:v.24.0
++ docker image ls -a
++ grep fastapi
+cpa8876/casts-ds-fastapi    v.10.0        13c6753885ff   2 hours ago    462MB
+cpa8876/casts-ds-fastapi    v.11.0        13c6753885ff   2 hours ago    462MB
+cpa8876/casts-ds-fastapi    v.12.0        13c6753885ff   2 hours ago    462MB
+cpa8876/casts-ds-fastapi    v.13.0        13c6753885ff   2 hours ago    462MB
+cpa8876/casts-ds-fastapi    v.14.0        13c6753885ff   2 hours ago    462MB
+cpa8876/casts-ds-fastapi    v.15.0        13c6753885ff   2 hours ago    462MB
+cpa8876/casts-ds-fastapi    v.16.0        13c6753885ff   2 hours ago    462MB
+cpa8876/casts-ds-fastapi    v.17.0        13c6753885ff   2 hours ago    462MB
+cpa8876/casts-ds-fastapi    v.18.0        13c6753885ff   2 hours ago    462MB
+cpa8876/casts-ds-fastapi    v.19.0        13c6753885ff   2 hours ago    462MB
+cpa8876/casts-ds-fastapi    v.20.0        13c6753885ff   2 hours ago    462MB
+cpa8876/casts-ds-fastapi    v.21.0        13c6753885ff   2 hours ago    462MB
+cpa8876/casts-ds-fastapi    v.22.0        13c6753885ff   2 hours ago    462MB
+cpa8876/casts-ds-fastapi    v.24.0        13c6753885ff   2 hours ago    462MB
+cpa8876/casts-ds-fastapi    v.9.0         13c6753885ff   2 hours ago    462MB
+cpa8876/movies-ds-fastapi   v.10.0        cae8f07ecd77   2 hours ago    469MB
+cpa8876/movies-ds-fastapi   v.11.0        cae8f07ecd77   2 hours ago    469MB
+cpa8876/movies-ds-fastapi   v.12.0        cae8f07ecd77   2 hours ago    469MB
+cpa8876/movies-ds-fastapi   v.13.0        cae8f07ecd77   2 hours ago    469MB
+cpa8876/movies-ds-fastapi   v.14.0        cae8f07ecd77   2 hours ago    469MB
+cpa8876/movies-ds-fastapi   v.15.0        cae8f07ecd77   2 hours ago    469MB
+cpa8876/movies-ds-fastapi   v.16.0        cae8f07ecd77   2 hours ago    469MB
+cpa8876/movies-ds-fastapi   v.17.0        cae8f07ecd77   2 hours ago    469MB
+cpa8876/movies-ds-fastapi   v.18.0        cae8f07ecd77   2 hours ago    469MB
+cpa8876/movies-ds-fastapi   v.19.0        cae8f07ecd77   2 hours ago    469MB
+cpa8876/movies-ds-fastapi   v.20.0        cae8f07ecd77   2 hours ago    469MB
+cpa8876/movies-ds-fastapi   v.21.0        cae8f07ecd77   2 hours ago    469MB
+cpa8876/movies-ds-fastapi   v.22.0        cae8f07ecd77   2 hours ago    469MB
+cpa8876/movies-ds-fastapi   v.24.0        cae8f07ecd77   2 hours ago    469MB
+cpa8876/movies-ds-fastapi   v.9.0         cae8f07ecd77   2 hours ago    469MB
++ sleep 6
+[Pipeline] }
+[Pipeline] // script
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Docker run)
+[Pipeline] script
+[Pipeline] {
+[Pipeline] sh
++ cd /app
++ docker volume create postgres_data_movie
+postgres_data_movie
++ docker volume create postgres_data_cast
+postgres_data_cast
++ docker run -d --name cast_db --net dm-jenkins-cpa-infra_my-net -v postgres_data_cast:/var/lib/postgresql/data/ -e POSTGRES_USER=cast_db_username -e POSTGRES_PASSWORD=cast_db_password -e POSTGRES_DB=cast_db_dev --health-cmd CMD-SHELL,pg_isready -U  -d  --health-interval 10s --health-retries 5 --health-start-period 30s --health-timeout 10s postgres:12.1-alpine
+d95225895c142067b2c62d66d6f0560006ffbc849d40f62b90c700bd02df3b50
++ sleep 6
++ docker run -d --name cast_service --net dm-jenkins-cpa-infra_my-net -p 8002:8000 -e DATABASE_URI=postgresql://cast_db_username:cast_db_password@cast_db/cast_db_dev cpa8876/casts-ds-fastapi:v.24.0 uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+30c4e4692d42b75e0e4b5626a4d39ca7379f2f16b5a3575fd4c008c6fff9db05
++ sleep 2
++ sleep 6
++ docker run -d --name movie_db --net dm-jenkins-cpa-infra_my-net -v postgres_data_movie:/var/lib/postgresql/data/ -e POSTGRES_USER=movie_db_username -e POSTGRES_PASSWORD=movie_db_password -e POSTGRES_DB=movie_db_dev --health-cmd CMD-SHELL,pg_isready -U  -d  --health-interval 10s --health-retries 5 --health-start-period 30s --health-timeout 10s postgres:12.1-alpine
+9ac079857971dab5e3a9062ae7946e46fed5e70a7715abba3a995e40e86e3c12
++ docker run -d --name movie_service --net dm-jenkins-cpa-infra_my-net -p 8001:8000 -e DATABASE_URL=postgresql://movie_db_username:movie_db_password@movie_db/movie_db_dev -e CAST_SERVICE_HOST_URL=http://cast_service:8000/api/v1/casts/ cpa8876/movies-ds-fastapi:v.24.0 uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+6c99e8ee3d0f09c654cc98bf7a1a36330eef40ba4beedf9a84845a26a50c48bc
++ sleep 2
++ docker run -d --name nginx --net dm-jenkins-cpa-infra_my-net -p 8080:8080 nginx:latest
+4ad3e7540f17ab70a9da94e4878e0cf59d83ce045914423bca2ebf694c6a56ee
++ docker cp nginx_config.conf nginx:/etc/nginx/conf.d/default.conf
++ docker restart nginx
+nginx
+[Pipeline] }
+[Pipeline] // script
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Test Acceptance)
+[Pipeline] script
+[Pipeline] {
+[Pipeline] sh
++ apt update -y
+
+WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
+
+Hit:1 http://deb.debian.org/debian bookworm InRelease
+Hit:2 http://deb.debian.org/debian bookworm-updates InRelease
+Get:3 http://deb.debian.org/debian-security bookworm-security InRelease [48.0 kB]
+Fetched 48.0 kB in 0s (285 kB/s)
+Reading package lists...
+Building dependency tree...
+Reading state information...
+All packages are up to date.
++ apt full-upgrade-y
+
+WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
+
+E: Invalid operation full-upgrade-y
++ echo -e 
+
+ -------------------------------------------------------------------
+-e 
+
+ -------------------------------------------------------------------
++ echo -e Tests acceptance access on contenaires  cast_db, movie_db, cast _sezrvice, movie_service and loadbalancer
+  
+-e Tests acceptance access on contenaires  cast_db, movie_db, cast _sezrvice, movie_service and loadbalancer
+  
++ echo -e 
+
+ ------------------------------------------
+-e 
+
+ ------------------------------------------
++ echo -e 
+ Test-01 : Sql query on cast_db : select * from pg_database :
+-e 
+ Test-01 : Sql query on cast_db : select * from pg_database :
++ docker exec cast_db psql -h localhost -p 5432 -U cast_db_username -d cast_db_dev -c select * from pg_database
+  oid  |   datname   | datdba | encoding | datcollate |  datctype  | datistemplate | datallowconn | datconnlimit | datlastsysoid | datfrozenxid | datminmxid | dattablespace |                           datacl                            
+-------+-------------+--------+----------+------------+------------+---------------+--------------+--------------+---------------+--------------+------------+---------------+-------------------------------------------------------------
+ 13423 | postgres    |     10 |        6 | en_US.utf8 | en_US.utf8 | f             | t            |           -1 |         13422 |          480 |          1 |          1663 | 
+ 16384 | cast_db_dev |     10 |        6 | en_US.utf8 | en_US.utf8 | f             | t            |           -1 |         13422 |          480 |          1 |          1663 | 
+     1 | template1   |     10 |        6 | en_US.utf8 | en_US.utf8 | t             | t            |           -1 |         13422 |          480 |          1 |          1663 | {=c/cast_db_username,cast_db_username=CTc/cast_db_username}
+ 13422 | template0   |     10 |        6 | en_US.utf8 | en_US.utf8 | t             | f            |           -1 |         13422 |          480 |          1 |          1663 | {=c/cast_db_username,cast_db_username=CTc/cast_db_username}
+(4 rows)
+
++ echo -e 
+
+ Test-02 : curl on ip-cast_service:8000/api/v1/casts/docs
+-e 
+
+ Test-02 : curl on ip-cast_service:8000/api/v1/casts/docs
++ docker exec cast_service hostname -i
++ curl 172.18.0.4:8000/api/v1/casts/docs
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100   911  100   911    0     0   901k      0 --:--:-- --:--:-- --:--:--  889k
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swagger-ui-dist@3/swagger-ui.css">
+    <link rel="shortcut icon" href="https://fastapi.tiangolo.com/img/favicon.png">
+    <title>FastAPI - Swagger UI</title>
+    </head>
+    <body>
+    <div id="swagger-ui">
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@3/swagger-ui-bundle.js"></script>
+    <!-- `SwaggerUIBundle` is now available on the page -->
+    <script>
+    const ui = SwaggerUIBundle({
+        url: '/api/v1/casts/openapi.json',
+    oauth2RedirectUrl: window.location.origin + '/docs/oauth2-redirect',
+        dom_id: '#swagger-ui',
+        presets: [
+        SwaggerUIBundle.presets.apis,
+        SwaggerUIBundle.SwaggerUIStandalonePreset
+        ],
+        layout: "BaseLayout",
+        deepLinking: true
+    })
+    </script>
+    </body>
+    </html>
+    + echo -e 
+ Test-03 : Sql query on movie_db : select * from pg_database :
+-e 
+ Test-03 : Sql query on movie_db : select * from pg_database :
++ docker exec movie_db psql -h localhost -p 5432 -U movie_db_username -d movie_db_dev -c select * from pg_database
+  oid  |   datname    | datdba | encoding | datcollate |  datctype  | datistemplate | datallowconn | datconnlimit | datlastsysoid | datfrozenxid | datminmxid | dattablespace |                             datacl                             
+-------+--------------+--------+----------+------------+------------+---------------+--------------+--------------+---------------+--------------+------------+---------------+----------------------------------------------------------------
+ 13423 | postgres     |     10 |        6 | en_US.utf8 | en_US.utf8 | f             | t            |           -1 |         13422 |          480 |          1 |          1663 | 
+ 16384 | movie_db_dev |     10 |        6 | en_US.utf8 | en_US.utf8 | f             | t            |           -1 |         13422 |          480 |          1 |          1663 | 
+     1 | template1    |     10 |        6 | en_US.utf8 | en_US.utf8 | t             | t            |           -1 |         13422 |          480 |          1 |          1663 | {=c/movie_db_username,movie_db_username=CTc/movie_db_username}
+ 13422 | template0    |     10 |        6 | en_US.utf8 | en_US.utf8 | t             | f            |           -1 |         13422 |          480 |          1 |          1663 | {=c/movie_db_username,movie_db_username=CTc/movie_db_username}
+(4 rows)
+
++ echo -e 
+
+ Test-04 : curl on ip-movie_service:8000/api/v1/casts/docs
+-e 
+
+ Test-04 : curl on ip-movie_service:8000/api/v1/casts/docs
++ docker exec movie_service hostname -i
++ curl 172.18.0.6:8000/api/v1/movies/docs
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100   912  100   912    0     0   959k      0 --:--:-- --:--:-- --:--:--  890k
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swagger-ui-dist@3/swagger-ui.css">
+    <link rel="shortcut icon" href="https://fastapi.tiangolo.com/img/favicon.png">
+    <title>FastAPI - Swagger UI</title>
+    </head>
+    <body>
+    <div id="swagger-ui">
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@3/swagger-ui-bundle.js"></script>
+    <!-- `SwaggerUIBundle` is now available on the page -->
+    <script>
+    const ui = SwaggerUIBundle({
+        url: '/api/v1/movies/openapi.json',
+    oauth2RedirectUrl: window.location.origin + '/docs/oauth2-redirect',
+        dom_id: '#swagger-ui',
+        presets: [
+        SwaggerUIBundle.presets.apis,
+        SwaggerUIBundle.SwaggerUIStandalonePreset
+        ],
+        layout: "BaseLayout",
+        deepLinking: true
+    })
+    </script>
+    </body>
+    </html>
+    + echo -e 
+
+ Test-05 : curl on ip-nginx:8080/api/v1/movies/docs
+-e 
+
+ Test-05 : curl on ip-nginx:8080/api/v1/movies/docs
++ docker exec nginx hostname -i
++ curl 172.18.0.7:8080/api/v1/movies/docs
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100   912  100   912    0     0   926k      0 --:--:-- --:--:-- --:--:--  890k
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swagger-ui-dist@3/swagger-ui.css">
+    <link rel="shortcut icon" href="https://fastapi.tiangolo.com/img/favicon.png">
+    <title>FastAPI - Swagger UI</title>
+    </head>
+    <body>
+    <div id="swagger-ui">
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@3/swagger-ui-bundle.js"></script>
+    <!-- `SwaggerUIBundle` is now available on the page -->
+    <script>
+    const ui = SwaggerUIBundle({
+        url: '/api/v1/movies/openapi.json',
+    oauth2RedirectUrl: window.location.origin + '/docs/oauth2-redirect',
+        dom_id: '#swagger-ui',
+        presets: [
+        SwaggerUIBundle.presets.apis,
+        SwaggerUIBundle.SwaggerUIStandalonePreset
+        ],
+        layout: "BaseLayout",
+        deepLinking: true
+    })
+    </script>
+    </body>
+    </html>
+    + echo -e 
+
+ Test-06 : curl on ip-nginx:8080/api/v1/casts/docs
+-e 
+
+ Test-06 : curl on ip-nginx:8080/api/v1/casts/docs
++ docker exec nginx hostname -i
++ curl 172.18.0.7:8080/api/v1/casts/docs
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100   911  100   911    0     0   711k      0 --:--:-- --:--:-- --:--:--  889k
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swagger-ui-dist@3/swagger-ui.css">
+    <link rel="shortcut icon" href="https://fastapi.tiangolo.com/img/favicon.png">
+    <title>FastAPI - Swagger UI</title>
+    </head>
+    <body>
+    <div id="swagger-ui">
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@3/swagger-ui-bundle.js"></script>
+    <!-- `SwaggerUIBundle` is now available on the page -->
+    <script>
+    const ui = SwaggerUIBundle({
+        url: '/api/v1/casts/openapi.json',
+    oauth2RedirectUrl: window.location.origin + '/docs/oauth2-redirect',
+        dom_id: '#swagger-ui',
+        presets: [
+        SwaggerUIBundle.presets.apis,
+        SwaggerUIBundle.SwaggerUIStandalonePreset
+        ],
+        layout: "BaseLayout",
+        deepLinking: true
+    })
+    </script>
+    </body>
+    </html>
+    + echo -e 
+
+ -------------------------------------------------------------------
+-e 
+
+ -------------------------------------------------------------------
++ echo -e Tests acceptance CRUD movies fastapi with contenair nginx (loadbalancer) application
+  
+-e Tests acceptance CRUD movies fastapi with contenair nginx (loadbalancer) application
+  
++ echo -e 
+
+ ------------------------------------------
+-e 
+
+ ------------------------------------------
++ echo -e 
+
+ Test-07 : curl -X POST on ip-nginx:8080/api/v1/movies/ for id=1 Star wars IX
+-e 
+
+ Test-07 : curl -X POST on ip-nginx:8080/api/v1/movies/ for id=1 Star wars IX
++ docker exec nginx hostname -i
++ curl -X POST 172.18.0.7:8080/api/v1/movies/ -H accept: application/json -H Content-Type: application/json -d {
+  "id": 1,
+  "name": "Star Wars: Episode IX - The Rise of Skywalker",
+  "plot": "The surviving members of the resistance face the First Order once again.",
+  "genres": [
+    "Action",
+    "Adventure",
+    "Fantasy"
+  ],
+  "casts_id": [
+   1,
+   2,
+   3,
+   4,
+   5
+  ]
+}
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100   272    0     0  100   272      0    226  0:00:01  0:00:01 --:--:--   226
+100   482  100   210  100   272    167    217  0:00:01  0:00:01 --:--:--   384
+{"id":1,"name":"Star Wars: Episode IX - The Rise of Skywalker","plot":"The surviving members of the resistance face the First Order once again.","genres":["Action","Adventure","Fantasy"],"casts_id":[1,2,3,4,5]}+ echo -e 
+
+ Test-08 : curl -X POST on ip-nginx:8080/api/v1/movies/ for id=2 Star wars VI
+-e 
+
+ Test-08 : curl -X POST on ip-nginx:8080/api/v1/movies/ for id=2 Star wars VI
++ docker exec nginx hostname -i
++ curl -X POST 172.18.0.7:8080/api/v1/movies/ -H accept: application/json -H Content-Type: application/json -d {
+  "id": 2,
+  "name": "Star Wars: Episode VI - Return of the Jedi",
+  "plot": "The evil Galactic Empire is building a new Death Star space station to permanently destroy the Rebel Alliance, its main opposition.",
+  "genres": [
+    "Action",
+    "Adventure",
+    "Fantasy"
+  ],
+  "casts_id": [
+   3,
+   4,
+   5
+  ]
+}
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100   337  100    21  100   316   5623  84627 --:--:-- --:--:-- --:--:--  109k
+Internal Server Error+ echo -e 
+
+ Test-09 : curl -X POST on ip-nginx:8080/api/v1/movies/ for id=3 Star wars V
+-e 
+
+ Test-09 : curl -X POST on ip-nginx:8080/api/v1/movies/ for id=3 Star wars V
++ docker exec nginx hostname -i
++ curl -X POST 172.18.0.7:8080/api/v1/movies/ -H accept: application/json -H Content-Type: application/json -d {
+ "id": 3,
+  "name": "Star Wars: Episode V - The Empire Strikes Back",
+  "plot": "Set three years after the events of Star Wars, the film recounts the battle between the malevolent Galactic Empire, ",
+  "genres": [
+    "Action",
+    "Adventure",
+    "Fantasy"
+  ],
+  "casts_id": [
+    3,
+    4,
+    5
+  ]
+}
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100   328  100    21  100   307   9341   133k --:--:-- --:--:-- --:--:--  160k
+Internal Server Error+ echo -e 
+
+ Test-10 : curl -X GET ALL on ip-nginx:8080/api/v1/movies/
+-e 
+
+ Test-10 : curl -X GET ALL on ip-nginx:8080/api/v1/movies/
++ docker exec nginx hostname -i
++ curl -X GET 172.18.0.7:8080/api/v1/movies/ -H accept: application/json
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100   727  100   727    0     0   253k      0 --:--:-- --:--:-- --:--:--  354k
+[{"id":2,"name":"Star Wars: Episode VI - Return of the Jedi","plot":"The evil Galactic Empire is building a new Death Star space station to permanently destroy the Rebel Alliance, its main opposition.","genres":["Action","Adventure","Fantasy"],"casts_id":[3,4,5]},{"id":3,"name":"Star Wars: Episode V - The Empire Strikes Back","plot":"Set three years after the events of Star Wars, the film recounts the battle between the malevolent Galactic Empire, ","genres":["Action","Adventure","Fantasy"],"casts_id":[3,4,5]},{"id":1,"name":"Star Wars: Episode IX - The Rise of Skywalker","plot":"The surviving members of the resistance face the First Order once again.","genres":["Action","Adventure","Fantasy"],"casts_id":[1,2,3,4,5]}]+ echo -e 
+
+ Test-11 : curl -X GET id=1 on ip-nginx:8080/api/v1/movies/1
+-e 
+
+ Test-11 : curl -X GET id=1 on ip-nginx:8080/api/v1/movies/1
++ docker exec nginx hostname -i
++ curl -X GET 172.18.0.7:8080/api/v1/movies/1/ -H accept: application/json
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100   210  100   210    0     0  70469      0 --:--:-- --:--:-- --:--:--  102k
+{"id":1,"name":"Star Wars: Episode IX - The Rise of Skywalker","plot":"The surviving members of the resistance face the First Order once again.","genres":["Action","Adventure","Fantasy"],"casts_id":[1,2,3,4,5]}+ echo -e 
+
+ Test-12 : curl -X PUT update id=1 on ip-nginx:8080/api/v1/movies/1
+-e 
+
+ Test-12 : curl -X PUT update id=1 on ip-nginx:8080/api/v1/movies/1
++ docker exec nginx hostname -i
++ curl -X PUT 172.18.0.7:8080/api/v1/movies/1 -H accept: application/json -H Content-Type: application/json -d {
+  "id": 1,
+  "name": "Star Wars: Episode IX - The Rise of Skywalker",
+  "plot": "The surviving members of the resistance face the First Order once again.",
+  "genres": [
+    "Action",
+    "Adventure",
+    "Fantasy"
+  ],
+  "casts_id": [
+   1
+  ]
+}
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100   252  100     4  100   248    946  58712 --:--:-- --:--:-- --:--:-- 63000
+null+ echo -e 
+
+ Test-13 : curl -X GET ALL on ip-nginx:8080/api/v1/movies/
+-e 
+
+ Test-13 : curl -X GET ALL on ip-nginx:8080/api/v1/movies/
++ docker exec nginx hostname -i
++ curl -X GET 172.18.0.7:8080/api/v1/movies/ -H accept: application/json
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100   719  100   719    0     0   317k      0 --:--:-- --:--:-- --:--:--  351k
+[{"id":2,"name":"Star Wars: Episode VI - Return of the Jedi","plot":"The evil Galactic Empire is building a new Death Star space station to permanently destroy the Rebel Alliance, its main opposition.","genres":["Action","Adventure","Fantasy"],"casts_id":[3,4,5]},{"id":3,"name":"Star Wars: Episode V - The Empire Strikes Back","plot":"Set three years after the events of Star Wars, the film recounts the battle between the malevolent Galactic Empire, ","genres":["Action","Adventure","Fantasy"],"casts_id":[3,4,5]},{"id":1,"name":"Star Wars: Episode IX - The Rise of Skywalker","plot":"The surviving members of the resistance face the First Order once again.","genres":["Action","Adventure","Fantasy"],"casts_id":[1]}]+ echo -e 
+
+ Test-14 : curl -X DELETE id=1 on ip-nginx:8080/api/v1/movies/1
+-e 
+
+ Test-14 : curl -X DELETE id=1 on ip-nginx:8080/api/v1/movies/1
++ docker exec nginx hostname -i
++ curl -X DELETE 172.18.0.7:8080/api/v1/movies/1 -H accept: application/json
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100     4  100     4    0     0   1203      0 --:--:-- --:--:-- --:--:--  1333
+null+ echo -e 
+
+ Test-15 : curl -X GET ALL on ip-nginx:8080/api/v1/movies/
+-e 
+
+ Test-15 : curl -X GET ALL on ip-nginx:8080/api/v1/movies/
++ docker exec nginx hostname -i
++ curl -X GET 172.18.0.7:8080/api/v1/movies/ -H accept: application/json
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100   516  100   516    0     0   208k      0 --:--:-- --:--:-- --:--:--  251k
+[{"id":2,"name":"Star Wars: Episode VI - Return of the Jedi","plot":"The evil Galactic Empire is building a new Death Star space station to permanently destroy the Rebel Alliance, its main opposition.","genres":["Action","Adventure","Fantasy"],"casts_id":[3,4,5]},{"id":3,"name":"Star Wars: Episode V - The Empire Strikes Back","plot":"Set three years after the events of Star Wars, the film recounts the battle between the malevolent Galactic Empire, ","genres":["Action","Adventure","Fantasy"],"casts_id":[3,4,5]}]+ echo -e 
+
+ -------------------------------------------------------------------
+-e 
+
+ -------------------------------------------------------------------
++ echo -e Tests acceptance CRUD casts fastapi application
+  
+-e Tests acceptance CRUD casts fastapi application
+  
++ echo -e 
+
+ ------------------------------------------
+-e 
+
+ ------------------------------------------
++ echo -e 
+
+ Test-16 : curl -X GET ALL on ip-nginx:8080/api/v1/casts/
+-e 
+
+ Test-16 : curl -X GET ALL on ip-nginx:8080/api/v1/casts/
++ docker exec nginx hostname -i
++ curl -X POST http://172.18.0.7:8080/api/v1/casts/ -H accept: application/json -H Content-Type: application/json -d {
+  "name": "Adam Driver",
+  "nationality": "USA"
+}
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100   100  100    49  100    51   5630   5860 --:--:-- --:--:-- --:--:-- 12500
+{"name":"Adam Driver","nationality":"USA","id":1}+ echo -e 
+
+ Test-17 : curl -X GET POST  create id=1 cast on ip-nginx:8080/api/v1/casts/
+-e 
+
+ Test-17 : curl -X GET POST  create id=1 cast on ip-nginx:8080/api/v1/casts/
++ docker exec nginx hostname -i
++ curl -X POST http://172.18.0.7:8080/api/v1/casts/ -H accept: application/json -H Content-Type: application/json -d {
+  "name": "Daisy Ridley",
+  "nationality": "USA"
+}
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100   102  100    50  100    52  20056  20858 --:--:-- --:--:-- --:--:-- 51000
+{"name":"Daisy Ridley","nationality":"USA","id":2}+ echo -e 
+
+ Test-18 : curl -X POST create id=2 cast ALL on ip-nginx:8080/api/v1/casts/
+-e 
+
+ Test-18 : curl -X POST create id=2 cast ALL on ip-nginx:8080/api/v1/casts/
++ docker exec nginx hostname -i
++ curl -X POST http://172.18.0.7:8080/api/v1/casts/ -H accept: application/json -H Content-Type: application/json -d {
+  "name": "Carrie FISHER",
+  "nationality": "USA"
+}
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100   104  100    51  100    53  18385  19105 --:--:-- --:--:-- --:--:-- 52000
+{"name":"Carrie FISHER","nationality":"USA","id":3}+ echo -e 
+
+ Test-19 : curl -X POST create id=3 cast on ip-nginx:8080/api/v1/casts/
+-e 
+
+ Test-19 : curl -X POST create id=3 cast on ip-nginx:8080/api/v1/casts/
++ docker exec nginx hostname -i
++ curl -X POST http://172.18.0.7:8080/api/v1/casts/ -H accept: application/json -H Content-Type: application/json -d {
+  "name": "Mark HAMILL",
+  "nationality": "USA"
+}
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100   100  100    49  100    51  17632  18351 --:--:-- --:--:-- --:--:-- 50000
+{"name":"Mark HAMILL","nationality":"USA","id":4}+ echo -e 
+
+ Test-20 : curl -X POST create id=4 cast on ip-nginx:8080/api/v1/casts/
+-e 
+
+ Test-20 : curl -X POST create id=4 cast on ip-nginx:8080/api/v1/casts/
++ docker exec nginx hostname -i
++ curl -X POST http://172.18.0.7:8080/api/v1/casts/ -H accept: application/json -H Content-Type: application/json -d {
+  "name": "Harisson FORD",
+  "nationality": "USA"
+}
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100   104  100    51  100    53  19332  20090 --:--:-- --:--:-- --:--:-- 52000
+{"name":"Harisson FORD","nationality":"USA","id":5}+ echo -e 
+
+ Test-21 : curl -X GET ALL on ip-nginx:8080/api/v1/casts/
+-e 
+
+ Test-21 : curl -X GET ALL on ip-nginx:8080/api/v1/casts/
++ docker exec nginx hostname -i
++ curl -X GET http://172.18.0.7:8080/api/v1/casts/ -H accept: application/json
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100   256  100   256    0     0   100k      0 --:--:-- --:--:-- --:--:--  125k
+[{"name":"Adam Driver","nationality":"USA","id":1},{"name":"Daisy Ridley","nationality":"USA","id":2},{"name":"Carrie FISHER","nationality":"USA","id":3},{"name":"Mark HAMILL","nationality":"USA","id":4},{"name":"Harisson FORD","nationality":"USA","id":5}]+ echo -e 
+
+ Test-22 : curl -X GET id=1 on ip-nginx:8080/api/v1/casts/1
+-e 
+
+ Test-22 : curl -X GET id=1 on ip-nginx:8080/api/v1/casts/1
++ docker exec nginx hostname -i
++ curl -X GET http://172.18.0.7:8080/api/v1/casts/1/ -H accept: application/json
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100    49  100    49    0     0  18553      0 --:--:-- --:--:-- --:--:-- 24500
+{"name":"Adam Driver","nationality":"USA","id":1}+ echo -e 
+
+ Test-23 : curl -X DELETE id=1 on ip-nginx:8080/api/v1/casts/
+-e 
+
+ Test-23 : curl -X DELETE id=1 on ip-nginx:8080/api/v1/casts/
++ docker exec nginx hostname -i
++ curl -X DELETE http://172.18.0.7:8080/api/v1/casts/1 -H accept: application/json
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100     4  100     4    0     0    938      0 --:--:-- --:--:-- --:--:--  1000
+null+ echo -e 
+
+ Test-24 : curl -X GET ALL on ip-nginx:8080/api/v1/casts/
+-e 
+
+ Test-24 : curl -X GET ALL on ip-nginx:8080/api/v1/casts/
++ docker exec nginx hostname -i
++ curl -X GET http://172.18.0.7:8080/api/v1/casts/ -H accept: application/json
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100   206  100   206    0     0  87846      0 --:--:-- --:--:-- --:--:--  100k
+[{"name":"Daisy Ridley","nationality":"USA","id":2},{"name":"Carrie FISHER","nationality":"USA","id":3},{"name":"Mark HAMILL","nationality":"USA","id":4},{"name":"Harisson FORD","nationality":"USA","id":5}]+ docker rm -f nginx movie_service movie_db cast_service cast_db
+nginx
+movie_service
+movie_db
+cast_service
+cast_db
++ docker ps -a
+CONTAINER ID   IMAGE                 COMMAND                  CREATED       STATUS       PORTS                                                                                          NAMES
+2beb1756c30a   jenkins/jenkins:lts   "/usr/bin/tini -- /u…"   4 hours ago   Up 4 hours   0.0.0.0:50000->50000/tcp, [::]:50000->50000/tcp, 0.0.0.0:8280->8080/tcp, [::]:8280->8080/tcp   jenkins
+[Pipeline] }
+[Pipeline] // script
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+Finished: SUCCESS
 ```
