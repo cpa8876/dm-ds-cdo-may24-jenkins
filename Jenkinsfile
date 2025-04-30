@@ -160,7 +160,7 @@ pipeline {
   -H 'accept: application/json'
             echo -e "\n\n Test-15 : curl -X GET ALL on ip-nginx:8080/api/v1/movies/"
             curl -X 'GET' \
-  $(docker exec nginx hostname -i):8001/api/v1/movies/ \
+  $(docker exec nginx hostname -i):8080/api/v1/movies/ \
   -H 'accept: application/json'
 
             docker rm -f nginx movie_service movie_db cast_service cast_db
