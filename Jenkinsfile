@@ -68,6 +68,55 @@ pipeline {
             curl $(docker exec movie_service hostname -i):8000/api/v1/movies/docs
             curl $(docker exec nginx hostname -i):8080/api/v1/movies/docs
             curl $(docker exec nginx hostname -i):8080/api/v1/casts/docs
+            curl -X 'POST'   'http://192.168.20.1:8080/api/v1/movies/'   -H 'accept: application/json'   -H 'Content-Type: application/json'   -d '{
+  "id": 1,
+  "name": "Star Wars: Episode IX - The Rise of Skywalker",
+  "plot": "The surviving members of the resistance face the First Order once again.",
+  "genres": [
+    "Action",
+    "Adventure",
+    "Fantasy"
+  ],
+  "casts_id": [
+   1,
+   2,
+   3,
+   4,
+   5
+  ]
+}'
+
+curl -X 'POST'   'http://192.168.20.1:8080/api/v1/movies/'   -H 'accept: application/json'   -H 'Content-Type: application/json'   -d '{
+  "id": 2,
+  "name": "Star Wars: Episode VI - Return of the Jedi",
+  "plot": "The evil Galactic Empire is building a new Death Star space station to permanently destroy the Rebel Alliance, its main opposition.",
+  "genres": [
+    "Action",
+    "Adventure",
+    "Fantasy"
+  ],
+  "casts_id": [
+   3,
+   4,
+   5
+  ]
+}'
+
+curl -X 'POST'   'http://127.0.0.1:8080/api/v1/movies/'   -H 'accept: application/json'   -H 'Content-Type: application/json'   -d '{
+ "id": 3,
+  "name": "Star Wars: Episode V - The Empire Strikes Back",
+  "plot": "Set three years after the events of Star Wars, the film recounts the battle between the malevolent Galactic Empire, ",
+  "genres": [
+    "Action",
+    "Adventure",
+    "Fantasy"
+  ],
+  "casts_id": [
+    3,
+    4,
+    5
+  ]
+}'
             docker rm -f nginx movie_service movie_db cast_service casts_db
             docker ps -a
           '''
