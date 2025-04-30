@@ -62,6 +62,9 @@ pipeline {
         script {//curl localhost or curl 127.0.0.1:8480 "curl -svo /dev/null http://localhost" or docker exec -it my-ctnr-ds-fastapi curl localhost
           sh '''
             apt update -y && apt full-upgrade-y && apt install curl -y
+            echo -e "\n\n -------------------------------------------------------------------"
+            echo -e "Tests acceptance access on contenaires  cast_db, movie_db, cast _sezrvice, movie_service and loadbalancer\n  "
+            echo -e "\n\n ------------------------------------------"
             echo -e "\n Test-01 : Sql query on cast_db : select * from pg_database :"
             docker exec cast_db psql -h localhost -p 5432 -U cast_db_username -d cast_db_dev -c "select * from pg_database"
             echo -e "\n\n Test-02 : curl on ip-cast_service:8000/api/v1/casts/docs"
@@ -74,6 +77,9 @@ pipeline {
             curl $(docker exec nginx hostname -i):8080/api/v1/movies/docs
             echo -e "\n\n Test-06 : curl on ip-nginx:8080/api/v1/casts/docs"
             curl $(docker exec nginx hostname -i):8080/api/v1/casts/docs
+            echo -e "\n\n -------------------------------------------------------------------"
+            echo -e "Tests acceptance CRUD movies fastapi with contenair nginx (loadbalancer) application\n  "
+            echo -e "\n\n ------------------------------------------"
             echo -e "\n\n Test-07 : curl -X POST on ip-nginx:8080/api/v1/movies/ for id=1 Star wars IX"
             curl -X 'POST'   $(docker exec nginx hostname -i):8080/api/v1/movies/   -H 'accept: application/json'   -H 'Content-Type: application/json'   -d '{
   "id": 1,
@@ -161,6 +167,61 @@ pipeline {
             echo -e "\n\n Test-15 : curl -X GET ALL on ip-nginx:8080/api/v1/movies/"
             curl -X 'GET' \
   $(docker exec nginx hostname -i):8080/api/v1/movies/ \
+  -H 'accept: application/json'
+            echo -e "\n\n -------------------------------------------------------------------"
+            echo -e "Tests acceptance CRUD casts fastapi application\n  "
+            echo -e "\n\n ------------------------------------------"
+            echo -e "\n\n Test-16 : curl -X GET ALL on ip-nginx:8080/api/v1/casts/"
+            curl -X 'POST' \
+  $(docker exec nginx hostname -i) \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "name": "Adam Driver",
+  "nationality": "USA"
+}'
+            echo -e "\n\n Test-17 : curl -X GET POST  create id=1 cast on ip-nginx:8080/api/v1/casts/"
+            curl -X 'POST' \
+  $(docker exec nginx hostname -i) \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "name": "Daisy Ridley",
+  "nationality": "USA"
+}'
+            echo -e "\n\n Test-18 : curl -X POST create id=2 cast ALL on ip-nginx:8080/api/v1/casts/"
+           curl -X 'POST' \                                                                                                       $(docker exec nginx hostname -i) \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "name": "Carrie FISHER",
+  "nationality": "USA"
+}'
+            echo -e "\n\n Test-19 : curl -X POST create id=3 cast on ip-nginx:8080/api/v1/casts/"
+            curl -X 'POST'   $(docker exec nginx hostname -i)   -H 'accept: application/json'   -H 'Content-Type: application/json'   -d '{
+  "name": "Mark HAMILL",
+  "nationality": "USA"
+}'
+            echo -e "\n\n Test-20 : curl -X POST create id=4 cast on ip-nginx:8080/api/v1/casts/"
+            curl -X 'POST'   $(docker exec nginx hostname -i)   -H 'accept: application/json'   -H 'Content-Type: application/json'   -d '{
+  "name": "Harisson FORD",
+  "nationality": "USA"
+}'
+            echo -e "\n\n Test-21 : curl -X GET ALL on ip-nginx:8080/api/v1/casts/"
+            curl -X 'GET' \
+  $(docker exec nginx hostname -i) \
+  -H 'accept: application/json'
+            echo -e "\n\n Test-22 : curl -X GET id=1 on ip-nginx:8080/api/v1/casts/1"
+            curl -X 'GET' \
+  'http://192.168.20.1:8002/api/v1/casts/1/' \
+  -H 'accept: application/json'
+            echo -e "\n\n Test-23 : curl -X DELETE id=1 on ip-nginx:8080/api/v1/casts/"
+            curl -X 'DELETE' \
+  'http://192.168.20.1:8002/api/v1/casts/1' \
+  -H 'accept: application/json'
+            echo -e "\n\n Test-24 : curl -X GET ALL on ip-nginx:8080/api/v1/casts/"
+            curl -X 'GET' \
+  $(docker exec nginx hostname -i) \
   -H 'accept: application/json'
 
             docker rm -f nginx movie_service movie_db cast_service cast_db

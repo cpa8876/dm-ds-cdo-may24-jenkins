@@ -97,7 +97,7 @@ cd   ./DM-SP04-C04-JENKINS-CPA-MAY2024
 ##### S-2.2.3)  application fastapi to manage casts :
 `sudo docker push cpa8876/casts-dm-ds-jenkins-fastapi:tagname`
 
-##### S-2.2.2)  docker image for th database useb by casts-dm-ds-jenkins-fastapi:
+##### S-2.2.2)  docker image for the database useb by casts-dm-ds-jenkins-fastapi:
 ```md 
 sudo docker push cpa8876/db-casts-dm-ds-jenkins-fastapi:tagname
 docker push dmcpa8876/dm-jenkins-cpa8876-fastapi:tagname \
@@ -506,4 +506,205 @@ http://192.168.20.1:8080/api/v1/casts/docs
 ```md
 
 
+```
+### Step 11)  Create jenkinsfile and execute pipeline CI
+#### S-11.1) Build : « ./Jenkinsfile » from /dr01-python-microservices6/
+-  ./Jenkinsfile
+```md
+ //# /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins/Jenkinsfile
+pipeline {
+  environment { // Declaration of environment variables
+    DOCKER_ID = "cpa8876" // replace this with your docker-id
+    DOCKER_IMAGE = "ds-fastapi"
+    DOCKER_IMAGE1 = "movies-ds-fastapi"
+    DOCKER_IMAGE2 = "casts-ds-fastapi"
+    DOCKER_TAG = "v.${BUILD_ID}.0" // we will tag our images with the current build in order to increment the value by 1 with each new build
+    //DOCKER_TAG="latest"
+    //DOCKER_ID="cpa8876" // replace this with your docker-id
+    //DOCKER_IMAGE="ds-fastapi"
+    //DOCKER_IMAGE1="movie-ds-fastapi"
+    //DOCKER_IMAGE2="casts-ds-fastapi"
+}
+  agent any // Jenkins will be able to select all available agents
+  stages {
+    stage('Docker Build'){ // docker build image stage
+    // docker rm -f my-ctnr-ds-fastapi
+      steps {
+        script {
+          sh '''
+            cd /app/movie-service
+            docker rm -f $DOCKER_ID/$DOCKER_IMAGE1
+            docker build -t $DOCKER_ID/$DOCKER_IMAGE1:$DOCKER_TAG .
+            cd /app/cast-service
+            docker rm -f $DOCKER_ID/$DOCKER_IMAGE2
+            docker build -t $DOCKER_ID/$DOCKER_IMAGE2:$DOCKER_TAG .
+            docker image ls -a | grep fastapi
+            sleep 6
+          '''
+        }
+      }
+    }
+    stage('Docker run'){ // run container from our builded image
+      steps {
+        script {// docker run --network=dm-jenkins-cpa-infra_my-net -d -p 8800:8000 --name my-ctnr-ds-fastapi $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG
+        //docker run -d --name test_loadbalancer_fastapi --net dm-jenkins-cpa-infra_my-net -p 8080:8080 -v /app/nginx_config.conf:/etc/nginx/conf.d/default.conf nginx:latest
+        // cast_db_username:cast_db_password@cast_db/cast_db_dev cpa8876/casts-ds-fastapi:v.4.0 uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+        // movie_db_username:movie_db_password@movie_db/movie_db_dev -e CAST_SERVICE_HOST_URL=http://cast_service:8000/api/v1/casts/ cpa8876/movies-ds-fastapi:v.4.0 uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+          sh '''
+            cd /app
+            docker volume create postgres_data_movie
+            docker volume create postgres_data_cast
+            docker run -d --name cast_db --net dm-jenkins-cpa-infra_my-net -v postgres_data_cast:/var/lib/postgresql/data/ -e POSTGRES_USER=cast_db_username -e POSTGRES_PASSWORD=cast_db_password -e POSTGRES_DB=cast_db_dev --health-cmd "CMD-SHELL,pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}" --health-interval 10s --health-retries 5 --health-start-period 30s --health-timeout 10s postgres:12.1-alpine
+            sleep 6
+            docker run -d --name cast_service --net dm-jenkins-cpa-infra_my-net -p 8002:8000 -e DATABASE_URI=postgresql://cast_db_username:cast_db_password@cast_db/cast_db_dev $DOCKER_ID/$DOCKER_IMAGE2:$DOCKER_TAG uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+            sleep 2
+            docker run -d  --name movie_db --net dm-jenkins-cpa-infra_my-net -v postgres_data_movie:/var/lib/postgresql/data/ -e POSTGRES_USER=movie_db_username -e POSTGRES_PASSWORD=movie_db_password -e POSTGRES_DB=movie_db_dev --health-cmd "CMD-SHELL,pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}" --health-interval 10s --health-retries 5 --health-start-period 30s --health-timeout 10s postgres:12.1-alpine &
+            sleep 6
+            docker run -d --name movie_service --net dm-jenkins-cpa-infra_my-net -p 8001:8000 -e DATABASE_URL=postgresql://movie_db_username:movie_db_password@movie_db/movie_db_dev -e CAST_SERVICE_HOST_URL=http://cast_service:8000/api/v1/casts/ $DOCKER_ID/$DOCKER_IMAGE1:$DOCKER_TAG uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+            sleep 2
+            docker run -d --name nginx --net dm-jenkins-cpa-infra_my-net -p 8080:8080 nginx:latest
+            docker cp nginx_config.conf nginx:/etc/nginx/conf.d/default.conf
+            docker restart nginx
+          '''
+        }
+      }
+    }
+
+    stage('Test Acceptance'){ // we launch the curl command to validate that the container responds to the request
+      steps {
+        script {//curl localhost or curl 127.0.0.1:8480 "curl -svo /dev/null http://localhost" or docker exec -it my-ctnr-ds-fastapi curl localhost
+          sh '''
+            apt update -y && apt full-upgrade-y && apt install curl -y
+            echo -e "\n Test-01 : Sql query on cast_db : select * from pg_database :"
+            docker exec cast_db psql -h localhost -p 5432 -U cast_db_username -d cast_db_dev -c "select * from pg_database"
+            echo -e "\n\n Test-02 : curl on ip-cast_service:8000/api/v1/casts/docs"
+            curl $(docker exec cast_service hostname -i):8000/api/v1/casts/docs
+            echo -e "\n Test-03 : Sql query on movie_db : select * from pg_database :"
+            docker exec movie_db psql -h localhost -p 5432 -U movie_db_username -d movie_db_dev -c "select * from pg_database"
+            echo -e "\n\n Test-04 : curl on ip-movie_service:8000/api/v1/casts/docs"
+            curl $(docker exec movie_service hostname -i):8000/api/v1/movies/docs
+            echo -e "\n\n Test-05 : curl on ip-nginx:8080/api/v1/movies/docs"
+            curl $(docker exec nginx hostname -i):8080/api/v1/movies/docs
+            echo -e "\n\n Test-06 : curl on ip-nginx:8080/api/v1/casts/docs"
+            curl $(docker exec nginx hostname -i):8080/api/v1/casts/docs
+            echo -e "\n\n Test-07 : curl -X POST on ip-nginx:8080/api/v1/movies/ for id=1 Star wars IX"
+            curl -X 'POST'   $(docker exec nginx hostname -i):8080/api/v1/movies/   -H 'accept: application/json'   -H 'Content-Type: application/json'   -d '{
+  "id": 1,
+  "name": "Star Wars: Episode IX - The Rise of Skywalker",
+  "plot": "The surviving members of the resistance face the First Order once again.",
+  "genres": [
+    "Action",
+    "Adventure",
+    "Fantasy"
+  ],
+  "casts_id": [
+   1,
+   2,
+   3,
+   4,
+   5
+  ]
+}'
+            echo -e "\n\n Test-08 : curl -X POST on ip-nginx:8080/api/v1/movies/ for id=2 Star wars VI"
+            curl -X 'POST'   $(docker exec nginx hostname -i):8080/api/v1/movies/   -H 'accept: application/json'   -H 'Content-Type: application/json'   -d '{
+  "id": 2,
+  "name": "Star Wars: Episode VI - Return of the Jedi",
+  "plot": "The evil Galactic Empire is building a new Death Star space station to permanently destroy the Rebel Alliance, its main opposition.",
+  "genres": [
+    "Action",
+    "Adventure",
+    "Fantasy"
+  ],
+  "casts_id": [
+   3,
+   4,
+   5
+  ]
+}'
+            echo -e "\n\n Test-09 : curl -X POST on ip-nginx:8080/api/v1/movies/ for id=3 Star wars V"
+            curl -X 'POST'   $(docker exec nginx hostname -i):8080/api/v1/movies/   -H 'accept: application/json'   -H 'Content-Type: application/json'   -d '{
+ "id": 3,
+  "name": "Star Wars: Episode V - The Empire Strikes Back",
+  "plot": "Set three years after the events of Star Wars, the film recounts the battle between the malevolent Galactic Empire, ",
+  "genres": [
+    "Action",
+    "Adventure",
+    "Fantasy"
+  ],
+  "casts_id": [
+    3,
+    4,
+    5
+  ]
+}'
+            echo -e "\n\n Test-10 : curl -X GET ALL on ip-nginx:8080/api/v1/movies/"
+            curl -X 'GET' \
+  $(docker exec nginx hostname -i):8080/api/v1/movies/ \
+  -H 'accept: application/json'
+            echo -e "\n\n Test-11 : curl -X GET id=1 on ip-nginx:8080/api/v1/movies/1"
+            curl -X 'GET' \
+  $(docker exec nginx hostname -i):8080/api/v1/movies/1/ \
+  -H 'accept: application/json'
+            echo -e "\n\n Test-12 : curl -X PUT update id=1 on ip-nginx:8080/api/v1/movies/1"
+            curl -X 'PUT' \
+  $(docker exec nginx hostname -i):8080/api/v1/movies/1 \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "id": 1,
+  "name": "Star Wars: Episode IX - The Rise of Skywalker",
+  "plot": "The surviving members of the resistance face the First Order once again.",
+  "genres": [
+    "Action",
+    "Adventure",
+    "Fantasy"
+  ],
+  "casts_id": [
+   1
+  ]
+}'
+            echo -e "\n\n Test-13 : curl -X GET ALL on ip-nginx:8080/api/v1/movies/"
+            curl -X 'GET' \
+  $(docker exec nginx hostname -i):8080/api/v1/movies/ \
+  -H 'accept: application/json'
+            echo -e "\n\n Test-14 : curl -X DELETE id=1 on ip-nginx:8080/api/v1/movies/1"
+            curl -X 'DELETE' \
+  $(docker exec nginx hostname -i):8080/api/v1/movies/1 \
+  -H 'accept: application/json'
+            echo -e "\n\n Test-15 : curl -X GET ALL on ip-nginx:8080/api/v1/movies/"
+            curl -X 'GET' \
+  $(docker exec nginx hostname -i):8080/api/v1/movies/ \
+  -H 'accept: application/json'
+
+            docker rm -f nginx movie_service movie_db cast_service cast_db
+            docker ps -a
+          '''
+        }
+      }
+    }
+  }
+  post { // send email when the job has failed
+  // ..
+    failure {
+      echo "This will run if the job failed"
+      mail to: "cristofe.pascale@gmail.com",
+        subject: "${env.JOB_NAME} - Build # ${env.BUILD_ID} has failed",
+        body: "For more info on the pipeline failure, check out the console output at ${env.BUILD_URL}"
+    }
+  // ..
+  }
+}
+```
+
+#### S-11.2) Screenshots after execute the pipeline with Jenkinsfile: « ./Jenkinsfile » from /dr01-python-microservices6/  
+<br>
+-  Stage view from Jenkinsfile
+![Screenshot from dashborad on pipeline Jenkins dm2 jenkins](./img/tdb-test22-dm2-jenkins.png  "Dashborad dm2-jenkins pipeline")
+<br>
+<br>
+-  Console output Tableau de bord / dm2-jenkins #22 view from Jenkinsfile : console-output-test22-dm2-jenkins.png
+![Extract frome test acceptance from console-output-test22-dm2-jenkins.png](./img/console-output-test22-dm2-jenkins.png  "Scrennshot extract from consople output test22-dm2")
+
+
+```md
 ```
