@@ -7,7 +7,7 @@
 2. docker and his plugin docker compose
 3. k3d
 4. helm  
-
+<br>
 ### P2) Verify all these softwares are well installed
 ```md
 sudo git version 
@@ -21,44 +21,100 @@ sudo k3d version
 
 sudo helm version
 ```
+### P3) Move to work directory
+```md
+cd /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins
+```
 
+### P4) Synchronize Github repo with local directoy of project
+```md
+ssh-add ../.ssh/ssh-key-github-cpa8876
+git branch -a
+git status
+git add .
+git commit -m "update file ./Docker-composez.yaml to delete blank rom on volume bloc"
+git push origin main
+```
+### P5) Create the docker network "network create dm-jenkins-cpa-infra_my-net"
+
+```md
+sudo docker network ls
+sudo docker network create dm-jenkins-cpa-infra_my-net
+sudo docker network ls
+```
+### P6) Build container docker of jenkins server 
+
+```md
+sudo docker ps -a
+sudo docker compose down
+sudo docker compose up -d
+sudo docker ps -a
+```
+
+### P7) Log on  jenkins server 
+
+Log on  [192.168.20.1:8280](192.168.20.1:8280) in firefox private mode
+![Screenshot log to jenkins server](./img/Login-jenkins-server.png
+  "log jenkins server")
+<br>
+<br>
+Log on [http://192.168.20.1:8280/](http://192.168.20.1:8280/)
+![Dashboard Jenkins server](./img/tdb-jenkins-srvr.png  "Dashboard Jenkins server")
+<br>
+### P8) Log on Github repo of jenkins homework  
+Log on [https://github.com/cpa8876/dm-ds-cdo-may24-jenkins#](https://github.com/cpa8876/dm-ds-cdo-may24-jenkins#) 
+![Log on github cpa8876](./img/log-on-github-cpa8876.png  "Log github cpa8876")
+<br>
+<br>
+Log on [https://github.com/cpa8876/dm-ds-cdo-may24-jenkins](https://github.com/cpa8876/dm-ds-cdo-may24-jenkins)
+![Dashboard Github cpa8876](./img/tdb-github-cpa8876.png  "Dashboard Github cpa8876")
+
+### P9) Log on Dockerhub repo of jenkins homework  
+Log on [Dockerhub](https://hub.docker.com/repositories/dmcpa8876)
+
+![Log on dockerhub cpa8876](./img/log-on-dockerhub-cpa8876.png "Log dockerhub cpa8876")
+<br>
+<br>
+Log on [https://hub.docker.com/repositories/cpa8876](https://hub.docker.com/repositories/cpa8876)
+![Dashboard Dockerhub cpa8876](./img/tdb-repo-dockerhub-cpa8876.png  "Dashboard dockrhub cpa8876")
+<br>
 ### Step 1)  Create a directory for the homework
 ```md
 mkdir -p DM-SP04-C04-JENKINS-CPA-MAY2024
 cd   ./DM-SP04-C04-JENKINS-CPA-MAY2024
 ```
-
+<br>
 ### Step 2) Create Dockerhub account
-#### 2.1) Create a repository Docker hub : "cpa8876"
+#### S-2.1) Create a repository Docker hub : "cpa8876"
 
-#### 2.2) Create this docker images
-##### 2.2.1)  docker image for the application fastapi to manage movies :
+#### S-2.2) Create this docker images
+##### S-2.2.1)  docker image for the application fastapi to manage movies :
 `sudo docker push cpa8876/movies-dm-ds-jenkins-fastapi:tagname`
 
-##### 2.2.2)  docker image for th database useb by movies-dm-ds-jenkins-fastap:
+##### S-2.2.2)  docker image for th database useb by movies-dm-ds-jenkins-fastap:
 `sudo docker push cpa8876/db-movies-dm-ds-jenkins-fastapi:tagname`
 
-##### 2.2.3)  application fastapi to manage casts :
+##### S-2.2.3)  application fastapi to manage casts :
 `sudo docker push cpa8876/casts-dm-ds-jenkins-fastapi:tagname`
 
-##### 2.2.2)  docker image for th database useb by casts-dm-ds-jenkins-fastapi:
+##### S-2.2.2)  docker image for th database useb by casts-dm-ds-jenkins-fastapi:
 ```md 
 sudo docker push cpa8876/db-casts-dm-ds-jenkins-fastapi:tagname
 docker push dmcpa8876/dm-jenkins-cpa8876-fastapi:tagname \
 https://hub.docker.com/repositories/dmcpa8876
 ```
 
-
+<br>
 ### Step 3) Create Github account and a repository for homework
-#### 3.1) Url  repo github of homework :
-[github cpa8876 for jenkins homework]( https://github.com/cpa8876/) 
+#### S-3.1) Url  repo github of homework  [github cpa8876 for jenkins homework]( https://github.com/cpa8876/) 
   
-#### 3.2) Url to clone this repo  : 
+#### S-3.2) Url to clone this repo  : 
 `git clone https://github.com/cpa8876/dm-ds-cdo-may24-jenkins.git`
 
-3.3) sshgen a pair of ssh keys to connect to the Github account and save this pair on the ./.ssh/ssh-key-github-cpa8876 and ssh-key-github-cpa8876.pub`
+#### S-3.3) Generate with sshgen and save a pair of ssh keys to connect to the Github account 
+Url where is saved  this keypair ssh access github repo:  ./.ssh/ssh-key-github-cpa8876 and ssh-key-github-cpa8876.pub`
 
-
+<br>
 ### Step 4) Clone repo github jenkins datascientest homeworks
 #### S-4.1) the fisrt time :
 
@@ -100,7 +156,7 @@ ssh-add ../.ssh/ssh-key-github-cpa8876
 git status
 git branch -a
 ```
-
+<br>
 ###  Step 5)  Delete all docker containers and images 
  
 #### S-5.1)  List all  dockers volumes, networks, images, and containers.
@@ -110,7 +166,7 @@ sudo docker volume ls
 sudo docker image ls -a 
 sudo docker ps -a
 ```
-
+<br>
 #### S-5.2)  Delete all  containers, images, volumes and  networks. .
 ```md
 sudo docker rm -f $(sudo docker ps -aq)
@@ -127,8 +183,14 @@ sudo docker image ls -a
 sudo docker ps -a
 ```
 
-### Step 6)  Create a init-k3d.sh to create my infrastructure with  one server jenkins, one loadbalancer to access to a cluster k3d  composed by one control master and two workers
+### Step 6)  Create a script shell file "init-k3d.sh" to create my infrastructure 
 
+This script create an infrastructuture with:  
+- one server jenkins,  
+- one loadbalancer to access to a cluster k3d  composed by :  
+&nbsp; &nbsp; - one control master  
+&nbsp; &nbsp; - and    two workers  
+        
 #### S-6.1)  Create a container Docker for jenkins with a Docker-compose.yml
 ```md
 # /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins/docker-compose.yml
@@ -196,7 +258,7 @@ k3d-mycluster-agent-0    Ready    <none>                 3m58s   v1.31.5+k3s1
 k3d-mycluster-agent-1    Ready    <none>                 3m58s   v1.31.5+k3s1
 k3d-mycluster-server-0   Ready    control-plane,master   4m7s    v1.31.5+k3s1
 ```
-
+<br>
 ### Step 7)  Connect with firefox on the jenkins server http://192.168.20.1:8280
 
 #### S-7.1) Access on jenkins server
@@ -242,6 +304,7 @@ id : token_dockerhub
 Description : token_dockerhub for the dm Jenkins
 ![ ](img/secret-token-dockerhub.png)
 
+<br>
 ### Step 8 : Create a docker for the server jenkins and a specific network. 
 
 #### S-8.1) Create a docker network "dm-jenkins-cpa-infra_my-net", that will be used by the containers of "jenkins" server and the cluster k3d composed with a control master and 2 worker and a loadbalancer
@@ -278,7 +341,7 @@ docker network ls
 exit
 ```
 
-
+<br>
 ### Step 9)  Test docker compose fastapi applications with ./dr01-python-microservices6/docker-compose .yaml
 #### S-9.1) Execute : « docker compose up -d » from /dr01-python-microservices6/
 ```md
@@ -437,7 +500,7 @@ curl http://192.168.20.1:8080/api/v1/casts/docs
 http://192.168.20.1:8080/api/v1/casts/docs 
 ![ ](img/8080-api-v1-casts-docs.png)
 
-
+<br>
 ### Step 10)  Test des charts helm fastapi applications with /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins/dr01-python-microservices6/charts/Chart.yaml
 - Test curl 
 ```md
