@@ -173,7 +173,7 @@ pipeline {
             echo -e "\n\n ------------------------------------------"
             echo -e "\n\n Test-16 : curl -X GET ALL on ip-nginx:8080/api/v1/casts/"
             curl -X 'POST' \
-  $(docker exec nginx hostname -i) \
+  http://$(docker exec nginx hostname -i):8080/api/v1/casts/ \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{
@@ -182,7 +182,7 @@ pipeline {
 }'
             echo -e "\n\n Test-17 : curl -X GET POST  create id=1 cast on ip-nginx:8080/api/v1/casts/"
             curl -X 'POST' \
-  $(docker exec nginx hostname -i) \
+  http://$(docker exec nginx hostname -i):8080/api/v1/casts/ \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{
@@ -190,7 +190,8 @@ pipeline {
   "nationality": "USA"
 }'
             echo -e "\n\n Test-18 : curl -X POST create id=2 cast ALL on ip-nginx:8080/api/v1/casts/"
-           curl -X 'POST' \                                                                                                       $(docker exec nginx hostname -i) \
+           curl -X 'POST' \
+  http://$(docker exec nginx hostname -i):8080/api/v1/casts/ \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{
@@ -198,30 +199,30 @@ pipeline {
   "nationality": "USA"
 }'
             echo -e "\n\n Test-19 : curl -X POST create id=3 cast on ip-nginx:8080/api/v1/casts/"
-            curl -X 'POST'   $(docker exec nginx hostname -i)   -H 'accept: application/json'   -H 'Content-Type: application/json'   -d '{
+            curl -X 'POST'   http://$(docker exec nginx hostname -i):8080/api/v1/casts/   -H 'accept: application/json'   -H 'Content-Type: application/json'   -d '{
   "name": "Mark HAMILL",
   "nationality": "USA"
 }'
             echo -e "\n\n Test-20 : curl -X POST create id=4 cast on ip-nginx:8080/api/v1/casts/"
-            curl -X 'POST'   $(docker exec nginx hostname -i)   -H 'accept: application/json'   -H 'Content-Type: application/json'   -d '{
+            curl -X 'POST'   http://$(docker exec nginx hostname -i):8080/api/v1/casts/   -H 'accept: application/json'   -H 'Content-Type: application/json'   -d '{
   "name": "Harisson FORD",
   "nationality": "USA"
 }'
             echo -e "\n\n Test-21 : curl -X GET ALL on ip-nginx:8080/api/v1/casts/"
             curl -X 'GET' \
-  $(docker exec nginx hostname -i) \
+  http://$(docker exec nginx hostname -i):8080/api/v1/casts/ \
   -H 'accept: application/json'
             echo -e "\n\n Test-22 : curl -X GET id=1 on ip-nginx:8080/api/v1/casts/1"
             curl -X 'GET' \
-  'http://192.168.20.1:8002/api/v1/casts/1/' \
+  http://$(docker exec nginx hostname -i):8080/api/v1/casts/1/ \
   -H 'accept: application/json'
             echo -e "\n\n Test-23 : curl -X DELETE id=1 on ip-nginx:8080/api/v1/casts/"
             curl -X 'DELETE' \
-  'http://192.168.20.1:8002/api/v1/casts/1' \
+  http://$(docker exec nginx hostname -i):8080/api/v1/casts/1 \
   -H 'accept: application/json'
             echo -e "\n\n Test-24 : curl -X GET ALL on ip-nginx:8080/api/v1/casts/"
             curl -X 'GET' \
-  $(docker exec nginx hostname -i) \
+  http://$(docker exec nginx hostname -i):8080/api/v1/casts/ \
   -H 'accept: application/json'
 
             docker rm -f nginx movie_service movie_db cast_service cast_db
