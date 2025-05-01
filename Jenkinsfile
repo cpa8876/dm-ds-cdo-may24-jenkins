@@ -19,16 +19,18 @@ pipeline {
     // docker rm -f my-ctnr-ds-fastapi
       steps {
         script {
-          sh '''
-            cd /app/movie-service
-            docker rm -f $DOCKER_ID/$DOCKER_IMAGE1
-            docker build -t $DOCKER_ID/$DOCKER_IMAGE1:$DOCKER_TAG .
-            cd /app/cast-service
-            docker rm -f $DOCKER_ID/$DOCKER_IMAGE2
-            docker build -t $DOCKER_ID/$DOCKER_IMAGE2:$DOCKER_TAG .
-            docker image ls -a | grep fastapi
-            sleep 6
-          '''
+          // sh '''
+          //  cd /app/movie-service
+          //  docker rm -f $DOCKER_ID/$DOCKER_IMAGE1
+          //  docker build -t $DOCKER_ID/$DOCKER_IMAGE1:$DOCKER_TAG .
+          //  cd /app/cast-service
+          //  docker rm -f $DOCKER_ID/$DOCKER_IMAGE2
+          //  docker build -t $DOCKER_ID/$DOCKER_IMAGE2:$DOCKER_TAG .
+          //  docker image ls -a | grep fastapi
+          //  sleep 6
+          //'''
+          dockerImage1Movies = docker.build("${env.DOCKER_IMAGE1}:${env.DOCKER_TAG}")
+          dockerImage2Casts = docker.build("${env.DOCKER_IMAGE2}:${env.DOCKER_TAG}")
         }
       }
     }
@@ -243,9 +245,10 @@ pipeline {
             // docker login -u $DOCKER_ID -p $DOCKER_PASS
             // docker push $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG
          //  '''
-         // https://search.brave.com/search?q=configure+jenkins+access+dockerhub&source=desktop&summary=1&conversation=278281bb8f766e0684f132
+         // B75-00-3) https://medium.com/@psnavya90/jenkins-setup-running-in-a-docker-container-f5f8cbb42a06
           docker.withRegistry('https://index.docker.io/v1/', 'dockerHub') {
-          dockerImage.push($DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG)
+          dockerImage1Movies.push()
+          dockerImage2Casts.push()
 
         }
       }
