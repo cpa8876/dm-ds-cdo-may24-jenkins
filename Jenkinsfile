@@ -1,6 +1,10 @@
   //# /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins/Jenkinsfile
 pipeline {
   environment { // Declaration of environment variables
+<<<<<<< HEAD
+=======
+    //DOCKERHUB_CREDENTIALS = credentials('dockerHub')
+>>>>>>> 3338e25 (update Jenkinsfile to repalce shell cmd by           docker.withRegistry('https://index.docker.io/v1/', 'dockerHub') {)
     DOCKER_ID = "cpa8876" // replace this with your docker-id
     DOCKER_IMAGE = "ds-fastapi"
     DOCKER_IMAGE1 = "movie-ds-fastapi"
