@@ -1,6 +1,7 @@
   //# /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins/Jenkinsfile
 pipeline {
   environment { // Declaration of environment variables
+    DOCKERHUB_CREDENTIALS = credentials('dockerHub')
     DOCKER_ID = "cpa8876" // replace this with your docker-id
     DOCKER_IMAGE = "ds-fastapi"
     DOCKER_IMAGE1 = "movies-ds-fastapi"
@@ -238,11 +239,14 @@ pipeline {
           DOCKER_PASS = credentials("DOCKER_HUB_PASS") // we retrieve  docker password from secret text called docker_hub_pass saved on jenkins
         }
       steps {
-        script {
-          sh '''
-            docker login -u $DOCKER_ID -p $DOCKER_PASS
-            docker push $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG
-          '''
+        script {         // sh '''
+            // docker login -u $DOCKER_ID -p $DOCKER_PASS
+            // docker push $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG
+         //  '''
+         // https://search.brave.com/search?q=configure+jenkins+access+dockerhub&source=desktop&summary=1&conversation=278281bb8f766e0684f132
+          docker.withRegistry('https://index.docker.io/v1/', 'dockerHub') {
+          dockerImage.push($DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG)
+
         }
       }
     }
