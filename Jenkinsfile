@@ -29,8 +29,8 @@ pipeline {
           //  docker image ls -a | grep fastapi
           //  sleep 6
           //'''
-          dockerImage1Movies = docker.build("${env.DOCKER_IMAGE1}:${env.DOCKER_TAG}")
-          dockerImage2Casts = docker.build("${env.DOCKER_IMAGE2}:${env.DOCKER_TAG}")
+          dockerImageMovies = docker.build("${env.DOCKER_IMAGE1}:${env.DOCKER_TAG}")
+          dockerImageCasts = docker.build("${env.DOCKER_IMAGE2}:${env.DOCKER_TAG}")
         }
       }
     }
@@ -247,13 +247,13 @@ pipeline {
          //  '''
          // B75-00-3) https://medium.com/@psnavya90/jenkins-setup-running-in-a-docker-container-f5f8cbb42a06
           docker.withRegistry('https://cpa8876/', 'dockerHub') {
-            dockerImage1Movies.push()
-            dockerImage2Casts.push()
+            dockerImageMovies.push()
+            dockerImageCasts.push()
             }
           }
         }
-       }
-  }
+      }
+    }
 
   post { // send email when the job has failed
   // ..
