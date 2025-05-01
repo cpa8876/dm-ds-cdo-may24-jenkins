@@ -246,7 +246,7 @@ pipeline {
             // docker push $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG
          //  '''
          // B75-00-3) https://medium.com/@psnavya90/jenkins-setup-running-in-a-docker-container-f5f8cbb42a06
-          docker.withRegistry('https://index.docker.io/v1/', 'dockerHub') {
+          docker.withRegistry('https://cpa8876/', 'dockerHub') {
             dockerImage1Movies.push()
             dockerImage2Casts.push()
             }
