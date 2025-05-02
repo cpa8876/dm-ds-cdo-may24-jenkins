@@ -13,7 +13,9 @@ pipeline {
     //DOCKER_IMAGE1="movie-ds-fastapi"
     //DOCKER_IMAGE2="casts-ds-fastapi"
 }
+
   agent any // Jenkins will be able to select all available agents
+
   stages {
     stage('Docker Build'){ // docker build image stage
     // docker rm -f my-ctnr-ds-fastapi
@@ -35,7 +37,6 @@ pipeline {
       }
     }
   }
-
 
   post { // send email when the job has failed
   // ..
