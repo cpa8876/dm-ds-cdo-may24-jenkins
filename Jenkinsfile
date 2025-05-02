@@ -223,19 +223,20 @@ pipeline {
       environment
         {
           DOCKER_PASS = credentials("DOCKER_HUB_PASS") // we retrieve  docker password from secret text called docker_hub_pass saved on jenkins
-          DOKER_CREDENTIALS=credentials('dockerhub')
-          USERNAME: "$(env.DOKER_CREDENTIALS_USR)"
-          PASSWORD: "$(env.DOCKER_CREDENTIALS_PSW)"
+         // DOKER_CREDENTIALS=credentials('dockerhub')
+         // USERNAME: "$(env.DOKER_CREDENTIALS_USR)"
+          //PASSWORD: "$(env.DOCKER_CREDENTIALS_PSW)"
         }
       steps {
-        //withCredentials([usernameColonPassword(credentialsId: 'dockerhub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')])
         script {// docker login -u $USERNAME -p $PASSWORD
              //docker push $DOCKER_ID/$DOCKER_IMAGE1:$DOCKER_TAG
+          withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'dockerhub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']) {
           sh '''
              echo  $USERNAME
              echo  $PASSWORD
              echo  "docker login -u $USERNAME -p $PASSWORD"
              '''
+             }
           }
         }
       }
