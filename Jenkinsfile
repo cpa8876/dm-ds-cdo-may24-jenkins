@@ -234,7 +234,6 @@ pipeline {
              docker login -u $DOCKER_ID -p $DOCKER_PASS
              docker push $DOCKER_ID/$DOCKER_IMAGE1:$DOCKER_TAG
              '''
-            }
           }
         }
       }
