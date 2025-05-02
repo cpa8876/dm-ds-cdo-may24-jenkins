@@ -19,10 +19,19 @@ pipeline {
             docker rm -f $DOCKER_ID/$DOCKER_IMAGE2
             docker build -t $DOCKER_ID/$DOCKER_IMAGE2:$DOCKER_TAG ./cast-service
             docker image ls -a | grep fastapi
-            print $nom
             sleep 6
           '''
         }
+      }
+    stage('Docker run'){ // run container from our builded image
+      steps {
+        script {// docker run --network=dm-jenkins-cpa-infra_my-net -d -p 8800:8000 --name my-ctnr-ds-fastapi $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG
+          sh '''
+            docker compose up -d
+            sleep 10
+            '''
+            }
+         }
       }
     }
   post { // send email when the job has failed
