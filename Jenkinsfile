@@ -230,7 +230,7 @@ pipeline {
       steps {
         script {// docker login -u $USERNAME -p $PASSWORD
              //docker push $DOCKER_ID/$DOCKER_IMAGE1:$DOCKER_TAG
-          withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'dockerhub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']) {
+          withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'dockerhub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
           sh '''
              echo  $USERNAME
              echo  $PASSWORD
