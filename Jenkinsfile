@@ -26,7 +26,7 @@ pipeline {
     stage('Docker run'){ // run container from our builded image
       steps {
         script {// docker run --network=dm-jenkins-cpa-infra_my-net -d -p 8800:8000 --name my-ctnr-ds-fastapi $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG
-      sh '''
+          sh '''
             cd /app
             docker volume create postgres_data_movie
             docker volume create postgres_data_cast
@@ -44,6 +44,180 @@ pipeline {
           '''
             }
          }
+      }
+    stage('Test Acceptance'){ // we launch the curl command to validate that the container responds to the request
+      steps {
+        script {//curl localhost or curl 127.0.0.1:8480 "curl -svo /dev/null http://localhost" or docker exec -it my-ctnr-ds-fastapi curl localhost
+          sh '''
+            apt update -y && apt full-upgrade-y && apt install curl -y
+            echo -e "\n\n -------------------------------------------------------------------"
+            echo -e "Tests acceptance access on contenaires  cast_db, movie_db, cast _sezrvice, movie_service and loadbalancer\n  "
+            echo -e "\n\n ------------------------------------------"
+            echo -e "\n Test-01 : Sql query on cast_db : select * from pg_database :"
+            docker exec cast_db psql -h localhost -p 5432 -U cast_db_username -d cast_db_dev -c "select * from pg_database"
+            echo -e "\n\n Test-02 : curl on ip-cast_service:8000/api/v1/casts/docs"
+            curl $(docker exec cast_service hostname -i):8000/api/v1/casts/docs
+            echo -e "\n Test-03 : Sql query on movie_db : select * from pg_database :"
+            docker exec movie_db psql -h localhost -p 5432 -U movie_db_username -d movie_db_dev -c "select * from pg_database"
+            echo -e "\n\n Test-04 : curl on ip-movie_service:8000/api/v1/casts/docs"
+            curl $(docker exec movie_service hostname -i):8000/api/v1/movies/docs
+            echo -e "\n\n Test-05 : curl on ip-nginx:8080/api/v1/movies/docs"
+            curl $(docker exec nginx hostname -i):8080/api/v1/movies/docs
+            echo -e "\n\n Test-06 : curl on ip-nginx:8080/api/v1/casts/docs"
+            curl $(docker exec nginx hostname -i):8080/api/v1/casts/docs
+            echo -e "\n\n -------------------------------------------------------------------"
+            echo -e "Tests acceptance CRUD movies fastapi with contenair nginx (loadbalancer) application\n  "
+            echo -e "\n\n ------------------------------------------"
+            echo -e "\n\n Test-07 : curl -X POST on ip-nginx:8080/api/v1/movies/ for id=1 Star wars IX"
+            curl -X 'POST'   $(docker exec nginx hostname -i):8080/api/v1/movies/   -H 'accept: application/json'   -H 'Content-Type: application/json'   -d '{
+  "id": 1,
+  "name": "Star Wars: Episode IX - The Rise of Skywalker",
+  "plot": "The surviving members of the resistance face the First Order once again.",
+  "genres": [
+    "Action",
+    "Adventure",
+    "Fantasy"
+  ],
+  "casts_id": [
+   1,
+   2,
+   3,
+   4,
+   5
+  ]
+}'
+            echo -e "\n\n Test-08 : curl -X POST on ip-nginx:8080/api/v1/movies/ for id=2 Star wars VI"
+            curl -X 'POST'   $(docker exec nginx hostname -i):8080/api/v1/movies/   -H 'accept: application/json'   -H 'Content-Type: application/json'   -d '{
+  "id": 2,
+  "name": "Star Wars: Episode VI - Return of the Jedi",
+  "plot": "The evil Galactic Empire is building a new Death Star space station to permanently destroy the Rebel Alliance, its main opposition.",
+  "genres": [
+    "Action",
+    "Adventure",
+    "Fantasy"
+  ],
+  "casts_id": [
+   3,
+   4,
+   5
+  ]
+}'
+            echo -e "\n\n Test-09 : curl -X POST on ip-nginx:8080/api/v1/movies/ for id=3 Star wars V"
+            curl -X 'POST'   $(docker exec nginx hostname -i):8080/api/v1/movies/   -H 'accept: application/json'   -H 'Content-Type: application/json'   -d '{
+ "id": 3,
+  "name": "Star Wars: Episode V - The Empire Strikes Back",
+  "plot": "Set three years after the events of Star Wars, the film recounts the battle between the malevolent Galactic Empire, ",
+  "genres": [
+    "Action",
+    "Adventure",
+    "Fantasy"
+  ],
+  "casts_id": [
+    3,
+    4,
+    5
+  ]
+}'
+            echo -e "\n\n Test-10 : curl -X GET ALL on ip-nginx:8080/api/v1/movies/"
+            curl -X 'GET' \
+  $(docker exec nginx hostname -i):8080/api/v1/movies/ \
+  -H 'accept: application/json'
+            echo -e "\n\n Test-11 : curl -X GET id=1 on ip-nginx:8080/api/v1/movies/1"
+            curl -X 'GET' \
+  $(docker exec nginx hostname -i):8080/api/v1/movies/1/ \
+  -H 'accept: application/json'
+            echo -e "\n\n Test-12 : curl -X PUT update id=1 on ip-nginx:8080/api/v1/movies/1"
+            curl -X 'PUT' \
+  $(docker exec nginx hostname -i):8080/api/v1/movies/1 \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "id": 1,
+  "name": "Star Wars: Episode IX - The Rise of Skywalker",
+  "plot": "The surviving members of the resistance face the First Order once again.",
+  "genres": [
+    "Action",
+    "Adventure",
+    "Fantasy"
+  ],
+  "casts_id": [
+   1
+  ]
+}'
+            echo -e "\n\n Test-13 : curl -X GET ALL on ip-nginx:8080/api/v1/movies/"
+            curl -X 'GET' \
+  $(docker exec nginx hostname -i):8080/api/v1/movies/ \
+  -H 'accept: application/json'
+            echo -e "\n\n Test-14 : curl -X DELETE id=1 on ip-nginx:8080/api/v1/movies/1"
+            curl -X 'DELETE' \
+  $(docker exec nginx hostname -i):8080/api/v1/movies/1 \
+  -H 'accept: application/json'
+            echo -e "\n\n Test-15 : curl -X GET ALL on ip-nginx:8080/api/v1/movies/"
+            curl -X 'GET' \
+  $(docker exec nginx hostname -i):8080/api/v1/movies/ \
+  -H 'accept: application/json'
+            echo -e "\n\n -------------------------------------------------------------------"
+            echo -e "Tests acceptance CRUD casts fastapi application\n  "
+            echo -e "\n\n ------------------------------------------"
+            echo -e "\n\n Test-16 : curl -X GET ALL on ip-nginx:8080/api/v1/casts/"
+            curl -X 'POST' \
+  http://$(docker exec nginx hostname -i):8080/api/v1/casts/ \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "name": "Adam Driver",
+  "nationality": "USA"
+}'
+            echo -e "\n\n Test-17 : curl -X GET POST  create id=1 cast on ip-nginx:8080/api/v1/casts/"
+            curl -X 'POST' \
+  http://$(docker exec nginx hostname -i):8080/api/v1/casts/ \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "name": "Daisy Ridley",
+  "nationality": "USA"
+}'
+            echo -e "\n\n Test-18 : curl -X POST create id=2 cast ALL on ip-nginx:8080/api/v1/casts/"
+           curl -X 'POST' \
+  http://$(docker exec nginx hostname -i):8080/api/v1/casts/ \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "name": "Carrie FISHER",
+  "nationality": "USA"
+}'
+            echo -e "\n\n Test-19 : curl -X POST create id=3 cast on ip-nginx:8080/api/v1/casts/"
+            curl -X 'POST'   http://$(docker exec nginx hostname -i):8080/api/v1/casts/   -H 'accept: application/json'   -H 'Content-Type: application/json'   -d '{
+  "name": "Mark HAMILL",
+  "nationality": "USA"
+}'
+            echo -e "\n\n Test-20 : curl -X POST create id=4 cast on ip-nginx:8080/api/v1/casts/"
+            curl -X 'POST'   http://$(docker exec nginx hostname -i):8080/api/v1/casts/   -H 'accept: application/json'   -H 'Content-Type: application/json'   -d '{
+  "name": "Harisson FORD",
+  "nationality": "USA"
+}'
+            echo -e "\n\n Test-21 : curl -X GET ALL on ip-nginx:8080/api/v1/casts/"
+            curl -X 'GET' \
+  http://$(docker exec nginx hostname -i):8080/api/v1/casts/ \
+  -H 'accept: application/json'
+            echo -e "\n\n Test-22 : curl -X GET id=1 on ip-nginx:8080/api/v1/casts/1"
+            curl -X 'GET' \
+  http://$(docker exec nginx hostname -i):8080/api/v1/casts/1/ \
+  -H 'accept: application/json'
+            echo -e "\n\n Test-23 : curl -X DELETE id=1 on ip-nginx:8080/api/v1/casts/"
+            curl -X 'DELETE' \
+  http://$(docker exec nginx hostname -i):8080/api/v1/casts/1 \
+  -H 'accept: application/json'
+            echo -e "\n\n Test-24 : curl -X GET ALL on ip-nginx:8080/api/v1/casts/"
+            curl -X 'GET' \
+  http://$(docker exec nginx hostname -i):8080/api/v1/casts/ \
+  -H 'accept: application/json'
+
+            docker rm -f nginx movie_service movie_db cast_service cast_db
+            docker ps -a
+            '''
+          }
+        }
       }
     }
   post { // send email when the job has failed
