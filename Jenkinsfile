@@ -19,19 +19,20 @@ pipeline {
             docker rm -f $DOCKER_ID/$DOCKER_IMAGE2
             docker build -t $DOCKER_ID/$DOCKER_IMAGE2:$DOCKER_TAG ./cast-service
             docker image ls -a | grep fastapi
+            print $nom
             sleep 6
           '''
         }
       }
-    post { // send email when the job has failed
+    }
+  post { // send email when the job has failed
   // ..
-      failure {
-        echo "This will run if the job failed"
-        mail to: "cristofe.pascale@gmail.com",
-          subject: "${env.JOB_NAME} - Build # ${env.BUILD_ID} has failed",
-          body: "For more info on the pipeline failure, check out the console output at ${env.BUILD_URL}"
-        }
+    failure {
+      echo "This will run if the job failed"
+      mail to: "cristofe.pascale@gmail.com",
+        subject: "${env.JOB_NAME} - Build # ${env.BUILD_ID} has failed",
+        body: "For more info on the pipeline failure, check out the console output at ${env.BUILD_URL}"
+    }
   // ..
-     }
   }
 }
