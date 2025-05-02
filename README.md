@@ -600,7 +600,7 @@ In this step, we create a Jenkinsfile and execute pipeline CI
 <br>
 
 ### S-12.3)  Terminal execution pipeline 69  
-[logTest69Dm2Jenkins](log/logTest69Dm2Jenkins)
+[log Test 69 Dm2 Jenkins](log/log-Test-69-Dm2-Jenkins.txt)
 
 
 ```md
