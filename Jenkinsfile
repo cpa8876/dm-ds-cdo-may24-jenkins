@@ -6,8 +6,13 @@ pipeline {
     //DOCKERHUB_CREDENTIALS = credentials('dockerHub')
 >>>>>>> 3338e25 (update Jenkinsfile to repalce shell cmd by           docker.withRegistry('https://index.docker.io/v1/', 'dockerHub') {)
     DOCKER_ID = "cpa8876" // replace this with your docker-id
+<<<<<<< HEAD
     DOCKER_IMAGE = "ds-fastapi"
     DOCKER_IMAGE1 = "movie-ds-fastapi"
+=======
+   // DOCKER_IMAGE = "ds-fastapi"
+    DOCKER_IMAGE1 = "movies-ds-fastapi"
+>>>>>>> ed802c7 (updazte Jenkinsfile : delete stage docker push bloc)
     DOCKER_IMAGE2 = "casts-ds-fastapi"
     DOCKER_TAG = "v.${BUILD_ID}.0" // we will tag our images with the current build in order to increment the value by 1 with each new build
     //DOCKER_TAG="latest"
@@ -67,6 +72,7 @@ pipeline {
         }
       }
     }
+<<<<<<< HEAD
 
 <<<<<<< HEAD
   }
@@ -84,6 +90,8 @@ pipeline {
           '''
         }
       }
+=======
+>>>>>>> ed802c7 (updazte Jenkinsfile : delete stage docker push bloc)
   }
 
 >>>>>>> 4765914 (update Jenkinsfile to repalce shell cmd by           docker.withRegistry('https://index.docker.io/v1/', 'dockerHub') {)
