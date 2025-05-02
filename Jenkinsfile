@@ -7,7 +7,7 @@ pipeline {
   stages {
     stage('Docker Build'){
       steps {
-        sh 'print $nom' // variable call
+        sh 'echo $nom' // variable call
         }
       }
     }
