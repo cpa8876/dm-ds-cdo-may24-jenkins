@@ -219,6 +219,25 @@ pipeline {
           }
         }
       }
+    stage('Docker Push'){ //we pass the built image to our docker hub account
+      environment
+        {
+          DOCKER_PASS = credentials("DOCKER_HUB_PASS") // we retrieve  docker password from secret text called docker_hub_pass saved on jenkins
+        }
+      steps {
+        withCredentials(
+        [usernamePassword(credentialsId: 'dockerhub',
+                    usernameVariable: 'USERNAME',
+                    passwordVariable: 'PASSWORD')])
+        script {
+          sh '''
+             docker login -u $DOCKER_ID -p $DOCKER_PASS
+             docker push $DOCKER_ID/$DOCKER_IMAGE1:$DOCKER_TAG
+             '''
+            }
+          }
+        }
+      }
     }
   post { // send email when the job has failed
   // ..
