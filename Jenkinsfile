@@ -82,6 +82,7 @@ pipeline {
 <<<<<<< HEAD
 <<<<<<< HEAD
             apt update -y && apt upgrade -y && apt install curl -y
+<<<<<<< HEAD
             # curl my-ctnr-ds-fastapi:8000/api/v1/checkapi
 =======
             apt update -y && apt full-upgrade-y && apt install curl -y
@@ -91,6 +92,9 @@ pipeline {
             apt update -y && apt upgrade -y && apt install curl -y
             # curl my-ctnr-ds-fastapi:8000/api/v1/checkapi
 >>>>>>> 33df531 (update Jenkins : back 3 downgrade)
+=======
+            curl my-ctnr-ds-fastapi:8000/api/v1/checkapi
+>>>>>>> f1a0c5a (update Jenkinsfile back 4 : downgrade)
           '''
         }
       }
