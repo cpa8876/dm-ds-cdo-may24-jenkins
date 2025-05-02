@@ -80,12 +80,17 @@ pipeline {
         script {//curl localhost or curl 127.0.0.1:8480 "curl -svo /dev/null http://localhost" or docker exec -it my-ctnr-ds-fastapi curl localhost
           sh '''
 <<<<<<< HEAD
+<<<<<<< HEAD
             apt update -y && apt upgrade -y && apt install curl -y
             # curl my-ctnr-ds-fastapi:8000/api/v1/checkapi
 =======
             apt update -y && apt full-upgrade-y && apt install curl -y
             curl my-ctnr-ds-fastapi:8000/api/v1/checkapi
 >>>>>>> fd6e2d9 (updazte Jenkinsfile : back downgrade)
+=======
+            apt update -y && apt upgrade -y && apt install curl -y
+            # curl my-ctnr-ds-fastapi:8000/api/v1/checkapi
+>>>>>>> 33df531 (update Jenkins : back 3 downgrade)
           '''
         }
       }
@@ -116,96 +121,6 @@ pipeline {
 >>>>>>> 4765914 (update Jenkinsfile to repalce shell cmd by           docker.withRegistry('https://index.docker.io/v1/', 'dockerHub') {)
 =======
 
-    stage('Docker Push'){ //we pass the built image to our docker hub account
-      environment
-        {
-          DOCKER_PASS = credentials("DOCKER_HUB_PASS") // we retrieve  docker password from secret text called docker_hub_pass saved on jenkins
-        }
-      steps {
-        script {
-          sh '''
-            docker login -u $DOCKER_ID -p $DOCKER_PASS
-            docker push $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG
-          '''
-        }
-      }
-    }
-
-    stage('Deploiement en dev'){
-      environment {
-        KUBECONFIG = credentials("config") // we retrieve  kubeconfig from secret file called config saved on jenkins
-      }
-      steps {
-        script {
-          // withKubeConfig(caCertificate: '', clusterName: 'k3d-mycluster', contextName: 'k3d-mycluster', credentialsId: 'k8s-jenkins-secret', namespace: '', restrictKubeConfigAccess: false, serverUrl: 'https://0.0.0.0:41521') {
-    // some block
-                // helm upgrade --install app fastapi --values=values.yml --namespace dev
-                // cf B52 helm --kubeconfig : https://helm.sh/docs/helm/helm/
-          sh '''
-            rm -Rf .kube
-            mkdir .kube
-            ls
-            cat $KUBECONFIG > .kube/config
-            cp /fastapi/values-dev.yaml /fastapiapp/values.yaml
-            cat /fastapiapp/values.yaml
-            sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
-
-            helm upgrade --kubeconfig /usr/local/k3s.yaml --install fastapi-dev /fastapiapp --namespace dev --create-namespace
-          '''
-          // kubectl --kubeconfig /usr/local/k3s.yaml delete namespace dev
-        //}
-        }
-      }
-    }
-
-    stage('Deploiement en staging'){
-      environment {
-        KUBECONFIG = credentials("config") // we retrieve  kubeconfig from secret file called config saved on jenkins
-      }
-      steps {
-        script {
-          sh '''
-            rm -Rf .kube
-            mkdir .kube
-            ls
-            cat $KUBECONFIG > .kube/config
-            cp /fastapi/values-staging.yaml /fastapiapp/values.yaml
-            cat /fastapiapp/values.yaml
-            sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
-
-            helm upgrade --kubeconfig /usr/local/k3s.yaml --install fastapi-staging /fastapiapp --namespace staging --create-namespace
-          '''
-          //kubectl --kubeconfig /usr/local/k3s.yaml delete namespace staging
-        }
-      }
-    }
-
-    stage('Deploiement en prod'){
-      environment {
-        KUBECONFIG = credentials("config") // we retrieve  kubeconfig from secret file called config saved on jenkins
-      }
-      steps {
-      // Create an Approval Button with a timeout of 15minutes.
-      // this require a manuel validation in order to deploy on production environment
-        timeout(time: 15, unit: "MINUTES") {
-        input message: 'Do you want to deploy in production ?', ok: 'Yes'
-      }
-
-        script {
-          sh '''
-            rm -Rf .kube
-            mkdir .kube
-            ls
-            cat $KUBECONFIG > .kube/config
-            cp /fastapi/values-prod.yaml /fastapiapp/values.yaml
-            cat /fastapiapp/values.yaml
-            sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
-            helm upgrade --kubeconfig /usr/local/k3s.yaml --install fastapi-prod /fastapiapp --namespace prod --create-namespace
-          '''
-          //kubectl --kubeconfig /usr/local/k3s.yaml delete namespace prod
-        }
-      }
-    }
   }
 >>>>>>> fd6e2d9 (updazte Jenkinsfile : back downgrade)
   post { // send email when the job has failed

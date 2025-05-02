@@ -1,0 +1,227 @@
+Script démarré sur 2025-05-02 09:57:00+02:00 [TERM="xterm-256color" TTY="/dev/pts/1" COLUMNS="238" LINES="59"]
+
+[?2004h]0;cpa@debiana8: ~/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins[01;32mcpa@debiana8[00m:[01;34m~/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins[00m$ 
+[?2004l[?2004h]0;cpa@debiana8: ~/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins[01;32mcpa@debiana8[00m:[01;34m~/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins[00m$ #############################################################################################################[K[47P echo "power off complete###########################################################################################################[Kgit ststus
+[?2004lgit : 'ststus' n'est pas une commande git. Voir 'git --help'.
+
+La commande la plus ressemblante est
+	status
+[?2004h]0;cpa@debiana8: ~/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins[01;32mcpa@debiana8[00m:[01;34m~/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins[00m$ git ststus[1Ptusatus
+[?2004lSur la branche main
+Votre branche est en avance sur 'origin/main' de 7 commits.
+  (utilisez "git push" pour publier vos commits locaux)
+
+Fichiers non suivis:
+  (utilisez "git add <fichier>..." pour inclure dans ce qui sera validé)
+	[31m{[m
+
+aucune modification ajoutée à la validation mais des fichiers non suivis sont présents (utilisez "git add" pour les suivre)
+[?2004h]0;cpa@debiana8: ~/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins[01;32mcpa@debiana8[00m:[01;34m~/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins[00m$ git status[K[K[K[K[K[Kadd.
+[?2004lgit : 'add.' n'est pas une commande git. Voir 'git --help'.
+
+La commande la plus ressemblante est
+	add
+[?2004h]0;cpa@debiana8: ~/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins[01;32mcpa@debiana8[00m:[01;34m~/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins[00m$ git add.[K .
+[?2004l[?2004h]0;cpa@debiana8: ~/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins[01;32mcpa@debiana8[00m:[01;34m~/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins[00m$ git add .[1P.statusstusatus[2Padd. .[Kgit commit -m "update Jenkins : back 2 downgrade"
+[?2004l[main 104da73] update Jenkins : back 2 downgrade
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 {
+[?2004h]0;cpa@debiana8: ~/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins[01;32mcpa@debiana8[00m:[01;34m~/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins[00m$ git commit -m "update Jenkins : back 2 downgrade"add .[K[1P. .[K[K[K[K[Kpush origin main
+[?2004lÉnumération des objets: 25, fait.
+Décompte des objets:   4% (1/25)Décompte des objets:   8% (2/25)Décompte des objets:  12% (3/25)Décompte des objets:  16% (4/25)Décompte des objets:  20% (5/25)Décompte des objets:  24% (6/25)Décompte des objets:  28% (7/25)Décompte des objets:  32% (8/25)Décompte des objets:  36% (9/25)Décompte des objets:  40% (10/25)Décompte des objets:  44% (11/25)Décompte des objets:  48% (12/25)Décompte des objets:  52% (13/25)Décompte des objets:  56% (14/25)Décompte des objets:  60% (15/25)Décompte des objets:  64% (16/25)Décompte des objets:  68% (17/25)Décompte des objets:  72% (18/25)Décompte des objets:  76% (19/25)Décompte des objets:  80% (20/25)Décompte des objets:  84% (21/25)Décompte des objets:  88% (22/25)Décompte des objets:  92% (23/25)Décompte des objets:  96% (24/25)Décompte des objets: 100% (25/25)Décompte des objets: 100% (25/25), fait.
+Compression par delta en utilisant jusqu'à 16 fils d'exécution
+Compression des objets:   4% (1/22)Compression des objets:   9% (2/22)Compression des objets:  13% (3/22)Compression des objets:  18% (4/22)Compression des objets:  22% (5/22)Compression des objets:  27% (6/22)Compression des objets:  31% (7/22)Compression des objets:  36% (8/22)Compression des objets:  40% (9/22)Compression des objets:  45% (10/22)Compression des objets:  50% (11/22)Compression des objets:  54% (12/22)Compression des objets:  59% (13/22)Compression des objets:  63% (14/22)Compression des objets:  68% (15/22)Compression des objets:  72% (16/22)Compression des objets:  77% (17/22)Compression des objets:  81% (18/22)Compression des objets:  86% (19/22)Compression des objets:  90% (20/22)Compression des objets:  95% (21/22)Compression des objets: 100% (22/22)Compression des objets: 100% (22/22), fait.
+Écriture des objets:   4% (1/23)Écriture des objets:   8% (2/23)Écriture des objets:  13% (3/23)Écriture des objets:  17% (4/23)Écriture des objets:  21% (5/23)Écriture des objets:  26% (6/23)Écriture des objets:  30% (7/23)Écriture des objets:  34% (8/23)Écriture des objets:  39% (9/23)Écriture des objets:  43% (10/23)Écriture des objets:  47% (11/23)Écriture des objets:  52% (12/23)Écriture des objets:  65% (15/23)Écriture des objets:  69% (16/23)Écriture des objets:  73% (17/23)Écriture des objets:  78% (18/23)Écriture des objets:  82% (19/23)Écriture des objets:  86% (20/23)Écriture des objets:  91% (21/23)Écriture des objets:  95% (22/23)Écriture des objets: 100% (23/23)Écriture des objets: 100% (23/23), 1.98 Kio | 1.98 Mio/s, fait.
+Total 23 (delta 18), réutilisés 0 (delta 0), réutilisés du pack 0
+remote: Resolving deltas:   0% (0/18)[Kremote: Resolving deltas:   5% (1/18)[Kremote: Resolving deltas:  11% (2/18)[Kremote: Resolving deltas:  16% (3/18)[Kremote: Resolving deltas:  22% (4/18)[Kremote: Resolving deltas:  27% (5/18)[Kremote: Resolving deltas:  33% (6/18)[Kremote: Resolving deltas:  38% (7/18)[Kremote: Resolving deltas:  44% (8/18)[Kremote: Resolving deltas:  50% (9/18)[Kremote: Resolving deltas:  55% (10/18)[Kremote: Resolving deltas:  61% (11/18)[Kremote: Resolving deltas:  66% (12/18)[Kremote: Resolving deltas:  72% (13/18)[Kremote: Resolving deltas:  77% (14/18)[Kremote: Resolving deltas:  83% (15/18)[Kremote: Resolving deltas:  88% (16/18)[Kremote: Resolving deltas:  94% (17/18)[Kremote: Resolving deltas: 100% (18/18)[Kremote: Resolving deltas: 100% (18/18), completed with 2 local objects.[K
+remote: [1;31merror[m: GH013: Repository rule violations found for refs/heads/main.[K
+remote: 
+remote: - GITHUB PUSH PROTECTION[K
+remote:   —————————————————————————————————————————[K
+remote:     Resolve the following violations before pushing again[K
+remote: 
+remote:     - Push cannot contain secrets[K
+remote: 
+remote:     [K
+remote:      (?) Learn how to resolve a blocked push[K
+remote:      https://docs.github.com/code-security/secret-scanning/working-with-secret-scanning-and-push-protection/working-with-push-protection-from-the-command-line#resolving-a-blocked-push[K
+remote:     [K
+remote:     [K
+remote:       —— Docker Personal Access Token ——————————————————————[K
+remote:        locations:[K
+remote:          - commit: 47659149dc142d50867f21f994b68f521aa8ae1a[K
+remote:            path: Jenkinsfile:245[K
+remote:     [K
+remote:        (?) To push, remove secret from commit(s) or follow this URL to allow the secret.[K
+remote:        https://github.com/cpa8876/dm-ds-cdo-may24-jenkins/security/secret-scanning/unblock-secret/2wVoPNAdcha4TY3rO20toX5YPbT[K
+remote:     [K
+remote: 
+remote: 
+To github.com:cpa8876/dm-ds-cdo-may24-jenkins.git
+ [31m! [remote rejected][m main -> main (push declined due to repository rule violations)
+[31merreur : impossible de pousser des références vers 'github.com:cpa8876/dm-ds-cdo-may24-jenkins.git'
+[m[?2004h]0;cpa@debiana8: ~/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins[01;32mcpa@debiana8[00m:[01;34m~/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins[00m$ git push origin main[Ksudo docker exec -it jenkins bash
+[?2004l[sudo] Mot de passe de cpa : ***********           
+[?2004hroot@a5e6fcad21c8:/# [7m cd /app[27m cd /app
+[?2004l[?2004hroot@a5e6fcad21c8:/app# [7mdocker rm -f $DOCKER_ID/$DOCKER_IMAGE1[27m[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cdocker rm -f $DOCKER_ID/$DOCKER_IMAGE1[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[Kcpa8876/[7mmovie-ds-fastapi[27mmovie-ds-fastapi
+[?2004lError response from daemon: No such container: cpa8876/movie-ds-fastapi
+[?2004hroot@a5e6fcad21c8:/app# [7mdocker build -t $DOCKER_ID/$DOCKER_IMAGE1:$DOCKER_TAG ./movie-service[27m[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cdocker build -t $DOCKER_ID/$DOCKER_IMAGE1:$DOCKER_TAG ./movie-service[C[C[1P ./movie-service[1P ./movie-service[1P ./movie-service[1P ./movie-service[1P ./movie-service[1P ./movie-service[1P ./movie-service[1P ./movie-service[1P ./movie-service[1P ./movie-service[1P ./movie-service[1P ./movie-service[1P ./movie-service[1P ./movie-service[1P ./movie-service[1P ./movie-service[1P ./movie-service[1P ./movie-service[1P ./movie-service[1P ./movie-service[1P ./movie-service[1P ./movie-service[1P ./movie-service[1P ./movie-service[1P ./movie-service[1P ./movie-service[1P ./movie-service[1P ./movie-service[1P ./movie-service[1P ./movie-service[1P ./movie-service[1P ./movie-service[1P ./movie-service[1P ./movie-service[1P ./movie-service[1P ./movie-service[1P ./movie-servicec ./movie-servicep ./movie-servicea ./movie-service8 ./movie-service8 ./movie-service7 ./movie-service6 ./movie-service/ ./movie-service[7mds-fastapi[27m ./movie-serviceds-fastapi[1@m[1@o[1@v[1@i[1@e[1@-[C[C[C[C[C[C[C[C[C[C: ./movie-servicev ./movie-service. ./movie-service1 ./movie-service0 ./movie-service. ./movie-service0 ./movie-service
+[?2004lDEPRECATED: The legacy builder is deprecated and will be removed in a future release.
+            Install the buildx component to build images with BuildKit:
+            https://docs.docker.com/go/buildx/
+
+Sending build context to Docker daemon   25.6kB
+Step 1/6 : FROM python:3.8-slim
+ ---> b5f62925bd0f
+Step 2/6 : WORKDIR /app
+ ---> Using cache
+ ---> 4c8b39cf70f0
+Step 3/6 : COPY ./requirements.txt /app/requirements.txt
+ ---> Using cache
+ ---> a6ebcc85c827
+Step 4/6 : RUN apt-get update     && apt-get install gcc -y     && apt-get clean
+ ---> Using cache
+ ---> 45b551dd00e1
+Step 5/6 : RUN pip install -r /app/requirements.txt     && rm -rf /root/.cache/pip
+ ---> Using cache
+ ---> ce5a5e48b597
+Step 6/6 : COPY . /app/
+ ---> Using cache
+ ---> cae8f07ecd77
+Successfully built cae8f07ecd77
+Successfully tagged cpa8876/movie-ds-fastapi:v.10.0
+[?2004hroot@a5e6fcad21c8:/app# [7mdocker rm -f $DOCKER_ID/$DOCKER_IMAGE2[27m[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cdocker rm -f $DOCKER_ID/$DOCKER_IMAGE2[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[Kcpa8876/casts-ds-fastapi
+[?2004lError response from daemon: No such container: cpa8876/casts-ds-fastapi
+[?2004hroot@a5e6fcad21c8:/app# docker rm -f cpa8876/casts-ds-fastapi[1P cpa8876/casts-ds-fastapi[1P cpa8876/casts-ds-fastapi[1Pcpa8876/casts-ds-fastapi[1P cpa8876/casts-ds-fastapi[1P cpa8876/casts-ds-fastapib cpa8876/casts-ds-fastapiu cpa8876/casts-ds-fastapii cpa8876/casts-ds-fastapio cpa8876/casts-ds-fastapil cpa8876/casts-ds-fastapid cpa8876/casts-ds-fastapi[1P cpa8876/casts-ds-fastapi[1P cpa8876/casts-ds-fastapi[1P cpa8876/casts-ds-fastapi[1P cpa8876/casts-ds-fastapii cpa8876/casts-ds-fastapil cpa8876/casts-ds-fastapid cpa8876/casts-ds-fastapi[C cpa8876/casts-ds-fastapi- cpa8876/casts-ds-fastapit cpa8876/casts-ds-fastapi[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C:v.10.0 ./cast-serevice
+[?2004lDEPRECATED: The legacy builder is deprecated and will be removed in a future release.
+            Install the buildx component to build images with BuildKit:
+            https://docs.docker.com/go/buildx/
+
+unable to prepare context: path "./cast-serevice" not found
+[?2004hroot@a5e6fcad21c8:/app# docker build -t cpa8876/casts-ds-fastapi:v.10.0 ./cast-serevice[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[26Prm -f cpa8876/casts-ds-fastapibuild -t cpa8876/movie-ds-fastapi:v.10.0 ./movie-service[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[26Prm -f cpa8876/casts-ds-fastapibuild -t cpa8876/casts-ds-fastapi:v.10.0 ./cast-serevice[1Pvice[C[C
+[?2004lDEPRECATED: The legacy builder is deprecated and will be removed in a future release.
+            Install the buildx component to build images with BuildKit:
+            https://docs.docker.com/go/buildx/
+
+Sending build context to Docker daemon  20.99kB
+Step 1/6 : FROM python:3.8-slim
+ ---> b5f62925bd0f
+Step 2/6 : WORKDIR /app
+ ---> Using cache
+ ---> 4c8b39cf70f0
+Step 3/6 : COPY ./requirements.txt /app/requirements.txt
+ ---> Using cache
+ ---> 8b9d7b1abc7d
+Step 4/6 : RUN apt-get update     && apt-get install gcc -y     && apt-get clean
+ ---> Using cache
+ ---> f364ed3dab48
+Step 5/6 : RUN pip install -r /app/requirements.txt     && rm -rf /root/.cache/pip
+ ---> Using cache
+ ---> b074cae8898e
+Step 6/6 : COPY . /app/
+ ---> Using cache
+ ---> 13c6753885ff
+Successfully built 13c6753885ff
+Successfully tagged cpa8876/casts-ds-fastapi:v.10.0
+[?2004hroot@a5e6fcad21c8:/app# [7mdocker image ls -a | grep fastapi[27m[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cdocker image ls -a | grep fastapi
+[?2004lcpa8876/casts-ds-fastapi    v.10.0        13c6753885ff   37 hours ago   462MB
+cpa8876/casts-ds-fastapi    v.11.0        13c6753885ff   37 hours ago   462MB
+cpa8876/casts-ds-fastapi    v.12.0        13c6753885ff   37 hours ago   462MB
+cpa8876/casts-ds-fastapi    v.13.0        13c6753885ff   37 hours ago   462MB
+cpa8876/casts-ds-fastapi    v.14.0        13c6753885ff   37 hours ago   462MB
+cpa8876/casts-ds-fastapi    v.15.0        13c6753885ff   37 hours ago   462MB
+cpa8876/casts-ds-fastapi    v.16.0        13c6753885ff   37 hours ago   462MB
+cpa8876/casts-ds-fastapi    v.17.0        13c6753885ff   37 hours ago   462MB
+cpa8876/casts-ds-fastapi    v.18.0        13c6753885ff   37 hours ago   462MB
+cpa8876/casts-ds-fastapi    v.19.0        13c6753885ff   37 hours ago   462MB
+cpa8876/casts-ds-fastapi    v.20.0        13c6753885ff   37 hours ago   462MB
+cpa8876/casts-ds-fastapi    v.21.0        13c6753885ff   37 hours ago   462MB
+cpa8876/casts-ds-fastapi    v.22.0        13c6753885ff   37 hours ago   462MB
+cpa8876/casts-ds-fastapi    v.24.0        13c6753885ff   37 hours ago   462MB
+cpa8876/casts-ds-fastapi    v.28.0        13c6753885ff   37 hours ago   462MB
+cpa8876/casts-ds-fastapi    v.29.0        13c6753885ff   37 hours ago   462MB
+cpa8876/casts-ds-fastapi    v.30.0        13c6753885ff   37 hours ago   462MB
+cpa8876/casts-ds-fastapi    v.70.0        13c6753885ff   37 hours ago   462MB
+cpa8876/casts-ds-fastapi    v.9.0         13c6753885ff   37 hours ago   462MB
+cpa8876/movie-ds-fastapi    v.10.0        cae8f07ecd77   37 hours ago   469MB
+cpa8876/movies-ds-fastapi   v.10.0        cae8f07ecd77   37 hours ago   469MB
+cpa8876/movies-ds-fastapi   v.11.0        cae8f07ecd77   37 hours ago   469MB
+cpa8876/movies-ds-fastapi   v.12.0        cae8f07ecd77   37 hours ago   469MB
+cpa8876/movies-ds-fastapi   v.13.0        cae8f07ecd77   37 hours ago   469MB
+cpa8876/movies-ds-fastapi   v.14.0        cae8f07ecd77   37 hours ago   469MB
+cpa8876/movies-ds-fastapi   v.15.0        cae8f07ecd77   37 hours ago   469MB
+cpa8876/movies-ds-fastapi   v.16.0        cae8f07ecd77   37 hours ago   469MB
+cpa8876/movies-ds-fastapi   v.17.0        cae8f07ecd77   37 hours ago   469MB
+cpa8876/movies-ds-fastapi   v.18.0        cae8f07ecd77   37 hours ago   469MB
+cpa8876/movies-ds-fastapi   v.19.0        cae8f07ecd77   37 hours ago   469MB
+cpa8876/movies-ds-fastapi   v.20.0        cae8f07ecd77   37 hours ago   469MB
+cpa8876/movies-ds-fastapi   v.21.0        cae8f07ecd77   37 hours ago   469MB
+cpa8876/movies-ds-fastapi   v.22.0        cae8f07ecd77   37 hours ago   469MB
+cpa8876/movies-ds-fastapi   v.24.0        cae8f07ecd77   37 hours ago   469MB
+cpa8876/movies-ds-fastapi   v.28.0        cae8f07ecd77   37 hours ago   469MB
+cpa8876/movies-ds-fastapi   v.29.0        cae8f07ecd77   37 hours ago   469MB
+cpa8876/movies-ds-fastapi   v.30.0        cae8f07ecd77   37 hours ago   469MB
+cpa8876/movies-ds-fastapi   v.70.0        cae8f07ecd77   37 hours ago   469MB
+cpa8876/movies-ds-fastapi   v.9.0         cae8f07ecd77   37 hours ago   469MB
+[?2004hroot@a5e6fcad21c8:/app# [7mdocker compose up -d[27mdocker compose up -d
+[?2004lunknown shorthand flag: 'd' in -d
+
+Usage:  docker [OPTIONS] COMMAND [ARG...]
+
+Run 'docker --help' for more information
+[?2004hroot@a5e6fcad21c8:/app# [7mapt update -y && apt full-upgrade-y && apt install curl -y[27m[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Capt update -y && apt full-upgrade-y && apt install curl -y
+[?2004l[33m0% [Working][0m            Get:1 http://deb.debian.org/debian bookworm InRelease [151 kB]
+[33m0% [1 InRelease 0 B/151 kB 0%][0m[33m                              0% [Waiting for headers][0m                        Get:2 http://deb.debian.org/debian bookworm-updates InRelease [55.4 kB]
+[33m0% [Waiting for headers][0m                        Get:3 http://deb.debian.org/debian-security bookworm-security InRelease [48.0 kB]
+[33m0% [3 InRelease 0 B/48.0 kB 0%][0m[33m                               0% [Working][0m[33m0% [Working][0m            Get:4 http://deb.debian.org/debian bookworm/main amd64 Packages [8792 kB]
+[33m0% [4 Packages 0 B/8792 kB 0%][0m[33m0% [4 Packages 4651 kB/8792 kB 53%][0m[33m                                   0% [Working][0m[33m91% [Working][0m[33m91% [4 Packages store 0 B][0m                          Get:5 http://deb.debian.org/debian bookworm-updates/main amd64 Packages [512 B]
+[33m91% [4 Packages store 0 B] [5 Packages 512 B/512 B 100%][0m[33m                                                        91% [4 Packages store 0 B][0m                          Get:6 http://deb.debian.org/debian-security bookworm-security/main amd64 Packages [258 kB]
+[33m91% [4 Packages store 0 B] [6 Packages 0 B/258 kB 0%][0m[33m                                                     93% [4 Packages store 0 B][0m[33m                          96% [Working][0m[33m96% [5 Packages store 0 B][0m[33m                          98% [Working][0m[33m98% [6 Packages store 0 B][0m[33m                          100% [Working][0m              Fetched 9305 kB in 1s (13.7 MB/s)
+Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 96%Reading package lists... 96%Reading package lists... 96%Reading package lists... 96%Reading package lists... 99%Reading package lists... 99%Reading package lists... Done
+Building dependency tree... 0%Building dependency tree... 0%Building dependency tree... 0%Building dependency tree... 50%Building dependency tree... 50%Building dependency tree... Done
+Reading state information... 0% Reading state information... 0%Reading state information... Done
+All packages are up to date.
+[1;31mE: [0mInvalid operation full-upgrade-y[0m
+[?2004hroot@a5e6fcad21c8:/app# [7mcurl my-ctnr-ds-fastapi:8000/api/v1/checkapi[27m[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Ccurl my-ctnr-ds-fastapi:8000/api/v1/checkapi
+[?2004lcurl: (6) Could not resolve host: my-ctnr-ds-fastapi
+[?2004hroot@a5e6fcad21c8:/app# [7mapt update -y && apt full-upgrade-y && apt install curl -y[27m[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Capt update -y && apt full-upgrade-y && apt install curl -y
+[?2004l[33m0% [Working][0m            Hit:1 http://deb.debian.org/debian bookworm InRelease
+[33m0% [Working][0m            Hit:2 http://deb.debian.org/debian bookworm-updates InRelease
+[33m0% [Waiting for headers][0m                        Hit:3 http://deb.debian.org/debian-security bookworm-security InRelease
+[33m                        0% [Working][0m[33m0% [Working][0m[33m0% [Working][0m[33m20% [Working][0m             Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 96%Reading package lists... 96%Reading package lists... 96%Reading package lists... 96%Reading package lists... 99%Reading package lists... 99%Reading package lists... Done
+Building dependency tree... 0%Building dependency tree... 0%Building dependency tree... 0%Building dependency tree... 50%Building dependency tree... 50%Building dependency tree... Done
+Reading state information... 0% Reading state information... 0%Reading state information... Done
+All packages are up to date.
+[1;31mE: [0mInvalid operation full-upgrade-y[0m
+[?2004hroot@a5e6fcad21c8:/app# [7mapt update -y && apt upgrade-y && apt install curl -y[27m[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Capt update -y && apt upgrade-y && apt install curl -y
+[?2004l[33m0% [Working][0m            Hit:1 http://deb.debian.org/debian bookworm InRelease
+[33m0% [Working][0m            Hit:2 http://deb.debian.org/debian bookworm-updates InRelease
+[33m0% [Waiting for headers][0m                        Hit:3 http://deb.debian.org/debian-security bookworm-security InRelease
+[33m                        0% [Working][0m[33m0% [Working][0m[33m0% [Working][0m[33m20% [Working][0m             Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 96%Reading package lists... 96%Reading package lists... 96%Reading package lists... 96%Reading package lists... 99%Reading package lists... 99%Reading package lists... Done
+Building dependency tree... 0%Building dependency tree... 0%Building dependency tree... 0%Building dependency tree... 50%Building dependency tree... 50%Building dependency tree... Done
+Reading state information... 0% Reading state information... 0%Reading state information... Done
+All packages are up to date.
+[1;31mE: [0mInvalid operation upgrade-y[0m
+[?2004hroot@a5e6fcad21c8:/app# [7mapt update -y && apt upgrade -y && apt install curl -y[27m[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Capt update -y && apt upgrade -y && apt install curl -y
+[?2004l[33m0% [Working][0m            Hit:1 http://deb.debian.org/debian bookworm InRelease
+[33m0% [Working][0m            Hit:2 http://deb.debian.org/debian bookworm-updates InRelease
+[33m0% [Waiting for headers][0m                        Hit:3 http://deb.debian.org/debian-security bookworm-security InRelease
+[33m                        0% [Working][0m[33m0% [Working][0m[33m0% [Working][0m[33m20% [Working][0m             Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 96%Reading package lists... 96%Reading package lists... 96%Reading package lists... 96%Reading package lists... 99%Reading package lists... 99%Reading package lists... Done
+Building dependency tree... 0%Building dependency tree... 0%Building dependency tree... 0%Building dependency tree... 50%Building dependency tree... 50%Building dependency tree... Done
+Reading state information... 0% Reading state information... 0%Reading state information... Done
+All packages are up to date.
+Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 96%Reading package lists... 96%Reading package lists... 96%Reading package lists... 96%Reading package lists... 99%Reading package lists... 99%Reading package lists... Done
+Building dependency tree... 0%Building dependency tree... 0%Building dependency tree... 50%Building dependency tree... 50%Building dependency tree... Done
+Reading state information... 0% Reading state information... 0%Reading state information... Done
+Calculating upgrade... 0%Calculating upgrade... 10%Calculating upgrade... Done
+0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
+Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 96%Reading package lists... 96%Reading package lists... 96%Reading package lists... 96%Reading package lists... 99%Reading package lists... 99%Reading package lists... Done
+Building dependency tree... 0%Building dependency tree... 0%Building dependency tree... 50%Building dependency tree... 50%Building dependency tree... Done
+Reading state information... 0% Reading state information... 0%Reading state information... Done
+curl is already the newest version (7.88.1-10+deb12u12).
+0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
+[?2004hroot@a5e6fcad21c8:/app# ^C[?2004l[?2004h[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C^C[?2004l[?2004h[?2004l
+[?2004hroot@a5e6fcad21c8:/app# ^C[?2004l[?2004h[?2004l
+[?2004hroot@a5e6fcad21c8:/app# exit
+[?2004lexit
+[?2004h]0;cpa@debiana8: ~/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins[01;32mcpa@debiana8[00m:[01;34m~/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins[00m$ su
