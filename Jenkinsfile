@@ -240,6 +240,33 @@ pipeline {
           }
         }
       }
+    stage('Deploiement en dev'){
+      environment {
+        KUBECONFIG = credentials("config") // we retrieve  kubeconfig from secret file called config saved on jenkins
+      }
+      steps {
+        script {
+          // withKubeConfig(caCertificate: '', clusterName: 'k3d-mycluster', contextName: 'k3d-mycluster', credentialsId: 'k8s-jenkins-secret', namespace: '', restrictKubeConfigAccess: false, serverUrl: 'https://0.0.0.0:41521') {
+    // some block
+                // helm upgrade --install app fastapi --values=values.yml --namespace dev
+                // cf B52 helm --kubeconfig : https://helm.sh/docs/helm/helm/
+          sh '''
+            rm -Rf .kube
+            mkdir .kube
+            ls
+            cat $KUBECONFIG > .kube/config
+            cp /fastapi/values-dev.yaml /fastapiapp/values.yaml
+            cat /fastapiapp/values.yaml
+            sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
+
+            helm upgrade --kubeconfig /usr/local/k3s.yaml --install fastapi-dev /fastapiapp --namespace dev --create-namespace
+          '''
+          // kubectl --kubeconfig /usr/local/k3s.yaml delete namespace dev
+        //}
+        }
+      }
+    }
+
     }
   post { // send email when the job has failed
   // ..

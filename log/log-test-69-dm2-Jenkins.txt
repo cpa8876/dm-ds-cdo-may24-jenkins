@@ -1,0 +1,885 @@
+./log/log-test-69-dm2-Jenkins.txt
+Skip to content
+[Jenkins]Jenkins
+1
+cpa
+se déconnecter
+
+    Tableau de bord
+    dm2-jenkins
+    #69
+
+Status
+Changes
+Console Output
+Edit Build Information
+Supprimer le build "#69"
+Timings
+Git Build Data
+Pipeline Console
+Restart from Stage
+Replay
+Pipeline Steps
+Workspaces
+Previous Build
+SuccèsSuccès
+Sortie de la console
+Download
+Afficher ous forme de texte simple
+
+Started by user cpa
+Obtained Jenkinsfile from git https://github.com/cpa8876/dm-ds-cdo-may24-jenkins.git
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on Jenkins in /var/jenkins_home/workspace/dm2-jenkins
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Declarative: Checkout SCM)
+[Pipeline] checkout
+The recommended git tool is: git
+No credentials specified
+ > git rev-parse --resolve-git-dir /var/jenkins_home/workspace/dm2-jenkins/.git # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url https://github.com/cpa8876/dm-ds-cdo-may24-jenkins.git # timeout=10
+Fetching upstream changes from https://github.com/cpa8876/dm-ds-cdo-may24-jenkins.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.39.5'
+ > git fetch --tags --force --progress -- https://github.com/cpa8876/dm-ds-cdo-may24-jenkins.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git rev-parse refs/remotes/origin/main^{commit} # timeout=10
+Checking out Revision 74d746a25263fc3a02d30897b8a16b8d0ae212e6 (refs/remotes/origin/main)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 74d746a25263fc3a02d30897b8a16b8d0ae212e6 # timeout=10
+Commit message: "test20 with 4stages bloc build, run, acceptance, push and post"
+ > git rev-list --no-walk 7705ef1661a3eedf76e7c714379357c6db83189d # timeout=10
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Docker Build)
+[Pipeline] sh
++ cd /app
++ docker rm -f cpa8876/movie-ds-fastapi
+Error response from daemon: No such container: cpa8876/movie-ds-fastapi
++ docker build -t cpa8876/movie-ds-fastapi:v.69.0 ./movie-service
+DEPRECATED: The legacy builder is deprecated and will be removed in a future release.
+            Install the buildx component to build images with BuildKit:
+            https://docs.docker.com/go/buildx/
+
+Sending build context to Docker daemon   25.6kB
+
+Step 1/6 : FROM python:3.8-slim
+ ---> b5f62925bd0f
+Step 2/6 : WORKDIR /app
+ ---> Using cache
+ ---> 4c8b39cf70f0
+Step 3/6 : COPY ./requirements.txt /app/requirements.txt
+ ---> Using cache
+ ---> a6ebcc85c827
+Step 4/6 : RUN apt-get update     && apt-get install gcc -y     && apt-get clean
+ ---> Using cache
+ ---> 45b551dd00e1
+Step 5/6 : RUN pip install -r /app/requirements.txt     && rm -rf /root/.cache/pip
+ ---> Using cache
+ ---> ce5a5e48b597
+Step 6/6 : COPY . /app/
+ ---> Using cache
+ ---> cae8f07ecd77
+Successfully built cae8f07ecd77
+Successfully tagged cpa8876/movie-ds-fastapi:v.69.0
++ docker rm -f cpa8876/casts-ds-fastapi
+Error response from daemon: No such container: cpa8876/casts-ds-fastapi
++ docker build -t cpa8876/casts-ds-fastapi:v.69.0 ./cast-service
+DEPRECATED: The legacy builder is deprecated and will be removed in a future release.
+            Install the buildx component to build images with BuildKit:
+            https://docs.docker.com/go/buildx/
+
+Sending build context to Docker daemon  20.99kB
+
+Step 1/6 : FROM python:3.8-slim
+ ---> b5f62925bd0f
+Step 2/6 : WORKDIR /app
+ ---> Using cache
+ ---> 4c8b39cf70f0
+Step 3/6 : COPY ./requirements.txt /app/requirements.txt
+ ---> Using cache
+ ---> 8b9d7b1abc7d
+Step 4/6 : RUN apt-get update     && apt-get install gcc -y     && apt-get clean
+ ---> Using cache
+ ---> f364ed3dab48
+Step 5/6 : RUN pip install -r /app/requirements.txt     && rm -rf /root/.cache/pip
+ ---> Using cache
+ ---> b074cae8898e
+Step 6/6 : COPY . /app/
+ ---> Using cache
+ ---> 13c6753885ff
+Successfully built 13c6753885ff
+Successfully tagged cpa8876/casts-ds-fastapi:v.69.0
++ docker image ls -a
++ grep fastapi
+cpa8876/casts-ds-fastapi    v.10.0        13c6753885ff   43 hours ago   462MB
+cpa8876/casts-ds-fastapi    v.11.0        13c6753885ff   43 hours ago   462MB
+cpa8876/casts-ds-fastapi    v.12.0        13c6753885ff   43 hours ago   462MB
+cpa8876/casts-ds-fastapi    v.13.0        13c6753885ff   43 hours ago   462MB
+cpa8876/casts-ds-fastapi    v.14.0        13c6753885ff   43 hours ago   462MB
+cpa8876/casts-ds-fastapi    v.15.0        13c6753885ff   43 hours ago   462MB
+cpa8876/casts-ds-fastapi    v.16.0        13c6753885ff   43 hours ago   462MB
+cpa8876/casts-ds-fastapi    v.17.0        13c6753885ff   43 hours ago   462MB
+cpa8876/casts-ds-fastapi    v.18.0        13c6753885ff   43 hours ago   462MB
+cpa8876/casts-ds-fastapi    v.19.0        13c6753885ff   43 hours ago   462MB
+cpa8876/casts-ds-fastapi    v.20.0        13c6753885ff   43 hours ago   462MB
+cpa8876/casts-ds-fastapi    v.21.0        13c6753885ff   43 hours ago   462MB
+cpa8876/casts-ds-fastapi    v.22.0        13c6753885ff   43 hours ago   462MB
+cpa8876/casts-ds-fastapi    v.24.0        13c6753885ff   43 hours ago   462MB
+cpa8876/casts-ds-fastapi    v.28.0        13c6753885ff   43 hours ago   462MB
+cpa8876/casts-ds-fastapi    v.29.0        13c6753885ff   43 hours ago   462MB
+cpa8876/casts-ds-fastapi    v.30.0        13c6753885ff   43 hours ago   462MB
+cpa8876/casts-ds-fastapi    v.51.0        13c6753885ff   43 hours ago   462MB
+cpa8876/casts-ds-fastapi    v.52.0        13c6753885ff   43 hours ago   462MB
+cpa8876/casts-ds-fastapi    v.54.0        13c6753885ff   43 hours ago   462MB
+cpa8876/casts-ds-fastapi    v.55.0        13c6753885ff   43 hours ago   462MB
+cpa8876/casts-ds-fastapi    v.56.0        13c6753885ff   43 hours ago   462MB
+cpa8876/casts-ds-fastapi    v.57.0        13c6753885ff   43 hours ago   462MB
+cpa8876/casts-ds-fastapi    v.58.0        13c6753885ff   43 hours ago   462MB
+cpa8876/casts-ds-fastapi    v.59.0        13c6753885ff   43 hours ago   462MB
+cpa8876/casts-ds-fastapi    v.61.0        13c6753885ff   43 hours ago   462MB
+cpa8876/casts-ds-fastapi    v.62.0        13c6753885ff   43 hours ago   462MB
+cpa8876/casts-ds-fastapi    v.63.0        13c6753885ff   43 hours ago   462MB
+cpa8876/casts-ds-fastapi    v.64.0        13c6753885ff   43 hours ago   462MB
+cpa8876/casts-ds-fastapi    v.65.0        13c6753885ff   43 hours ago   462MB
+cpa8876/casts-ds-fastapi    v.68.0        13c6753885ff   43 hours ago   462MB
+cpa8876/casts-ds-fastapi    v.69.0        13c6753885ff   43 hours ago   462MB
+cpa8876/casts-ds-fastapi    v.70.0        13c6753885ff   43 hours ago   462MB
+cpa8876/casts-ds-fastapi    v.9.0         13c6753885ff   43 hours ago   462MB
+cpa8876/movies-ds-fastapi   v.10.0        cae8f07ecd77   43 hours ago   469MB
+cpa8876/movies-ds-fastapi   v.11.0        cae8f07ecd77   43 hours ago   469MB
+cpa8876/movies-ds-fastapi   v.12.0        cae8f07ecd77   43 hours ago   469MB
+cpa8876/movies-ds-fastapi   v.13.0        cae8f07ecd77   43 hours ago   469MB
+cpa8876/movies-ds-fastapi   v.14.0        cae8f07ecd77   43 hours ago   469MB
+cpa8876/movies-ds-fastapi   v.15.0        cae8f07ecd77   43 hours ago   469MB
+cpa8876/movies-ds-fastapi   v.16.0        cae8f07ecd77   43 hours ago   469MB
+cpa8876/movies-ds-fastapi   v.17.0        cae8f07ecd77   43 hours ago   469MB
+cpa8876/movies-ds-fastapi   v.18.0        cae8f07ecd77   43 hours ago   469MB
+cpa8876/movies-ds-fastapi   v.19.0        cae8f07ecd77   43 hours ago   469MB
+cpa8876/movies-ds-fastapi   v.20.0        cae8f07ecd77   43 hours ago   469MB
+cpa8876/movies-ds-fastapi   v.21.0        cae8f07ecd77   43 hours ago   469MB
+cpa8876/movies-ds-fastapi   v.22.0        cae8f07ecd77   43 hours ago   469MB
+cpa8876/movies-ds-fastapi   v.24.0        cae8f07ecd77   43 hours ago   469MB
+cpa8876/movies-ds-fastapi   v.28.0        cae8f07ecd77   43 hours ago   469MB
+cpa8876/movies-ds-fastapi   v.29.0        cae8f07ecd77   43 hours ago   469MB
+cpa8876/movies-ds-fastapi   v.30.0        cae8f07ecd77   43 hours ago   469MB
+cpa8876/movies-ds-fastapi   v.70.0        cae8f07ecd77   43 hours ago   469MB
+cpa8876/movies-ds-fastapi   v.9.0         cae8f07ecd77   43 hours ago   469MB
+cpa8876/movie-ds-fastapi    v.10.0        cae8f07ecd77   43 hours ago   469MB
+cpa8876/movie-ds-fastapi    v.51.0        cae8f07ecd77   43 hours ago   469MB
+cpa8876/movie-ds-fastapi    v.52.0        cae8f07ecd77   43 hours ago   469MB
+cpa8876/movie-ds-fastapi    v.54.0        cae8f07ecd77   43 hours ago   469MB
+cpa8876/movie-ds-fastapi    v.55.0        cae8f07ecd77   43 hours ago   469MB
+cpa8876/movie-ds-fastapi    v.56.0        cae8f07ecd77   43 hours ago   469MB
+cpa8876/movie-ds-fastapi    v.57.0        cae8f07ecd77   43 hours ago   469MB
+cpa8876/movie-ds-fastapi    v.58.0        cae8f07ecd77   43 hours ago   469MB
+cpa8876/movie-ds-fastapi    v.59.0        cae8f07ecd77   43 hours ago   469MB
+cpa8876/movie-ds-fastapi    v.61.0        cae8f07ecd77   43 hours ago   469MB
+cpa8876/movie-ds-fastapi    v.62.0        cae8f07ecd77   43 hours ago   469MB
+cpa8876/movie-ds-fastapi    v.63.0        cae8f07ecd77   43 hours ago   469MB
+cpa8876/movie-ds-fastapi    v.64.0        cae8f07ecd77   43 hours ago   469MB
+cpa8876/movie-ds-fastapi    v.65.0        cae8f07ecd77   43 hours ago   469MB
+cpa8876/movie-ds-fastapi    v.68.0        cae8f07ecd77   43 hours ago   469MB
+cpa8876/movie-ds-fastapi    v.69.0        cae8f07ecd77   43 hours ago   469MB
++ sleep 6
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Docker run)
+[Pipeline] script
+[Pipeline] {
+[Pipeline] sh
++ cd /app
++ docker volume create postgres_data_movie
+postgres_data_movie
++ docker volume create postgres_data_cast
+postgres_data_cast
++ docker run -d --name cast_db --net dm-jenkins-cpa-infra_my-net -v postgres_data_cast:/var/lib/postgresql/data/ -e POSTGRES_USER=cast_db_username -e POSTGRES_PASSWORD=cast_db_password -e POSTGRES_DB=cast_db_dev --health-cmd CMD-SHELL,pg_isready -U  -d  --health-interval 10s --health-retries 5 --health-start-period 30s --health-timeout 10s postgres:12.1-alpine
+b4fbcdd7c30b583f9d8b9bf60441b635c5328d56f2654131e590b92007158d49
++ sleep 6
++ docker run -d --name cast_service --net dm-jenkins-cpa-infra_my-net -p 8002:8000 -e DATABASE_URI=postgresql://cast_db_username:cast_db_password@cast_db/cast_db_dev cpa8876/casts-ds-fastapi:v.69.0 uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+5afc695b00c45559cdf445238779ae9e85cf509532b5ffbb08ce08997af7f10f
++ sleep 2
++ sleep+  6
+docker run -d --name movie_db --net dm-jenkins-cpa-infra_my-net -v postgres_data_movie:/var/lib/postgresql/data/ -e POSTGRES_USER=movie_db_username -e POSTGRES_PASSWORD=movie_db_password -e POSTGRES_DB=movie_db_dev --health-cmd CMD-SHELL,pg_isready -U  -d  --health-interval 10s --health-retries 5 --health-start-period 30s --health-timeout 10s postgres:12.1-alpine
+8ef711a717f9c7d93d840fad80af076bc6aca8cbb436ed44d6db6471a9cafb8f
++ docker run -d --name movie_service --net dm-jenkins-cpa-infra_my-net -p 8001:8000 -e DATABASE_URL=postgresql://movie_db_username:movie_db_password@movie_db/movie_db_dev -e CAST_SERVICE_HOST_URL=http://cast_service:8000/api/v1/casts/ cpa8876/movie-ds-fastapi:v.69.0 uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+7083c2f9902c09e84a03eb15841d2e4d6e1343d5726201eb8178f189daedef6b
++ sleep 2
++ docker run -d --name nginx --net dm-jenkins-cpa-infra_my-net -p 8080:8080 nginx:latest
+12d8fdbb4e492b1975fab6937b1d82a72c208953404009f76be985094195e4b9
++ docker cp nginx_config.conf nginx:/etc/nginx/conf.d/default.conf
++ docker restart nginx
+nginx
+[Pipeline] }
+[Pipeline] // script
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Test Acceptance)
+[Pipeline] script
+[Pipeline] {
+[Pipeline] sh
++ apt update -y
+
+WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
+
+Hit:1 http://deb.debian.org/debian bookworm InRelease
+Hit:2 http://deb.debian.org/debian bookworm-updates InRelease
+Hit:3 http://deb.debian.org/debian-security bookworm-security InRelease
+Reading package lists...
+Building dependency tree...
+Reading state information...
+All packages are up to date.
++ apt full-upgrade-y
+
+WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
+
+E: Invalid operation full-upgrade-y
++ echo -e
+
+ -------------------------------------------------------------------
+-e
+
+ -------------------------------------------------------------------
++ echo -e Tests acceptance access on contenaires  cast_db, movie_db, cast _sezrvice, movie_service and loadbalancer
+
+-e Tests acceptance access on contenaires  cast_db, movie_db, cast _sezrvice, movie_service and loadbalancer
+
++ echo -e
+
+ ------------------------------------------
+-e
+
+ ------------------------------------------
++ echo -e
+ Test-01 : Sql query on cast_db : select * from pg_database :
+-e
+ Test-01 : Sql query on cast_db : select * from pg_database :
++ docker exec cast_db psql -h localhost -p 5432 -U cast_db_username -d cast_db_dev -c select * from pg_database
+  oid  |   datname   | datdba | encoding | datcollate |  datctype  | datistemplate | datallowconn | datconnlimit | datlastsysoid | datfrozenxid | datminmxid | dattablespace |                           datacl
+-------+-------------+--------+----------+------------+------------+---------------+--------------+--------------+---------------+--------------+------------+---------------+-------------------------------------------------------------
+ 13423 | postgres    |     10 |        6 | en_US.utf8 | en_US.utf8 | f             | t            |           -1 |         13422 |          480 |          1 |          1663 |
+ 16384 | cast_db_dev |     10 |        6 | en_US.utf8 | en_US.utf8 | f             | t            |           -1 |         13422 |          480 |          1 |          1663 |
+     1 | template1   |     10 |        6 | en_US.utf8 | en_US.utf8 | t             | t            |           -1 |         13422 |          480 |          1 |          1663 | {=c/cast_db_username,cast_db_username=CTc/cast_db_username}
+ 13422 | template0   |     10 |        6 | en_US.utf8 | en_US.utf8 | t             | f            |           -1 |         13422 |          480 |          1 |          1663 | {=c/cast_db_username,cast_db_username=CTc/cast_db_username}
+(4 rows)
+
++ echo -e
+
+ Test-02 : curl on ip-cast_service:8000/api/v1/casts/docs
+-e
+
+ Test-02 : curl on ip-cast_service:8000/api/v1/casts/docs
++ docker exec cast_service hostname -i
++ curl 172.18.0.4:8000/api/v1/casts/docs
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100   911  100   911    0     0   923k      0 --:--:-- --:--:-- --:--:--  889k
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swagger-ui-dist@3/swagger-ui.css">
+    <link rel="shortcut icon" href="https://fastapi.tiangolo.com/img/favicon.png">
+    <title>FastAPI - Swagger UI</title>
+    </head>
+    <body>
+    <div id="swagger-ui">
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@3/swagger-ui-bundle.js"></script>
+    <!-- `SwaggerUIBundle` is now available on the page -->
+    <script>
+    const ui = SwaggerUIBundle({
+        url: '/api/v1/casts/openapi.json',
+    oauth2RedirectUrl: window.location.origin + '/docs/oauth2-redirect',
+        dom_id: '#swagger-ui',
+        presets: [
+        SwaggerUIBundle.presets.apis,
+        SwaggerUIBundle.SwaggerUIStandalonePreset
+        ],
+        layout: "BaseLayout",
+        deepLinking: true
+    })
+    </script>
+    </body>
+    </html>
+    + echo -e
+ Test-03 : Sql query on movie_db : select * from pg_database :
+-e
+ Test-03 : Sql query on movie_db : select * from pg_database :
++ docker exec movie_db psql -h localhost -p 5432 -U movie_db_username -d movie_db_dev -c select * from pg_database
+  oid  |   datname    | datdba | encoding | datcollate |  datctype  | datistemplate | datallowconn | datconnlimit | datlastsysoid | datfrozenxid | datminmxid | dattablespace |                             datacl
+-------+--------------+--------+----------+------------+------------+---------------+--------------+--------------+---------------+--------------+------------+---------------+----------------------------------------------------------------
+ 13423 | postgres     |     10 |        6 | en_US.utf8 | en_US.utf8 | f             | t            |           -1 |         13422 |          480 |          1 |          1663 |
+ 16384 | movie_db_dev |     10 |        6 | en_US.utf8 | en_US.utf8 | f             | t            |           -1 |         13422 |          480 |          1 |          1663 |
+     1 | template1    |     10 |        6 | en_US.utf8 | en_US.utf8 | t             | t            |           -1 |         13422 |          480 |          1 |          1663 | {=c/movie_db_username,movie_db_username=CTc/movie_db_username}
+ 13422 | template0    |     10 |        6 | en_US.utf8 | en_US.utf8 | t             | f            |           -1 |         13422 |          480 |          1 |          1663 | {=c/movie_db_username,movie_db_username=CTc/movie_db_username}
+(4 rows)
+
++ echo -e
+
+ Test-04 : curl on ip-movie_service:8000/api/v1/casts/docs
+-e
+
+ Test-04 : curl on ip-movie_service:8000/api/v1/casts/docs
++ docker exec movie_service hostname -i
++ curl 172.18.0.6:8000/api/v1/movies/docs
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100   912  100   912    0     0   933k      0 --:--:-- --:--:-- --:--:--  890k
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swagger-ui-dist@3/swagger-ui.css">
+    <link rel="shortcut icon" href="https://fastapi.tiangolo.com/img/favicon.png">
+    <title>FastAPI - Swagger UI</title>
+    </head>
+    <body>
+    <div id="swagger-ui">
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@3/swagger-ui-bundle.js"></script>
+    <!-- `SwaggerUIBundle` is now available on the page -->
+    <script>
+    const ui = SwaggerUIBundle({
+        url: '/api/v1/movies/openapi.json',
+    oauth2RedirectUrl: window.location.origin + '/docs/oauth2-redirect',
+        dom_id: '#swagger-ui',
+        presets: [
+        SwaggerUIBundle.presets.apis,
+        SwaggerUIBundle.SwaggerUIStandalonePreset
+        ],
+        layout: "BaseLayout",
+        deepLinking: true
+    })
+    </script>
+    </body>
+    </html>
+    + echo -e
+
+ Test-05 : curl on ip-nginx:8080/api/v1/movies/docs
+-e
+
+ Test-05 : curl on ip-nginx:8080/api/v1/movies/docs
++ docker exec nginx hostname -i
++ curl 172.18.0.7:8080/api/v1/movies/docs
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100   912  100   912    0     0   833k      0 --:--:-- --:--:-- --:--:--  890k
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swagger-ui-dist@3/swagger-ui.css">
+    <link rel="shortcut icon" href="https://fastapi.tiangolo.com/img/favicon.png">
+    <title>FastAPI - Swagger UI</title>
+    </head>
+    <body>
+    <div id="swagger-ui">
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@3/swagger-ui-bundle.js"></script>
+    <!-- `SwaggerUIBundle` is now available on the page -->
+    <script>
+    const ui = SwaggerUIBundle({
+        url: '/api/v1/movies/openapi.json',
+    oauth2RedirectUrl: window.location.origin + '/docs/oauth2-redirect',
+        dom_id: '#swagger-ui',
+        presets: [
+        SwaggerUIBundle.presets.apis,
+        SwaggerUIBundle.SwaggerUIStandalonePreset
+        ],
+        layout: "BaseLayout",
+        deepLinking: true
+    })
+    </script>
+    </body>
+    </html>
+    + echo -e
+
+ Test-06 : curl on ip-nginx:8080/api/v1/casts/docs
+-e
+
+ Test-06 : curl on ip-nginx:8080/api/v1/casts/docs
++ docker exec nginx hostname -i
++ curl 172.18.0.7:8080/api/v1/casts/docs
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100   911  100   911    0     0   735k      0 --:--:-- --:--:-- --:--:--  889k
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swagger-ui-dist@3/swagger-ui.css">
+    <link rel="shortcut icon" href="https://fastapi.tiangolo.com/img/favicon.png">
+    <title>FastAPI - Swagger UI</title>
+    </head>
+    <body>
+    <div id="swagger-ui">
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@3/swagger-ui-bundle.js"></script>
+    <!-- `SwaggerUIBundle` is now available on the page -->
+    <script>
+    const ui = SwaggerUIBundle({
+        url: '/api/v1/casts/openapi.json',
+    oauth2RedirectUrl: window.location.origin + '/docs/oauth2-redirect',
+        dom_id: '#swagger-ui',
+        presets: [
+        SwaggerUIBundle.presets.apis,
+        SwaggerUIBundle.SwaggerUIStandalonePreset
+        ],
+        layout: "BaseLayout",
+        deepLinking: true
+    })
+    </script>
+    </body>
+    </html>
+    + echo -e
+
+ -------------------------------------------------------------------
+-e
+
+ -------------------------------------------------------------------
++ echo -e Tests acceptance CRUD movies fastapi with contenair nginx (loadbalancer) application
+
+-e Tests acceptance CRUD movies fastapi with contenair nginx (loadbalancer) application
+
++ echo -e
+
+ ------------------------------------------
+-e
+
+ ------------------------------------------
++ echo -e
+
+ Test-07 : curl -X POST on ip-nginx:8080/api/v1/movies/ for id=1 Star wars IX
+-e
+
+ Test-07 : curl -X POST on ip-nginx:8080/api/v1/movies/ for id=1 Star wars IX
++ docker exec nginx hostname -i
++ curl -X POST 172.18.0.7:8080/api/v1/movies/ -H accept: application/json -H Content-Type: application/json -d {
+  "id": 1,
+  "name": "Star Wars: Episode IX - The Rise of Skywalker",
+  "plot": "The surviving members of the resistance face the First Order once again.",
+  "genres": [
+    "Action",
+    "Adventure",
+    "Fantasy"
+  ],
+  "casts_id": [
+   1,
+   2,
+   3,
+   4,
+   5
+  ]
+}
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100   272    0     0  100   272      0   1356 --:--:-- --:--:-- --:--:--  1353
+100   272    0     0  100   272      0    226  0:00:01  0:00:01 --:--:--   226
+100   482  100   210  100   272    168    218  0:00:01  0:00:01 --:--:--   387
+{"id":1,"name":"Star Wars: Episode IX - The Rise of Skywalker","plot":"The surviving members of the resistance face the First Order once again.","genres":["Action","Adventure","Fantasy"],"casts_id":[1,2,3,4,5]}+ echo -e
+
+ Test-08 : curl -X POST on ip-nginx:8080/api/v1/movies/ for id=2 Star wars VI
+-e
+
+ Test-08 : curl -X POST on ip-nginx:8080/api/v1/movies/ for id=2 Star wars VI
++ docker exec nginx hostname -i
++ curl -X POST 172.18.0.7:8080/api/v1/movies/ -H accept: application/json -H Content-Type: application/json -d {
+  "id": 2,
+  "name": "Star Wars: Episode VI - Return of the Jedi",
+  "plot": "The evil Galactic Empire is building a new Death Star space station to permanently destroy the Rebel Alliance, its main opposition.",
+  "genres": [
+    "Action",
+    "Adventure",
+    "Fantasy"
+  ],
+  "casts_id": [
+   3,
+   4,
+   5
+  ]
+}
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100   337  100    21  100   316   5201  78275 --:--:-- --:--:-- --:--:-- 84250
+Internal Server Error+ echo -e
+
+ Test-09 : curl -X POST on ip-nginx:8080/api/v1/movies/ for id=3 Star wars V
+-e
+
+ Test-09 : curl -X POST on ip-nginx:8080/api/v1/movies/ for id=3 Star wars V
++ docker exec nginx hostname -i
++ curl -X POST 172.18.0.7:8080/api/v1/movies/ -H accept: application/json -H Content-Type: application/json -d {
+ "id": 3,
+  "name": "Star Wars: Episode V - The Empire Strikes Back",
+  "plot": "Set three years after the events of Star Wars, the film recounts the battle between the malevolent Galactic Empire, ",
+  "genres": [
+    "Action",
+    "Adventure",
+    "Fantasy"
+  ],
+  "casts_id": [
+    3,
+    4,
+    5
+  ]
+}
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100   328  100    21  100   307   8389   119k --:--:-- --:--:-- --:--:--  160k
+Internal Server Error+ echo -e
+
+ Test-10 : curl -X GET ALL on ip-nginx:8080/api/v1/movies/
+-e
+
+ Test-10 : curl -X GET ALL on ip-nginx:8080/api/v1/movies/
++ docker exec nginx hostname -i
++ curl -X GET 172.18.0.7:8080/api/v1/movies/ -H accept: application/json
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100   727  100   727    0     0   301k      0 --:--:-- --:--:-- --:--:--  354k
+[{"id":2,"name":"Star Wars: Episode VI - Return of the Jedi","plot":"The evil Galactic Empire is building a new Death Star space station to permanently destroy the Rebel Alliance, its main opposition.","genres":["Action","Adventure","Fantasy"],"casts_id":[3,4,5]},{"id":3,"name":"Star Wars: Episode V - The Empire Strikes Back","plot":"Set three years after the events of Star Wars, the film recounts the battle between the malevolent Galactic Empire, ","genres":["Action","Adventure","Fantasy"],"casts_id":[3,4,5]},{"id":1,"name":"Star Wars: Episode IX - The Rise of Skywalker","plot":"The surviving members of the resistance face the First Order once again.","genres":["Action","Adventure","Fantasy"],"casts_id":[1,2,3,4,5]}]+ echo -e
+
+ Test-11 : curl -X GET id=1 on ip-nginx:8080/api/v1/movies/1
+-e
+
+ Test-11 : curl -X GET id=1 on ip-nginx:8080/api/v1/movies/1
++ docker exec nginx hostname -i
++ curl -X GET 172.18.0.7:8080/api/v1/movies/1/ -H accept: application/json
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100   210  100   210    0     0  87976      0 --:--:-- --:--:-- --:--:--  102k
+{"id":1,"name":"Star Wars: Episode IX - The Rise of Skywalker","plot":"The surviving members of the resistance face the First Order once again.","genres":["Action","Adventure","Fantasy"],"casts_id":[1,2,3,4,5]}+ echo -e
+
+ Test-12 : curl -X PUT update id=1 on ip-nginx:8080/api/v1/movies/1
+-e
+
+ Test-12 : curl -X PUT update id=1 on ip-nginx:8080/api/v1/movies/1
++ docker exec nginx hostname -i
++ curl -X PUT 172.18.0.7:8080/api/v1/movies/1 -H accept: application/json -H Content-Type: application/json -d {
+  "id": 1,
+  "name": "Star Wars: Episode IX - The Rise of Skywalker",
+  "plot": "The surviving members of the resistance face the First Order once again.",
+  "genres": [
+    "Action",
+    "Adventure",
+    "Fantasy"
+  ],
+  "casts_id": [
+   1
+  ]
+}
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100   252  100     4  100   248    795  49304 --:--:-- --:--:-- --:--:-- 50400
+null+ echo -e
+
+ Test-13 : curl -X GET ALL on ip-nginx:8080/api/v1/movies/
+-e
+
+ Test-13 : curl -X GET ALL on ip-nginx:8080/api/v1/movies/
++ docker exec nginx hostname -i
++ curl -X GET 172.18.0.7:8080/api/v1/movies/ -H accept: application/json
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100   719  100   719    0     0   314k      0 --:--:-- --:--:-- --:--:--  351k
+[{"id":2,"name":"Star Wars: Episode VI - Return of the Jedi","plot":"The evil Galactic Empire is building a new Death Star space station to permanently destroy the Rebel Alliance, its main opposition.","genres":["Action","Adventure","Fantasy"],"casts_id":[3,4,5]},{"id":3,"name":"Star Wars: Episode V - The Empire Strikes Back","plot":"Set three years after the events of Star Wars, the film recounts the battle between the malevolent Galactic Empire, ","genres":["Action","Adventure","Fantasy"],"casts_id":[3,4,5]},{"id":1,"name":"Star Wars: Episode IX - The Rise of Skywalker","plot":"The surviving members of the resistance face the First Order once again.","genres":["Action","Adventure","Fantasy"],"casts_id":[1]}]+ echo -e
+
+ Test-14 : curl -X DELETE id=1 on ip-nginx:8080/api/v1/movies/1
+-e
+
+ Test-14 : curl -X DELETE id=1 on ip-nginx:8080/api/v1/movies/1
++ docker exec nginx hostname -i
++ curl -X DELETE 172.18.0.7:8080/api/v1/movies/1 -H accept: application/json
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100     4  100     4    0     0   1146      0 --:--:-- --:--:-- --:--:--  1333
+null+ echo -e
+
+ Test-15 : curl -X GET ALL on ip-nginx:8080/api/v1/movies/
+-e
+
+ Test-15 : curl -X GET ALL on ip-nginx:8080/api/v1/movies/
++ docker exec nginx hostname -i
++ curl -X GET 172.18.0.7:8080/api/v1/movies/ -H accept: application/json
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100   516  100   516    0     0   250k      0 --:--:-- --:--:-- --:--:--  503k
+[{"id":2,"name":"Star Wars: Episode VI - Return of the Jedi","plot":"The evil Galactic Empire is building a new Death Star space station to permanently destroy the Rebel Alliance, its main opposition.","genres":["Action","Adventure","Fantasy"],"casts_id":[3,4,5]},{"id":3,"name":"Star Wars: Episode V - The Empire Strikes Back","plot":"Set three years after the events of Star Wars, the film recounts the battle between the malevolent Galactic Empire, ","genres":["Action","Adventure","Fantasy"],"casts_id":[3,4,5]}]+ echo -e
+
+ -------------------------------------------------------------------
+-e
+
+ -------------------------------------------------------------------
++ echo -e Tests acceptance CRUD casts fastapi application
+
+-e Tests acceptance CRUD casts fastapi application
+
++ echo -e
+
+ ------------------------------------------
+-e
+
+ ------------------------------------------
++ echo -e
+
+ Test-16 : curl -X GET ALL on ip-nginx:8080/api/v1/casts/
+-e
+
+ Test-16 : curl -X GET ALL on ip-nginx:8080/api/v1/casts/
++ docker exec nginx hostname -i
++ curl -X POST http://172.18.0.7:8080/api/v1/casts/ -H accept: application/json -H Content-Type: application/json -d {
+  "name": "Adam Driver",
+  "nationality": "USA"
+}
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100   102  100    51  100    51   8518   8518 --:--:-- --:--:-- --:--:-- 20400
+{"name":"Adam Driver","nationality":"USA","id":397}+ echo -e
+
+ Test-17 : curl -X GET POST  create id=1 cast on ip-nginx:8080/api/v1/casts/
+-e
+
+ Test-17 : curl -X GET POST  create id=1 cast on ip-nginx:8080/api/v1/casts/
++ docker exec nginx hostname -i
++ curl -X POST http://172.18.0.7:8080/api/v1/casts/ -H accept: application/json -H Content-Type: application/json -d {
+  "name": "Daisy Ridley",
+  "nationality": "USA"
+}
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100   104  100    52  100    52  19490  19490 --:--:-- --:--:-- --:--:-- 52000
+{"name":"Daisy Ridley","nationality":"USA","id":398}+ echo -e
+
+ Test-18 : curl -X POST create id=2 cast ALL on ip-nginx:8080/api/v1/casts/
+-e
+
+ Test-18 : curl -X POST create id=2 cast ALL on ip-nginx:8080/api/v1/casts/
++ docker exec nginx hostname -i
++ curl -X POST http://172.18.0.7:8080/api/v1/casts/ -H accept: application/json -H Content-Type: application/json -d {
+  "name": "Carrie FISHER",
+  "nationality": "USA"
+}
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100   106  100    53  100    53  18969  18969 --:--:-- --:--:-- --:--:-- 53000
+{"name":"Carrie FISHER","nationality":"USA","id":399}+ echo -e
+
+ Test-19 : curl -X POST create id=3 cast on ip-nginx:8080/api/v1/casts/
+-e
+
+ Test-19 : curl -X POST create id=3 cast on ip-nginx:8080/api/v1/casts/
++ docker exec nginx hostname -i
++ curl -X POST http://172.18.0.7:8080/api/v1/casts/ -H accept: application/json -H Content-Type: application/json -d {
+  "name": "Mark HAMILL",
+  "nationality": "USA"
+}
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100   102  100    51  100    51  18511  18511 --:--:-- --:--:-- --:--:-- 51000
+{"name":"Mark HAMILL","nationality":"USA","id":400}+ echo -e
+
+ Test-20 : curl -X POST create id=4 cast on ip-nginx:8080/api/v1/casts/
+-e
+
+ Test-20 : curl -X POST create id=4 cast on ip-nginx:8080/api/v1/casts/
++ docker exec nginx hostname -i
++ curl -X POST http://172.18.0.7:8080/api/v1/casts/ -H accept: application/json -H Content-Type: application/json -d {
+  "name": "Harisson FORD",
+  "nationality": "USA"
+}
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100   106  100    53  100    53  18138  18138 --:--:-- --:--:-- --:--:-- 53000
+{"name":"Harisson FORD","nationality":"USA","id":401}+ echo -e
+
+ Test-21 : curl -X GET ALL on ip-nginx:8080/api/v1/casts/
+-e
+
+ Test-21 : curl -X GET ALL on ip-nginx:8080/api/v1/casts/
++ docker exec nginx hostname -i
++ curl -X GET http://172.18.0.7:8080/api/v1/casts/ -H accept: application/json
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100  3376  100  3376    0     0   882k      0 --:--:-- --:--:-- --:--:-- 1098k
+[{"name":"Daisy Ridley","nationality":"USA","id":2},{"name":"Carrie FISHER","nationality":"USA","id":3},{"name":"Mark HAMILL","nationality":"USA","id":4},{"name":"Harisson FORD","nationality":"USA","id":5},{"name":"Adam Driver","nationality":"USA","id":34},{"name":"Daisy Ridley","nationality":"USA","id":35},{"name":"Carrie FISHER","nationality":"USA","id":36},{"name":"Mark HAMILL","nationality":"USA","id":37},{"name":"Harisson FORD","nationality":"USA","id":38},{"name":"Adam Driver","nationality":"USA","id":67},{"name":"Daisy Ridley","nationality":"USA","id":68},{"name":"Carrie FISHER","nationality":"USA","id":69},{"name":"Mark HAMILL","nationality":"USA","id":70},{"name":"Harisson FORD","nationality":"USA","id":71},{"name":"Adam Driver","nationality":"USA","id":100},{"name":"Daisy Ridley","nationality":"USA","id":101},{"name":"Carrie FISHER","nationality":"USA","id":102},{"name":"Mark HAMILL","nationality":"USA","id":103},{"name":"Harisson FORD","nationality":"USA","id":104},{"name":"Adam Driver","nationality":"USA","id":133},{"name":"Daisy Ridley","nationality":"USA","id":134},{"name":"Carrie FISHER","nationality":"USA","id":135},{"name":"Mark HAMILL","nationality":"USA","id":136},{"name":"Harisson FORD","nationality":"USA","id":137},{"name":"Adam Driver","nationality":"USA","id":166},{"name":"Daisy Ridley","nationality":"USA","id":167},{"name":"Carrie FISHER","nationality":"USA","id":168},{"name":"Mark HAMILL","nationality":"USA","id":169},{"name":"Harisson FORD","nationality":"USA","id":170},{"name":"Adam Driver","nationality":"USA","id":199},{"name":"Daisy Ridley","nationality":"USA","id":200},{"name":"Carrie FISHER","nationality":"USA","id":201},{"name":"Mark HAMILL","nationality":"USA","id":202},{"name":"Harisson FORD","nationality":"USA","id":203},{"name":"Adam Driver","nationality":"USA","id":232},{"name":"Daisy Ridley","nationality":"USA","id":233},{"name":"Carrie FISHER","nationality":"USA","id":234},{"name":"Mark HAMILL","nationality":"USA","id":235},{"name":"Harisson FORD","nationality":"USA","id":236},{"name":"Adam Driver","nationality":"USA","id":265},{"name":"Daisy Ridley","nationality":"USA","id":266},{"name":"Carrie FISHER","nationality":"USA","id":267},{"name":"Mark HAMILL","nationality":"USA","id":268},{"name":"Harisson FORD","nationality":"USA","id":269},{"name":"Adam Driver","nationality":"USA","id":298},{"name":"Daisy Ridley","nationality":"USA","id":299},{"name":"Carrie FISHER","nationality":"USA","id":300},{"name":"Mark HAMILL","nationality":"USA","id":301},{"name":"Harisson FORD","nationality":"USA","id":302},{"name":"Adam Driver","nationality":"USA","id":331},{"name":"Daisy Ridley","nationality":"USA","id":332},{"name":"Carrie FISHER","nationality":"USA","id":333},{"name":"Mark HAMILL","nationality":"USA","id":334},{"name":"Harisson FORD","nationality":"USA","id":335},{"name":"Adam Driver","nationality":"USA","id":364},{"name":"Daisy Ridley","nationality":"USA","id":365},{"name":"Carrie FISHER","nationality":"USA","id":366},{"name":"Mark HAMILL","nationality":"USA","id":367},{"name":"Harisson FORD","nationality":"USA","id":368},{"name":"Adam Driver","nationality":"USA","id":397},{"name":"Daisy Ridley","nationality":"USA","id":398},{"name":"Carrie FISHER","nationality":"USA","id":399},{"name":"Mark HAMILL","nationality":"USA","id":400},{"name":"Harisson FORD","nationality":"USA","id":401}]+ echo -e
+
+ Test-22 : curl -X GET id=1 on ip-nginx:8080/api/v1/casts/1
+-e
+
+ Test-22 : curl -X GET id=1 on ip-nginx:8080/api/v1/casts/1
++ docker exec nginx hostname -i
++ curl -X GET http://172.18.0.7:8080/api/v1/casts/1/ -H accept: application/json
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100    27  100    27    0     0  10791      0 --:--:-- --:--:-- --:--:-- 13500
+{"detail":"Cast not found"}+ echo -e
+
+ Test-23 : curl -X DELETE id=1 on ip-nginx:8080/api/v1/casts/
+-e
+
+ Test-23 : curl -X DELETE id=1 on ip-nginx:8080/api/v1/casts/
++ docker exec nginx hostname -i
++ curl -X DELETE http://172.18.0.7:8080/api/v1/casts/1 -H accept: application/json
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100    27  100    27    0     0  12587      0 --:--:-- --:--:-- --:--:-- 13500
+{"detail":"Cast not found"}+ echo -e
+
+ Test-24 : curl -X GET ALL on ip-nginx:8080/api/v1/casts/
+-e
+
+ Test-24 : curl -X GET ALL on ip-nginx:8080/api/v1/casts/
++ docker exec nginx hostname -i
++ curl -X GET http://172.18.0.7:8080/api/v1/casts/ -H accept: application/json
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100  3376  100  3376    0     0   967k      0 --:--:-- --:--:-- --:--:-- 1098k
+[{"name":"Daisy Ridley","nationality":"USA","id":2},{"name":"Carrie FISHER","nationality":"USA","id":3},{"name":"Mark HAMILL","nationality":"USA","id":4},{"name":"Harisson FORD","nationality":"USA","id":5},{"name":"Adam Driver","nationality":"USA","id":34},{"name":"Daisy Ridley","nationality":"USA","id":35},{"name":"Carrie FISHER","nationality":"USA","id":36},{"name":"Mark HAMILL","nationality":"USA","id":37},{"name":"Harisson FORD","nationality":"USA","id":38},{"name":"Adam Driver","nationality":"USA","id":67},{"name":"Daisy Ridley","nationality":"USA","id":68},{"name":"Carrie FISHER","nationality":"USA","id":69},{"name":"Mark HAMILL","nationality":"USA","id":70},{"name":"Harisson FORD","nationality":"USA","id":71},{"name":"Adam Driver","nationality":"USA","id":100},{"name":"Daisy Ridley","nationality":"USA","id":101},{"name":"Carrie FISHER","nationality":"USA","id":102},{"name":"Mark HAMILL","nationality":"USA","id":103},{"name":"Harisson FORD","nationality":"USA","id":104},{"name":"Adam Driver","nationality":"USA","id":133},{"name":"Daisy Ridley","nationality":"USA","id":134},{"name":"Carrie FISHER","nationality":"USA","id":135},{"name":"Mark HAMILL","nationality":"USA","id":136},{"name":"Harisson FORD","nationality":"USA","id":137},{"name":"Adam Driver","nationality":"USA","id":166},{"name":"Daisy Ridley","nationality":"USA","id":167},{"name":"Carrie FISHER","nationality":"USA","id":168},{"name":"Mark HAMILL","nationality":"USA","id":169},{"name":"Harisson FORD","nationality":"USA","id":170},{"name":"Adam Driver","nationality":"USA","id":199},{"name":"Daisy Ridley","nationality":"USA","id":200},{"name":"Carrie FISHER","nationality":"USA","id":201},{"name":"Mark HAMILL","nationality":"USA","id":202},{"name":"Harisson FORD","nationality":"USA","id":203},{"name":"Adam Driver","nationality":"USA","id":232},{"name":"Daisy Ridley","nationality":"USA","id":233},{"name":"Carrie FISHER","nationality":"USA","id":234},{"name":"Mark HAMILL","nationality":"USA","id":235},{"name":"Harisson FORD","nationality":"USA","id":236},{"name":"Adam Driver","nationality":"USA","id":265},{"name":"Daisy Ridley","nationality":"USA","id":266},{"name":"Carrie FISHER","nationality":"USA","id":267},{"name":"Mark HAMILL","nationality":"USA","id":268},{"name":"Harisson FORD","nationality":"USA","id":269},{"name":"Adam Driver","nationality":"USA","id":298},{"name":"Daisy Ridley","nationality":"USA","id":299},{"name":"Carrie FISHER","nationality":"USA","id":300},{"name":"Mark HAMILL","nationality":"USA","id":301},{"name":"Harisson FORD","nationality":"USA","id":302},{"name":"Adam Driver","nationality":"USA","id":331},{"name":"Daisy Ridley","nationality":"USA","id":332},{"name":"Carrie FISHER","nationality":"USA","id":333},{"name":"Mark HAMILL","nationality":"USA","id":334},{"name":"Harisson FORD","nationality":"USA","id":335},{"name":"Adam Driver","nationality":"USA","id":364},{"name":"Daisy Ridley","nationality":"USA","id":365},{"name":"Carrie FISHER","nationality":"USA","id":366},{"name":"Mark HAMILL","nationality":"USA","id":367},{"name":"Harisson FORD","nationality":"USA","id":368},{"name":"Adam Driver","nationality":"USA","id":397},{"name":"Daisy Ridley","nationality":"USA","id":398},{"name":"Carrie FISHER","nationality":"USA","id":399},{"name":"Mark HAMILL","nationality":"USA","id":400},{"name":"Harisson FORD","nationality":"USA","id":401}]+ docker rm -f nginx movie_service movie_db cast_service cast_db
+nginx
+movie_service
+movie_db
+cast_service
+cast_db
++ docker ps -a
+CONTAINER ID   IMAGE                 COMMAND                  CREATED       STATUS       PORTS                                                                                          NAMES
+a5e6fcad21c8   jenkins/jenkins:lts   "/usr/bin/tini -- /u…"   6 hours ago   Up 6 hours   0.0.0.0:50000->50000/tcp, [::]:50000->50000/tcp, 0.0.0.0:8280->8080/tcp, [::]:8280->8080/tcp   jenkins
+[Pipeline] }
+[Pipeline] // script
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Docker Push)
+[Pipeline] withCredentials
+Masking supported pattern matches of $DOCKER_PASS
+[Pipeline] {
+[Pipeline] script
+[Pipeline] {
+[Pipeline] withCredentials
+Masking supported pattern matches of $PASSWORD
+[Pipeline] {
+[Pipeline] sh
++ docker login -u cpa8876 -p ****
+WARNING! Using --password via the CLI is insecure. Use --password-stdin.
+Login Succeeded
++ docker push cpa8876/movie-ds-fastapi:v.69.0
+The push refers to repository [docker.io/cpa8876/movie-ds-fastapi]
+39b25b7488e6: Preparing
+1d9e3e5eb6af: Preparing
+950e75b96886: Preparing
+a9cafd1bf670: Preparing
+cad972bc5d8e: Preparing
+d2a2207b52a4: Preparing
+5d2d143f3d7f: Preparing
+c3772b569c3a: Preparing
+8d853c8add5d: Preparing
+5d2d143f3d7f: Waiting
+d2a2207b52a4: Waiting
+c3772b569c3a: Waiting
+8d853c8add5d: Waiting
+a9cafd1bf670: Pushed
+39b25b7488e6: Pushed
+cad972bc5d8e: Pushed
+d2a2207b52a4: Layer already exists
+c3772b569c3a: Layer already exists
+5d2d143f3d7f: Layer already exists
+8d853c8add5d: Layer already exists
+1d9e3e5eb6af: Pushed
+950e75b96886: Pushed
+v.69.0: digest: sha256:9d85b2a097f0cd9d09346a42aa37043ebb87474a84fe91812c4286d09e42f716 size: 2205
++ docker push cpa8876/casts-ds-fastapi:v.69.0
+The push refers to repository [docker.io/cpa8876/casts-ds-fastapi]
+e63bf3eaf62b: Preparing
+68380e8fcaf2: Preparing
+5eb30a9935e8: Preparing
+6ea336a359c8: Preparing
+cad972bc5d8e: Preparing
+d2a2207b52a4: Preparing
+5d2d143f3d7f: Preparing
+c3772b569c3a: Preparing
+8d853c8add5d: Preparing
+5d2d143f3d7f: Waiting
+c3772b569c3a: Waiting
+8d853c8add5d: Waiting
+d2a2207b52a4: Waiting
+cad972bc5d8e: Mounted from cpa8876/movie-ds-fastapi
+d2a2207b52a4: Layer already exists
+5d2d143f3d7f: Layer already exists
+6ea336a359c8: Pushed
+e63bf3eaf62b: Pushed
+c3772b569c3a: Layer already exists
+8d853c8add5d: Layer already exists
+68380e8fcaf2: Pushed
+5eb30a9935e8: Pushed
+v.69.0: digest: sha256:16cf0a08ae42f1bc7af885427ca7298d35993cfe914aba21733249e7a411c7ab size: 2205
+[Pipeline] }
+[Pipeline] // withCredentials
+[Pipeline] }
+[Pipeline] // script
+[Pipeline] }
+[Pipeline] // withCredentials
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+Finished: SUCCESS
+
+REST API
