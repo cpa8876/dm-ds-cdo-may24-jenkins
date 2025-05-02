@@ -1,7 +1,6 @@
   //# /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins/Jenkinsfile
 pipeline {
   environment { // Declaration of environment variables
-    DOCKER_ID = "cpa8876" // replace this with your docker-id
 }
   agent any // Jenkins will be able to select all available agents
   stages {
@@ -12,7 +11,7 @@ pipeline {
           sh '''
             cd /app
             docker rm -f $DOCKER_ID/DOCKER_IMAGE1
-            docker build -t $DOCKER_ID/DOCKER_IMAGE1:$DOCKER_TAG ./movie-service
+            docker build -t DOCKER_ID/DOCKER_IMAGE1:$DOCKER_TAG ./movie-service
             sleep 6
           '''
         }
