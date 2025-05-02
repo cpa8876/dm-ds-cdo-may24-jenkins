@@ -582,7 +582,7 @@ In this step, we configure Jenkins server to execute pipeline CI
 In this step, we create a Jenkinsfile and execute pipeline CI  
 
 ### S-12.1) Build : « ./Jenkinsfile » from /dr01-python-microservices6/
-[Jenkinsfile] ./(Jenkinsfile)
+[Jenkinsfile](Jenkinsfile)
 ```md
 ```
 <br>
@@ -599,8 +599,8 @@ In this step, we create a Jenkinsfile and execute pipeline CI
 ![Extract frome test acceptance from console-output-test69-dm2-jenkins.png](./img/console-output-test69-dm2-jenkins.png  "Scrennshot extract from consople output test69-dm2")
 <br>
 
-### S-12.3)  Terminal execution pipeline 69 
-[log-test-69-dm2-Jenkins.txt](./log/log-test-69-dm2-Jenkins.txt)
+### S-12.3)  Terminal execution pipeline 69  
+[logTest69Dm2Jenkins](log/logTest69Dm2Jenkins)
 
 
 ```md
