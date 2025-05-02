@@ -19,18 +19,18 @@ pipeline {
     // docker rm -f my-ctnr-ds-fastapi
       steps {
         script {
-          // sh '''
-          //  cd /app/movie-service
-          //  docker rm -f $DOCKER_ID/$DOCKER_IMAGE1
-          //  docker build -t $DOCKER_ID/$DOCKER_IMAGE1:$DOCKER_TAG .
-          //  cd /app/cast-service
-          //  docker rm -f $DOCKER_ID/$DOCKER_IMAGE2
-          //  docker build -t $DOCKER_ID/$DOCKER_IMAGE2:$DOCKER_TAG .
-          //  docker image ls -a | grep fastapi
-          //  sleep 6
-          //'''
-          dockerImageMovies = docker.build("${env.DOCKER_IMAGE1}:${env.DOCKER_TAG}")
-          dockerImageCasts = docker.build("${env.DOCKER_IMAGE2}:${env.DOCKER_TAG}")
+           sh '''
+            cd /app/movie-service
+            docker rm -f $DOCKER_ID/$DOCKER_IMAGE1
+            docker build -t $DOCKER_ID/$DOCKER_IMAGE1:$DOCKER_TAG .
+            cd /app/cast-service
+            docker rm -f $DOCKER_ID/$DOCKER_IMAGE2
+            docker build -t $DOCKER_ID/$DOCKER_IMAGE2:$DOCKER_TAG .
+            docker image ls -a | grep fastapi
+          sleep 6
+          '''
+          // dockerImageMovies = docker.build("${env.DOCKER_IMAGE1}:${env.DOCKER_TAG}")
+          // dockerImageCasts = docker.build("${env.DOCKER_IMAGE2}:${env.DOCKER_TAG}")
         }
       }
     }
