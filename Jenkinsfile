@@ -13,25 +13,15 @@ pipeline {
     //DOCKER_IMAGE="ds-fastapi"
     //DOCKER_IMAGE1="movie-ds-fastapi"
     //DOCKER_IMAGE2="casts-ds-fastapi"
+    nom = 'datascientest'
     }
   stages {
     stage('Docker Build'){
       steps {
-        script {
-           sh '''
-            cd /app/movie-service
-            docker rm -f $DOCKER_ID/$DOCKER_IMAGE1
-            docker build -t $DOCKER_ID/$DOCKER_IMAGE1:$DOCKER_TAG .
-            cd /app/cast-service
-            docker rm -f $DOCKER_ID/$DOCKER_IMAGE2
-            docker build -t $DOCKER_ID/$DOCKER_IMAGE2:$DOCKER_TAG .
-            docker image ls -a | grep fastapi
-            sleep 6
-          '''
+        sh 'print $nom' // variable call
         }
       }
     }
-  }
 
   post { // send email when the job has failed
   // ..
