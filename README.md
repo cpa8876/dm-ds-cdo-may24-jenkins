@@ -1,17 +1,44 @@
-# Readme of my homework : 
+# Readme of my homework : Deploy a fastapi application with postrgres with helm on k3d cluster
 
 This document explains every steps of my homework : dm-ds-cdo-may24-jenkins 
 
 ---
 ## Prerequisites
-### P1) The folow softwares must be installed on the  local machine:  
+###  P-0) Execute these commands to initiate environment
+####  P-0.1) Write a shell script ./init-k3d.sh to install the work environment 
+```md
+
+cd /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins
+./init-k3d.sh
+
+vim init-k3d.sh
+
+```
+You can access to this script : [`init-k3d.sh`](./init-k3d.sh)
+<br>
+<br>
+
+####  P-0.2)  Execute these commands to initiate environment 
+```md
+./init-k3d.sh
+sudo kubectl get all -A -o wide
+```
+<br>
+<br>
+
+####  P-0.3)  Screenshot of terminal 
+![terminal-PO-configure-test-env.png](./img/terminal-PO-configure-test-env.png  "Screeshot terminal-PO-configure-test-env.png")
+<br>
+<br>
+
+### P-1) The folow softwares must be installed on the  local machine:  
 1. git
 2. docker and his plugin docker compose
 3. k3d
 4. helm  
 <br>
 
-### P2) Verify all these softwares are well installed
+### P-2) Verify all these softwares are well installed
 ```md
 sudo git version 
 
@@ -26,13 +53,13 @@ sudo helm version
 ```
 <br>
 
-### P3) Move to work directory
+### P-3) Move to work directory
 ```md
 cd /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins
 ```
 <br>
 
-### P4) Synchronize Github repo with local directoy of project
+### P-4) Synchronize Github repo with local directoy of project
 ```md
 ssh-add ../.ssh/ssh-key-github-cpa8876
 git branch -a
@@ -43,16 +70,22 @@ git push origin main
 ```
 <br>
 
-### P5) Create the docker "network create dm-jenkins-cpa-infra_my-net"
+### P-5) Create the docker "network create dm-jenkins-cpa-infra_my-net"
 
 ```md
+
 sudo docker network ls
 sudo docker network create dm-jenkins-cpa-infra_my-net
 sudo docker network ls
+
 ```
 <br>
 
-### P6) Build container docker of jenkins server 
+### P-6) Build container docker of jenkins server 
+#### P-6.1) Writez a docker-compose file to create a container docker for the jenkins server
+You can access to this script : [`docker-compose.yml`](./docker-compose.yml)
+
+
 ```md
 sudo docker ps -a
 sudo docker compose down
@@ -61,7 +94,7 @@ sudo docker ps -a
 ```
 <br>
 
-### P7) Log on  jenkins server 
+### P-7) Log on  jenkins server 
 Log on  [192.168.20.1:8280](192.168.20.1:8280) in firefox private mode
 ![Screenshot log to jenkins server](./img/Login-jenkins-server.png
   "log jenkins server")
@@ -71,7 +104,7 @@ Log on [http://192.168.20.1:8280/](http://192.168.20.1:8280/)
 ![Dashboard Jenkins server](./img/tdb-jenkins-srvr.png  "Dashboard Jenkins server")
 <br>
 
-### P8) Log on Github repo of jenkins homework  
+### P-8) Log on Github repo of jenkins homework  
 Log on [https://github.com/cpa8876/dm-ds-cdo-may24-jenkins#](https://github.com/cpa8876/dm-ds-cdo-may24-jenkins#) 
 ![Log on github cpa8876](./img/log-on-github-cpa8876.png  "Log github cpa8876")
 <br>
@@ -80,7 +113,7 @@ Log on [https://github.com/cpa8876/dm-ds-cdo-may24-jenkins](https://github.com/c
 ![Dashboard Github cpa8876](./img/tdb-github-cpa8876.png  "Dashboard Github cpa8876")
 <br>
 
-### P9) Log on Dockerhub repo of jenkins homework  
+### P-9) Log on Dockerhub repo of jenkins homework  
 Log on [Dockerhub](https://hub.docker.com/repositories/dmcpa8876)
 
 ![Log on dockerhub cpa8876](./img/log-on-dockerhub-cpa8876.png "Log dockerhub cpa8876")
@@ -212,51 +245,8 @@ This script create an infrastructuture with:
 
 ### S-6.1)  Create a container Docker for jenkins with a Docker-compose.yml
 ```md
-# /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins/docker-compose.yml
-version: '3'
-name: <dm-jenkins-cpa-infra>
+vim /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins/docker-compose.yml
 
-services:
-  jenkins:
-    image: jenkins/jenkins:lts
-    privileged: true
-    user: root
-    ports:
-      - 8280:8080
-      - 50000:50000
-    container_name: jenkins
-    restart: always
-    environment:
-      - KUBECONFIG="/usr/local/k3s.yaml
-
-    volumes:
-     # - /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/dm-ds-cdo-may24-jenkins5/datas/data-k3d:/datas/data-k3d
-      - ./init-k3d.sh:/app/init-k3d.sh
-      - /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/dm-ds-cdo-may24-jenkins5/datas/data-k3d/k3s_v2.yaml:/usr/local/k3s.yaml
-      - /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/dm-ds-cdo-may24-jenkins5/dr01-python-microservices6:/app
-      - /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/dm-ds-cdo-may24-jenkins5/fastapi:/fastapi
-      - /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/dm-ds-cdo-may24-jenkins5/fastapiapp:/fastapiapp
-      - /opt/jenkins-training/jenkins_compose/jenkins_configuration:/var/jenkins_home
-      - /var/run/docker.sock:/var/run/docker.sock
-      - /var/run/docker-compose.sock:/var/run/docker-compose.sock
-      - /var/run/kubectl.sock:/var/run/kubectl.sock
-      - /var/run/helm.sock:/var/run/helm.sock
-      - /usr/bin/docker:/usr/bin/docker
-      - /usr/bin/docker-compose:/usr/bin/docker-compose
-      - /usr/local/bin/kubectl:/usr/local/bin/kubectl
-      - /usr/local/bin/helm:/usr/local/bin/helm
-
-# https://forums.docker.com/t/docker-compose-cant-connect-to-existing-network/94370/13
-    networks:
-      #- my-net
-      - dm-jenkins-cpa-infra_my-net
-
-    # command: ["/app/init-k3d.sh"]
-
-networks:
-  dm-jenkins-cpa-infra_my-net:
-    external: true
-    driver: bridge
 ```
 #### S-6.2) : Create a script shell « init-k3d.sh » to build all architecture and execute sudo docker compose up -d command
 
@@ -545,15 +535,58 @@ http://192.168.20.1:8080/api/v1/casts/docs
 <br>
 <br>
 ---
-## Step 10)  Test des charts helm fastapi applications 
+## Step 10)  Test charts helm fastapi applications 
 
 Tests are realised  with file/home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins/dr01-python-microservices6/charts/chart.yaml
-- Test curl 
 
+### S-10.1)  Build the cluster k3d composed one ctl manager and 2 workers and a loadbalancer nginx 
 ```md
+sudo k3d cluster create mycluster --network "dm-jenkins-cpa-infra_my-net" -p "8900:30080@agent:0" -p "8901:30081@agent:0" -p "8902:30082@agent:0" --agents 2 --k3s-arg "--tls-san=${ip_jenkins}"@server:*
+
+sudo docker ps -a
+
+sudo kubectl cluster-info
+
+sudo kubectl get nodes
+sudo kubectl get all -A -o wide
 
 
 ```
+<br>
+
+### S-10.2) Screenshot of the terminal after execute these commands on local PC
+![k3d-create-cluster.png](./img/k3d-create-cluster.png  "k3d-create-cluster.png")
+<br>
+
+### S-10.4)  update ./enkinsfile
+```md
+    stage('Deploiement en staging'){
+      environment {
+        KUBECONFIG = credentials("config") // we retrieve  kubeconfig from secret file called config saved on jenkins
+      }
+      steps {
+        script {
+          sh '''
+            rm -Rf .kube
+            mkdir .kube
+            ls
+            cat $KUBECONFIG > .kube/config
+            cp /fastapi/values-staging.yaml /fastapiapp/values.yaml
+            cat /fastapiapp/values.yaml
+            sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
+
+            helm upgrade --kubeconfig /usr/local/k3s.yaml --install fastapi-staging /fastapiapp --namespace staging --create-namespace
+          '''
+          //kubectl --kubeconfig /usr/local/k3s.yaml delete namespace staging
+        }
+      }
+```
+
+### S-10.3) Script to verify execution on the jenkins server 
+```md
+
+```
+
 <br>
 <br>
 <br>

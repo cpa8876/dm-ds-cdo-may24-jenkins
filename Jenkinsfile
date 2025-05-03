@@ -251,23 +251,37 @@ pipeline {
                 // helm upgrade --install app fastapi --values=values.yml --namespace dev
                 // cf B52 helm --kubeconfig : https://helm.sh/docs/helm/helm/
           sh '''
-            rm -Rf .kube
-            mkdir .kube
-            ls
-            cat $KUBECONFIG > .kube/config
+            rm -Rf /data
+            mkdir -p data/data-k3d
+            docker exec -it k3d-mycluster-server-0 cat /etc/rancher/k3s/k3s.yaml >/datas/data-k3d/k3s.yaml
+            cat /datas/data-k3d/k3s.yaml
+            ip_source="127\\.0\\.0\\.1"
+            echo "ip_source: " $ip_source
+            ip_jenkins=$(docker exec jenkins hostname -i)
+            echo "ip_jenkins: " $ip_jenkins
+            ip_k3s_srvr=$(docker exec k3d-mycluster-server-0 hostname -i)
+            echo "ip_k3s_srvr: " $ip_k3s_srvr
+            ls -lha /datas/data-k3d
+            cp /datas/data-k3d/k3s.yaml /datas/data-k3d/k3s_v2.yaml
+            sed -i 's+127.0.0.1+'$ip_k3s_srvr'+g' /datas/data-k3d/k3s_v2.yaml
+            ls -lha /datas/data-k3d
+            cat /datas/data-k3d/k3s_v2.yaml
+            export KUBECONFIG=/datas/data-k3d/k3s_v2.yaml
+            kubectl get nodes
+
             cp /fastapi/values-dev.yaml /fastapiapp/values.yaml
             cat /fastapiapp/values.yaml
             sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
 
-            helm upgrade --kubeconfig /usr/local/k3s.yaml --install fastapi-dev /fastapiapp --namespace dev --create-namespace
+            helm upgrade --kubeconfig /usr/local/k3s.yaml --install fastapi-dev /charts --namespace dev --create-namespace
           '''
           // kubectl --kubeconfig /usr/local/k3s.yaml delete namespace dev
         //}
         }
       }
     }
+  }
 
-    }
   post { // send email when the job has failed
   // ..
     failure {

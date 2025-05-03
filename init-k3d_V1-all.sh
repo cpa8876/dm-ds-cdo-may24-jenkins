@@ -213,12 +213,10 @@ sudo rm checksums.txt
 ###       B33-k3d-Rancher-supervision-Playing with Kubernetes using k3d and Rancher | by Prakhar Malviya | 47Billion | Medium:
 ####         https://medium.com/47billion/playing-with-kubernetes-using-k3d-and-rancher-78126d341d23
 ###############################
-###    2.1) This will create a docker network named "dm-jenkins-cpa-infra_my-net" which wille be use by server Jenkins and cluster k3d
-###############
-sudo docker network create dm-jenkins-cpa-infra_my-net
+
 
 ###############################
-###    2.2) This will create a cluster named “mycluster” with 1 ctl master and 2 workers and a nginx loadbalancer with 3 ports exposed 30080, 30081 and 30082.
+###    2.1) This will create a cluster named “mycluster” with 3 ports exposed 30080, 30081 and 30082.
 ###############
 ####        B33-2) k3d-create --tls-san : doc1 doc officielle k3s / configuration / k3s server
 #####                  https://docs.k3s.io/cli/server
@@ -246,14 +244,12 @@ sudo docker network create dm-jenkins-cpa-infra_my-net
 ####          These ports will map to ports 8900, 8901 and 8902 of your localhost respectively.
 ####          The cluster will have 1 master node and 2 worker nodes. You can adjust these settings using the p and the agent flags as you wish.
 #####             sudo k3d cluster create mycluster --network "dm-jenkins-cpa-infra_my-net" -p "8900:30080@agent:0" -p "8901:30081@agent:0" -p "8902:30082@agent:0" --agents 2 --k3s-arg "--tls-san=172.30.0.6"@server:*
-
 sudo k3d cluster create mycluster --network "dm-jenkins-cpa-infra_my-net" -p "8900:30080@agent:0" -p "8901:30081@agent:0" -p "8902:30082@agent:0" --agents 2 --k3s-arg "--tls-san=${ip_jenkins}"@server:*
 ###############################
 
 
-
 ###############################
-###    2.3) Verify the creation of the cluster k3s [my-cluster] composed with one loadbalancer, one ctl master and 2 workers
+###    2.2) Verify the creation of the cluster k3s [my-cluster] composed with one loadbalancer, one ctl master and 2 workers
 sudo docker ps -a
 ####  cpa@debiana8:~/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins2$ sudo docker ps -a
 ##### => CONTAINER ID   IMAGE                            COMMAND                  CREATED          STATUS          PORTS                  NAMES
