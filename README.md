@@ -5,11 +5,20 @@ This document explains every steps of my homework : dm-ds-cdo-may24-jenkins
 ---
 ## Prerequisites
 ###  P-0) Execute these commands to initiate environment
-####  P-0.1) Write a shell script ./init-k3d.sh to install the work environment 
+#### P-0.1) P-0.1) Write a ./docker-compose.yml file to build a docker image jenkins server
 ```md
 
 cd /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins
-./init-k3d.sh
+
+vim docker-compose.yml
+
+```
+
+You can access to this script : [`docker-compose.yml`](./docker-compose.yml)
+####  P-0.2) Write a shell script ./init-k3d.sh to install the work environment 
+```md
+
+cd /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins
 
 vim init-k3d.sh
 

@@ -218,7 +218,7 @@ sudo rm checksums.txt
 sudo docker network create dm-jenkins-cpa-infra_my-net
 
 ###############################
-###    2.2) This will create a cluster named “mycluster” with 1 ctl master and 2 workers and a nginx loadbalancer with 3 ports exposed 30080, 30081 and 30082.
+###    2.2) This will create a cluster named “mycluster” with 1 ctl manager 2 workers and 1 loadbalancer nginx with 3 ports exposed 30080, 30081 and 30082.
 ###############
 ####        B33-2) k3d-create --tls-san : doc1 doc officielle k3s / configuration / k3s server
 #####                  https://docs.k3s.io/cli/server
@@ -353,7 +353,7 @@ ls -lha ./datas/data-k3d
 #####          3.1.2) Recreate the file [./datas/data-k3d/k3s.yaml] from the ctl master [k3d-mycluster-server-0] of the k3s cluster
 sudo docker exec -it k3d-mycluster-server-0 cat /etc/rancher/k3s/k3s.yaml >./datas/data-k3d/k3s.yaml
 cat ./datas/data-k3d/k3s.yaml
-
+sleep 15
 ###############
 
 #####          3.1.3) From the existant file [./datas/data-k3d/k3s.yaml], create a second file [./datas/data-k3d/k3s_v2.yaml] with the configuration which be able to connect the kubectl server from jenkins server.
@@ -461,33 +461,62 @@ sleep 15
 # git add .
 # git commit -m "update final version of Jenkinsfile step 1 buil images"
 # git push origin main
+###############################
 
-
+###############################
+## 6.1) Excute script ./docker-compose.yml script to build container docker Jenkins server
 sudo docker compose up -d
+sleep 3
+###############################
 
-sleep 6
+###############################
+## 6.2) Copy ./datas/data-k3d/k3s_v2.yaml jenkins:/usr/local/k3s.yaml to permitt acces of kubectl command from Jenkins server
+sudo docker cp ./datas/data-k3d/k3s_v2.yaml jenkins:/usr/local/k3s.yaml
+cat ./datas/data-k3d/k3s_v2.yaml
+sudo docker exec -it jenkins cat /usr/local/k3s.yaml
+# sudo docker exec -it jenkins /bin/sh -c "export KUBECONFIG='/usr/local/k3s.yaml' && kubectl get pods --all-namespaces"
+sudo docker exec -it jenkins kubectl get nodes
+sleep 3
 #ip_jenkins=$(sudo docker exec -it jenkins hostname -i)
 # echo $ip_jenkins
 #sudo docker exec -it jenkins hostname -i > foo && sed -e 's/^M//g' foo && ip_jenkins=`cat foo` && echo $ip_jenkins && rm foo
+###############################
+###############################
 
 
 ################################################################
-### 7.) Verification
-#      7.1) Display all VM docker
+# 7.) Verification
+##      7.1) Display all VM docker
 sudo docker images
 sudo docker volume ls -a
 sudo docker ps -a
 ###############################
 
 ###############################
-#      7.2) Display all nodes of the k3s cluster
-sudo kubectl get nodes -o wide
-sudo kubectl get all -A
-sudo docker exec -it jenkins kubectl --kubeconfig /usr/local/k3s.yaml get nodes
+##      7.2) Display all nodes of the k3d cluster
+sudo docker exec -it jenkins kubectl --kubeconfig /usr/local/k3s.yaml get all -A -o wide
 ###############################
 
 ###############################
-#      7.3) Display the password rancher monitoring k3s cluster
+##      7.3) Display all nodes of the k3d cluster
+echo " 7.3) ############################### "
+sudo docker exec -it jenkins kubectl --kubeconfig /usr/local/k3s.yaml get pods -A -o wide
+###############################
+
+###############################
+##      7.4) Display all namerspaces of the k3d cluster
+echo " 7.4) ############################### "
+sudo docker exec -it jenkins kubectl --kubeconfig /usr/local/k3s.yaml get ns -A -o wide
+###############################
+
+###############################
+##      7.5) Display all pods of the k3d cluster
+echo " 7.5) ############################### "
+sudo docker exec -it jenkins kubectl --kubeconfig /usr/local/k3s.yaml get pods -A -o wide
+###############################
+
+###############################
+#      7.6) Display the password rancher monitoring k3s cluster
 #kubectl get secret --namespace cattle-system bootstrap-secret -o go-template='{{.data.bootstrapPassword|base64decode}}{{"\n"}}'
 ################################################################
 
