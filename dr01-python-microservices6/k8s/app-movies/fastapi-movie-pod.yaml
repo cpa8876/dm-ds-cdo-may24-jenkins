@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    type: web 
+  name: fastapi-movie
+spec:
+  containers:
+#  - image: nginx
+#  - image: cpa8876/movie-ds-fastapi:v.73.0
+  - image: cpa8876/casts-ds-fastapi:v.73.0
+#  - image: haerschke/fastapi_postgres:2.0
+    name: my-fastapi-movie
+    env: 
+      - name: DATABASE_URI
+        value: "postgres://cpa_movies@cpa_movies@postgres-movies-sts:5432/movies_db"
+#      - name: CAST_SERVICE_HOST_URL
+#        value: "postgres://cpa_movies@cpa_movioes@postgres-movies-sts-0/movies_db"

@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx
+  labels:
+    app: nginx
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fastapi
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: nginx
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:latest
+          ports:
+          - containerPort: 8081
+          resources: {}
+          volumeMounts:
+            - name: nginx-config
+              mountPath: /etc/nginx/conf.d
+

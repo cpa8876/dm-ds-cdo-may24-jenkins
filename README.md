@@ -27,7 +27,7 @@ You can access to this script : [`init-k3d.sh`](./init-k3d.sh)
 <br>
 <br>
 
-####  P-0.2)  Execute these commands to initiate environment 
+####  P-0.3)  Execute these commands to initiate environment 
 ```md
 ./init-k3d.sh
 sudo kubectl get all -A -o wide
@@ -36,7 +36,7 @@ sudo kubectl get all -A -o wide
 <br>
 
 ####  P-0.3)  Screenshot of terminal 
-![terminal-PO-configure-test-env.png](./img/terminal-PO-configure-test-env.png  "Screeshot terminal-PO-configure-test-env.png")
+![terminal-PO-configure-test-env.png](./img/terminal-PO-configure-test-env.png  "Screenshot terminal-PO-configure-test-env.png")
 <br>
 <br>
 
@@ -548,7 +548,7 @@ http://192.168.20.1:8080/api/v1/casts/docs
 
 Tests are realised  with file/home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins/dr01-python-microservices6/charts/chart.yaml
 
-### S-10.1)  Build the cluster k3d composed one ctl manager and 2 workers and a loadbalancer nginx 
+### S-10.1)  Build the cluster k3d composed by 1 control manager, 2 workers and a loadbalancer nginx 
 ```md
 sudo k3d cluster create mycluster --network "dm-jenkins-cpa-infra_my-net" -p "8900:30080@agent:0" -p "8901:30081@agent:0" -p "8902:30082@agent:0" --agents 2 --k3s-arg "--tls-san=${ip_jenkins}"@server:*
 
@@ -567,7 +567,7 @@ sudo kubectl get all -A -o wide
 ![k3d-create-cluster.png](./img/k3d-create-cluster.png  "k3d-create-cluster.png")
 <br>
 
-### S-10.4)  update ./enkinsfile
+### S-10.3)  update ./Jenkinsfile
 ```md
     stage('Deploiement en staging'){
       environment {
@@ -591,14 +591,240 @@ sudo kubectl get all -A -o wide
       }
 ```
 
-### S-10.3) Script to verify execution on the jenkins server 
+### S-10.4) Script to verify execution on the jenkins server 
+```md
+echo «"test #72 " 
+
+git status
+git add .
+git commit -m "test20 with 4stages bloc build, run, acceptance, push and post"
+git push origin main
+
+
+
+
+COOKIE_JAR=/tmp/cookie
+echo $COOKIE_JAR
+crumb=$(curl --cookie-jar $COOKIE_JAR -u "cpa:cpa" 'http://192.168.20.1:8280/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,":",//crumb)')
+echo $crumb
+curl --cookie $COOKIE_JAR -u "cpa:cpa" -H "$crumb" -X POST http://192.168.20.1:8280/job/dm2-jenkins/build?delay=0sec -d file.json
+```
+#### S-10.4.2) Verify the webhook genrated by github cpa8876 with the webhook.site:
+![webhook-site-test-72-dm2-jenkins.png](./img/webhook-site-test-72-dm2-jenkins.png  "webhook-site-test-72-dm2-jenkins.png")
+<br>
+
+#### S-10.4.3) Verify the stage view result on jenkins server dashboard for the dm2-jenkins item: 
+![jenkins-dashboard-item-dm2-jenkins-test-72.png](./img/jenkins-dashboard-item-dm2-jenkins-test-72.png  "jenkins-dashboard-item-dm2-jenkins-test-72.png")
+<br>
+
+#### S-10.4.4) Access logfile of access oin webhook.site with curl
+You can access to this script : [log-Test-72-webhook-site-Dm2-Jenkins`](./log/log-Test-72-webhook-site-Dm2-Jenkins)
+
+<br>
+### S-10.5) Write k8s manifestes for the deployment of the fastapi-movies-NNN.yaml 
+<br>
+```md
+
+```
+#### S-10.5.1) Install vim on the contenair jenkins 
+
+```md
+sudo docker exec -it jenkins bash
+
+ cd /app
+
+apt update -y && apt upgrade -y && apt install vim -y
+
+```
+<br>
+
+#### S-10.5.2) Create directories and scripts k8s/app-movies/fastapi-movies-deployment.yaml
+
+```md
+ cd /app
+ mkdir -p k8s/app-movies
+cd k8s/app-movies
+vim fastapi-movies-deployment.yaml
+
+cat fastapi-movies-deployment.yaml
+
+```
+<br>
+
+#### S-10.5.3) Create manifest k8s/app-movies/fastapi-movies-secret.yaml
+
+```md
+
+vim fastapi-movies-secret.yaml
+
+cat fastapi-movies-secret.yaml
+
+```
+<br>
+
+#### S-10.5.5) Create notes k8s/app-movies/notes.txt
+
+```md
+
+vim notes.txt
+
+cat notes.txt
+
+```
+<br>
+
+#### S-10.5.6) Create manifest k8s/app-movies/fastapi-movies-service.yaml
+
+```md
+
+vim fastapi-movies-secret.yaml
+
+cat fastapi-movies-secret.yaml
+
+```
+<br>
+
+#### S-10.5.6) Execute 3 manifestes k8s/app-movies/fastapi-movies-NNN.yaml
+
+```md
+
+kubectl apply -f fastapi-movies-secret.yaml
+kubectl apply -f fastapi-movies-deployment.yaml
+kubectl apply -f fastapi-movies-service.yaml
+
+kubectl get all -A | grep fastapi
+```
+
+- Result
+```md
+root@3e37a1319d5d:/app/k8s/app-movies# kubectl get all -A | grep fastapi
+default                           pod/fastapi-deployment-6cc6fbc475-c2fqc          0/1     Init:0/1    0          25s
+default                           service/fastapi-movies-service        NodePort       10.43.46.146    <none>                             8000:30420/TCP               25s
+default                           deployment.apps/fastapi-deployment          0/1     1            0           25s
+default                           replicaset.apps/fastapi-deployment-6cc6fbc475          1         1         0       25s
+
+```
+<br>
+
+### S-10.6) Write k8s manifestes for the deployment of the fastapi-db-movies-NNN.yaml 
+<br>
+```md
+
+```
+#### S-10.6.1) Create directories and scripts k8s/app-movies/fastapi-db-movies-deployment.yaml
+
+```md
+
+cd ..
+mkdir db-movie
+cd db-movie/
+
+vim postgres-movies-deployment.yaml
+
+```
+<br>
+
+#### S-10.6.2) Create manifest k8s/app-movies/postgres-movies-secret.yaml
+
+```md
+
+vim postgres-movies-secret.yaml
+
+cat postgres-movies-secret.yaml
+
+```
+<br>
+
+#### S-10.6.3) Create manifest k8s/app-movies/postgres-movies-service.yaml
+
+```md
+
+vim fastapi-movies-service.yaml
+
+cat fastapi-movies-service.yaml
+
+```
+<br>
+
+#### S-10.6.4) Create notes k8s/app-movies/notes.txt
+
+```md
+
+vim notes.txt
+
+ cat notes.txt 
+
+```
+<br>
+
+#### S-10.6.5) Execute 3 manifestes k8s/app-movies/posgres-movies-NNN.yaml
+
+```md
+
+kubectl apply -f fastapi-movies-secret.yaml
+kubectl apply -f fastapi-movies-deployment.yaml
+kubectl apply -f fastapi-movies-service.yaml
+
+kubectl get all -A | grep postgres
+```
+
+- Result
+```md
+root@3e37a1319d5d:/app/k8s/db-movie# kubectl apply -f postgres-movies-secret.yaml
+kubectl apply -f postgres-movies-deployment.yaml
+kubectl apply -f postgres-movies-service.yaml
+kubectl get all -A | grep postgres-movie
+secret/postgres-secret created
+deployment.apps/postgres-deployment created
+service/postgres-service created
+root@3e37a1319d5d:/app/k8s/db-movie# kubectl get all -A | grep postgres
+default                           pod/postgres-deployment-5f6f4bd44f-vcq5f         1/1     Running        0          22s
+default                           service/postgres-service              ClusterIP      10.43.18.41     <none>                             5432/TCP                     22s
+default                           deployment.apps/postgres-deployment         1/1     1            1           22s
+default                           replicaset.apps/postgres-deployment-5f6f4bd44f         1         1         1       22s
+root@3e37a1319d5d:/app/k8s/db-movie# 
+
+```
+<br>
+
+### S-10.6) Write k8s manifestes for the deployment of the fastapi-db-movies-NNN.yaml 
+<br>
+```md
+
+```
+#### S-10.6.1) Create directories and scripts k8s/app-movies/fastapi-db-movies-deployment.yaml
+
+```md
+
+cd ..
+mkdir db-movie
+cd db-movie/
+
+vim postgres-movies-deployment.yaml
+
+```
+<br>
+
+#### S-10.6.2) Create manifest k8s/app-movies/postgres-movies-secret.yaml
+
+```md
+
+vim postgres-movies-secret.yaml
+
+cat postgres-movies-secret.yaml
+
+```
+<br>
+
+
+<br>
+<br>
+<br>
 ```md
 
 ```
 
-<br>
-<br>
-<br>
+
 ---
 
 ## Step 11 : Configure jenkins to execute pipeline CI (S-11)
