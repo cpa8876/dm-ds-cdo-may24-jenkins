@@ -5,6 +5,7 @@ metadata:
   name: nginx-config-pv
   labels:
     app: fastapi-casts
+  namespace: dev
 spec:
   capacity:
     storage: 2Gi

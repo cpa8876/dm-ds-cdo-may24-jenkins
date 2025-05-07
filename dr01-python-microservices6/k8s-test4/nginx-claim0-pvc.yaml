@@ -5,6 +5,7 @@ metadata:
   labels:
     io.kompose.service: nginx-config-pvc
   name: nginx-config-pvc
+  namespace: dev
 spec:
   accessModes:
   - ReadWriteOnce

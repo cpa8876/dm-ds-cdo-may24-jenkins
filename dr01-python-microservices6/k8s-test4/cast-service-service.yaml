@@ -5,6 +5,7 @@ metadata:
   name: cast-service
   labels:
     app: fastapi-casts
+  namespace: dev
 spec:
 #  type: LoadBalancer
   type: NodePort # For INGRESS ClusterIP can be used as well instead of NodePort

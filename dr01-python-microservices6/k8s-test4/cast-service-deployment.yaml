@@ -5,6 +5,7 @@ metadata:
   name: cast-service-deployment
   labels:
     app: fastapi-casts
+  namespace: dev
 spec:
   replicas: 1
   selector:
@@ -27,9 +28,26 @@ spec:
         - 0.0.0.0
         - --port
         - "8005"
-        env:
+      - env:
+        - name: POSTGRES_DB
+          valueFrom:
+            secretKeyRef:
+              name: cast-db-secret
+              key: postgres_db
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: cast-db-secret
+              key: postgres_password
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: cast-db-secret
+              key: postgres_user
+        - name: CAST_DB
+          value: postgresql://$POSTGRES_USER:$POSTGRES_PASSWORD@cast_db/POSTGRES_DB
         - name: DATABASE_URI
-          value: postgresql://cast_db_username:cast_db_password@cast_db/cast_db_dev
+          value: postgresql://$POSTGRES_USER:$POSTGRES_PASSWORD@cast_db/POSTGRES_DB
         image: cpa8876/casts-service:V.74.0
         name: cast-service
         ports:
