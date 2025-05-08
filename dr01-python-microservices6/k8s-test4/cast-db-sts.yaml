@@ -37,7 +37,10 @@ spec:
         livenessProbe:
           exec:
             command:
-            - 'pg_isready -U  -d '
+#            - 'pg_isready -U $POSTGRES_USER -d $POSTGRES_DB'
+             - /bin/sh
+             - -c
+             - exec pg_isready -U "$POSTGRES_USER" -d "$POSTGRE_DB_NAME"
           failureThreshold: 5
           periodSeconds: 10
           timeoutSeconds: 10

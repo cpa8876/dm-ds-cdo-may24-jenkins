@@ -3,20 +3,20 @@ kind: Deployment
 metadata:
   name: nginx
   labels:
-    app: nginx
-
+    app: fastapi-casts
+  namespace: dev
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: fastapi
+      app: nginx-deployment
   strategy:
     type: Recreate
   template:
     metadata:
       creationTimestamp: null
       labels:
-        app: nginx
+        app: nginx-deployment
     spec:
       containers:
         - name: nginx
@@ -25,6 +25,9 @@ spec:
           - containerPort: 8081
           resources: {}
           volumeMounts:
-            - name: nginx-config
+            - name: nginx-config-pvc
               mountPath: /etc/nginx/conf.d
-
+      volumes:
+        - name: nginx-config-pvc
+          persistentVolumeClaim:
+            claimName: nginx-config-pvc

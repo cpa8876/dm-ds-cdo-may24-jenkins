@@ -45,4 +45,14 @@ spec:
             value: postgresql://cast_db_cpa_username:cast_db_cpa_password@10.42.1.40/cast_db_cpa
         ports:
           - containerPort: 8005
-        command: ["uvicorn", "app.main:app", "--reload", "--host", "0.0.0.0", "--port", "8005"]
+        command: ["/bin/sh", "-c"]
+        args: ["uvicorn", "app.main:app", "--reload", "--host", "0.0.0.0", "---port", "8005"]
+        args: ["echo", "$DATABASE_URI" ]
+        volumeMounts:
+          - mountPath: /data/
+            name: cast-service-claim0
+      restartPolicy: Always
+      volumes:
+        - name: cast-service-claim0
+          persistentVolumeClaim:
+            claimName: cast-service-claim0

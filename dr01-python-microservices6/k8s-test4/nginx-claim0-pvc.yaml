@@ -1,10 +1,9 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  creationTimestamp: null
-  labels:
-    io.kompose.service: nginx-config-pvc
   name: nginx-config-pvc
+  labels:
+    app: fastapi-casts
   namespace: dev
 spec:
   accessModes:
