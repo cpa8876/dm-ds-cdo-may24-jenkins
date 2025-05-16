@@ -480,8 +480,28 @@ sleep 15
 ###############################
 ## 7.1) Excute script ./docker-compose.yml script to build container docker Jenkins server
 # sudo docker compose up -d
-# sleep 3
+
+# sudo docker compose up -d
+ssh -i $url_id_rsa root@$ip_jenkins ' rm -r /app'
+ssh -i $url_id_rsa root@$ip_jenkins 'ls -lha /app'
+ssh -i $url_id_rsa root@$ip_jenkins 'mkdir -p /app'
+ssh -i $url_id_rsa root@$ip_jenkins 'ls -lha /app'
+ssh -i $url_id_rsa root@$ip_jenkins 'groupadd docker'
+ssh -i $url_id_rsa root@$ip_jenkins 'usermod -aG docker jenkins'
+ssh -i $url_id_rsa root@$ip_jenkins 'reboot'
+sleep 2
+gnome-terminal --tab --name="jenkins" --command "ssh -i $url_id_rsa root@$ip_jenkins"
+ssh -i $url_id_rsa root@$ip_jenkins 'newgrp docker'
+ssh -i $url_id_rsa root@$ip_jenkins 'systemctl restart docker.service'
+
+scp -r -i $url_id_rsa /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins/dr01-python-microservices6/cast-service root@$ip_jenkins:/app/
+ssh -i $url_id_rsa root@$ip_jenkins 'ls -lha /app/cast-service/'
+
+scp -r -i $url_id_rsa /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins/dr01-python-microservices6/movie-service root@$ip_jenkins:/app/movie-service
+ssh -i $url_id_rsa root@$ip_jenkins 'ls -lha /app/movie-service/'
+
 ###############
+
 
 
 ###############################
