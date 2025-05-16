@@ -1,0 +1,17 @@
+# /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins/dr01-python-microservices6/k8s-test4/cast-service-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: cast-service
+  labels:
+    app: fastapi-casts
+  namespace: dev
+spec:
+#  type: LoadBalancer
+  type: NodePort # For INGRESS ClusterIP can be used as well instead of NodePort
+  selector:
+    app: cast-service
+  ports:
+  - name: "8005"
+    port: 8005
+    targetPort: 8005

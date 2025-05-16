@@ -1,0 +1,25 @@
+#  Tuto : How to Get a Kubernetes Ingress Endpoint/IP Address : https://www.baeldung.com/ops/kubernetes-retrieve-ingress-endpoint-ip-address
+# https://www.baeldung.com/ops/kubernetes-retrieve-ingress-endpoint-ip-address
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: fanout-nginx-ingress
+  namespace: default
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /nginx
+        pathType: Prefix
+        backend:
+          service:
+            name: nginx
+            port:
+              number: 80
+      - path: /echo
+        pathType: Prefix
+        backend:
+          service:
+            name: echoserver
+            port:
+              number: 8080

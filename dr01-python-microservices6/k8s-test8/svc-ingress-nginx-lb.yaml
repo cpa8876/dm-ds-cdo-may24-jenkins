@@ -1,0 +1,27 @@
+# url fic .yaml:  github fichttps://github.com/nginx/kubernetes-ingress/blob/main/deployments/service/nodeport.yaml
+# suite rech brave : https://search.brave.com/search?q=NodePort+service+template+(service-nodeport.yaml)+from+the+NGINX+ingress+GitHub+repository&source=desktop
+# Tuto : How to Get a Kubernetes Ingress Endpoint/IP Address : https://www.baeldung.com/ops/kubernetes-retrieve-ingress-endpoint-ip-address
+apiVersion: v1
+kind: Service
+metadata:
+  name: ingress-nginx-lb
+  namespace: ingress-nginx
+spec:
+ # type: NodePort
+  type: LoadBalancer
+  externalIPs:
+    - 192.168.121.110
+    - 192.168.121.111
+    - 192.168.121.112
+  externalTrafficPolicy: Local
+  ports:
+  - port: 80
+    targetPort: 80
+    protocol: TCP
+    name: http
+  - port: 443
+    targetPort: 443
+    protocol: TCP
+    name: https
+  selector:
+    app: nginx-ingress

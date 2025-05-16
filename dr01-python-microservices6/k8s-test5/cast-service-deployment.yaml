@@ -1,0 +1,63 @@
+# /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins/dr01-python-microservices6/k8s-test4/cast-service-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cast-service-deployment
+  labels:
+    app: fastapi-casts
+  namespace: dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cast-service
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: cast-service
+    spec:
+      containers:
+      - args:
+        - uvicorn
+        - app.main:app
+        - --reload
+        - --host
+        - 0.0.0.0
+        - --port
+        - "8005"
+      - env:
+        - name: POSTGRES_DB
+          valueFrom:
+            secretKeyRef:
+              name: cast-db-secret
+              key: postgres_db
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: cast-db-secret
+              key: postgres_password
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: cast-db-secret
+              key: postgres_user
+        - name: CAST_DB
+          value: postgresql://$POSTGRES_USER:$POSTGRES_PASSWORD@cast_db/POSTGRES_DB
+        - name: DATABASE_URI
+          value: postgresql://$POSTGRES_USER:$POSTGRES_PASSWORD@cast_db/POSTGRES_DB
+        image: cpa8876/casts-service:V.74.0
+        name: cast-service
+        ports:
+        - containerPort: 8005
+        resources: {}
+        volumeMounts:
+        - mountPath: /data/
+          name: cast-service-claim0
+      restartPolicy: Always
+      volumes:
+      - name: cast-service-claim0
+        persistentVolumeClaim:
+          claimName: cast-service-claim0

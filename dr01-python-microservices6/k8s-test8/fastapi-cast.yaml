@@ -1,0 +1,252 @@
+# /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins/dr01-python-microservices6/k8s-test4/fastapi-cast.yaml
+# sudo kubectl -n dev create configmap nginx-config --from-file=nginx_config.conf
+# sudo kubectl -n dev get configmap
+# sudo kubectl -n dev edit configmap nginx-config
+# sudo kubectl -n dev describe configmap nginx-conf
+# sudo kubectl -n dev get configmap nginx-config -o json
+# sudo kubectl -n dev get configmap nginx-config -o "jsonpath={.data['nginx_config\.conf']# Notons que le '.' dans max_allowed_packet.cnf doit être échappé
+# sudo kubectl -n dev get configmap nginx-config -o json > nginx_config.json
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dev
+  labels:
+    name: dm-ds-jenkins
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nginx-config-pv
+  labels:
+    app: fastapi-casts
+  namespace: dev
+spec:
+  capacity:
+    storage: 500Mi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins/datas
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-data-cast
+  creationTimestamp: null
+  labels:
+    app: cast-db
+  namespace: dev
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+status: {}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nginx-config-pvc
+  creationTimestamp: null
+  labels:
+    app: nginx-config
+  namespace: dev
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+status: {}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: cast-service-claim0
+  creationTimestamp: null
+  labels:
+    app: fastapi-casts
+  namespace: dev
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 200Mi
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: cast-db-secret
+  labels:
+    app: fastapi-casts
+  namespace: dev
+data: # echo -n "postgres:..." | base64
+  postgres_db: Y2FzdF9kYl9jcGE=
+  postgres_password: Y2FzdF9kYl9jcGFfcGFzc3dvcmQ=
+  postgres_user: Y2FzdF9kYl9jcGFfdXNlcm5hbWU=
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: cast-db
+  namespace: dev
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: fastapi-casts
+  template:
+    metadata:
+      labels:
+        app: fastapi-casts
+    spec:
+      containers:
+      - env:
+        - name: POSTGRES_DB
+          valueFrom:
+            secretKeyRef:
+              name: cast-db-secret
+              key: postgres_db
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: cast-db-secret
+              key: postgres_password
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: cast-db-secret
+              key: postgres_user
+        image: postgres:12.1-alpine
+        livenessProbe:
+          exec:
+            command:
+            - 'pg_isready -U  -d '
+          failureThreshold: 5
+          periodSeconds: 10
+          timeoutSeconds: 10
+        name: cast-db
+        resources: {}
+        volumeMounts:
+        - mountPath: /var/lib/postgresql/data/
+          name: postgres-data-cast
+      restartPolicy: Always
+      volumes:
+      - name: postgres-data-cast
+        persistentVolumeClaim:
+          claimName: postgres-data-cast
+---
+# /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins/dr01-python-microservices6/k8s-test4/cast-service-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cast-service-deployment
+  labels:
+    app: fastapi-casts
+  namespace: dev
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: cast-service
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: cast-service
+    spec:
+      containers:
+      - name: cast-service
+        image: cpa8876/casts-ds-fastapi:v.74.0
+        env:
+          - name: POSTGRES_DB
+            valueFrom:
+              secretKeyRef:
+                name: cast-db-secret
+                key: postgres_db
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: cast-db-secret
+                key: postgres_password
+          - name: POSTGRES_USER
+            valueFrom:
+              secretKeyRef:
+                name: cast-db-secret
+                key: postgres_user
+          - name: IP_CAST_DB
+            value: "10.42.1.40"
+          - name: PORT_CAST_DB
+            value: "5432"
+          - name: DATABASE_URI
+            value:  "postgresql://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@$(IP_CAST_DB):$(PORT_CAST_DB)/$(POSTGRES_DB)"
+        ports:
+          - containerPort: 8005
+        command: ["uvicorn", "app.main:app", "--root-path", "--reload", "--host", "0.0.0.0", "--port", "8005"]
+        resources: {}
+        volumeMounts:
+          - mountPath: /data/
+            name: cast-service-claim0
+      volumes:
+        - name: cast-service-claim0
+          persistentVolumeClaim:
+            claimName: cast-service-claim0
+
+---
+# /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins/dr01-python-microservices6/k8s-test4/cast-service-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: cast-service
+  labels:
+    app: fastapi-casts
+  namespace: dev
+spec:
+#  type: LoadBalancer
+  type: NodePort # For INGRESS ClusterIP can be used as well instead of NodePort
+  selector:
+    app: cast-service
+  ports:
+  - name: "8005"
+    port: 8005
+    targetPort: 8005
+---
+# Kubernetes uvicorn fastapi path based routing Ingress not working; Asked 1 year, 11 months ago; Modified 1 year, 10 months ago; Viewed 1k times;  Part of Microsoft Azure Collective
+# 4 We have solved it like this:
+# In the Dockerfile we add a --root-path parameter to the run command, like this:
+# CMD ["pdm", "run", "uvicorn", "our.uvicorn.service.main:app", "--root-path", "/service/api/v1", "--host", "0.0.0.0", "--port", "8080"]
+# In the kubernetes ingress resource, we use regex to catch the right path:
+# https://stackoverflow.com/questions/76414203/kubernetes-uvicorn-fastapi-path-based-routing-ingress-not-working
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: fastapi-ingress
+  namespace: dev
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-clusterissuer
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: fastapi.dmjenkins.com
+    http:
+      paths:
+      - path: /api/v1/casts
+        pathType: Prefix
+        backend:
+          service:
+            name: cast-service
+            port:
+              number: 8005
+  tls:
+  - hosts:
+      - fastapi.dmjenkins.com
+    secretName: fastapi-dmjenkins-com-tls
+---
+

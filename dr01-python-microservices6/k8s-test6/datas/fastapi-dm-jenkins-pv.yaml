@@ -1,0 +1,15 @@
+# /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins/dr01-python-microservices6/k8s-test4/fastapi-dm-jenkins-pv.yaml
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: fastapi-dm-jenkins-pv
+  labels:
+    app: fastapi-casts
+  namespace: dev
+spec:
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins/dr01-python-microservices6/k8s-test4/datas
