@@ -29,7 +29,7 @@ pipeline {
           sh '''
             cd /app
             docker rm -f $(docker ps -aq)
-            docker rm network dm-jenkins-cpa-infra_my-net
+            docker network rm dm-jenkins-cpa-infra_my-net
             docker volume create postgres_data_movie
             docker volume create postgres_data_cast
             docker network create dm-jenkins-cpa-infra_my-net
