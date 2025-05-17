@@ -28,7 +28,7 @@ pipeline {
         script {// docker run --network=dm-jenkins-cpa-infra_my-net -d -p 8800:8000 --name my-ctnr-ds-fastapi $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG
           sh '''
             cd /app
-            docker rm $(docker ps -aq)
+            docker rm -f $(docker ps -aq)
             docker volume create postgres_data_movie
             docker volume create postgres_data_cast
             docker network create dm-jenkins-cpa-infra_my-net
