@@ -76,12 +76,20 @@ ip_k3d="192.168.1.83"
 
 ###############################
 ### 2.2) Access from host PC on vm-114-111-dmj-jenkins
+# gnome-terminal --tab --name="jenkins" --command "ssh -i $url_id_rsa_cpa cpa@$ip_jenkins"
 gnome-terminal --tab --name="jenkins" --command "ssh -i $url_id_rsa root@$ip_jenkins"
+echo "*************************"
+echo "ip_jenkins : "
+ssh -i $url_id_rsa root@$ip_jenkins 'hostname -I'
 ###############
 
 ###############################
 ### 2.3) Access from host PC on vm-114-111-dmj-k3d
-gnome-terminal --tab --name="k3d" --command "ssh -i $url_id_rsa_cpa cpa@$ip_k3d"
+# gnome-terminal --tab --name="k3d" --command "ssh -i $url_id_rsa_cpa cpa@$ip_k3d"
+gnome-terminal --tab --name="k3d" --command "ssh -i $url_id_rsa root@$ip_k3d"
+echo "*************************"
+echo "ip_k3d : "
+ssh -i $url_id_rsa root@$ip_k3d 'hostname -I'
 ###############
 ###############################
 ################################################################
@@ -131,9 +139,17 @@ ssh -i $url_id_rsa root@$ip_k3d 'docker network ls'
 
 ###############################
 ### 3.7) List and verify all dckr components are well deleted =
+echo "*************************"
+echo "dckr networks : "
 ssh -i $url_id_rsa root@$ip_k3d 'docker network ls'
+echo "*************************"
+echo "dckr volumes : "
 ssh -i $url_id_rsa root@$ip_k3d 'docker volume ls'
+echo "*************************"
+echo "dckr images : "
 ssh -i $url_id_rsa root@$ip_k3d 'docker images'
+echo "*************************"
+echo "dckr ctnr : "
 ssh -i $url_id_rsa root@$ip_k3d 'docker ps -a'
 ###############
 ###############################
@@ -174,58 +190,72 @@ ssh -i $url_id_rsa root@$ip_k3d 'docker network ls'
 #####             sudo k3d cluster create mycluster --network "dm-jenkins-cpa-infra_my-net" -p "8900:30080@agent:0" -p "8901:30081@agent:0" -p "8902:30082@agent:0" --agents 2 --k3s-arg "--tls-san=172.30.0.6"@server:*
 ###############
 ###############
-# sudo k3d cluster create mycluster --network "dm-jenkins-cpa-infra_my-net" -p "8900:30080@agent:0" -p "8901:30081@agent:0" -p "8902:30082@agent:0" --agents 2 --k3s-arg "--tls-san=${$ip_jenkins}"@server:*
+# sudo k3d cluster create mycluster --network "dm-jenkins-cpa-infra_my-net" -p "8900:30080@agent:0" -p "8901:30081@agent:0" -p "8902:30082@agent:0" --agents 2 --k3s-arg "--tls-san=${$ip_jenkins}"@serv
 #  ssh -i $url_id_rsa root@$ip_k3d  'k3d cluster create mycluster --network "dm-jenkins-cpa-infra_my-net" -p "8900:30080@agent:0" -p "8901:30081@agent:0" -p "8902:30082@agent:0" --agents 2 --k3s-arg "--tls-san=localhost"@server:*'
 # ssh -i $url_id_rsa root@$ip_k3d  'k3d cluster create mycluster --network "dm-jenkins-cpa-infra_my-net" -p "8900:30080@agent:0" -p "8901:30081@agent:0" -p "8902:30082@agent:0" --agents 2 --k3s-arg "--tls-san=${$ip_jenkins}"@server:*'
 
+####                         k3d cluster delete mycluster
+ssh -i $url_id_rsa root@$ip_k3d  'k3d cluster delete mycluster'
 ssh -i $url_id_rsa root@$ip_k3d  'k3d cluster create mycluster --network "dm-jenkins-cpa-infra_my-net" -p "8900:30080@agent:0" -p "8901:30081@agent:0" -p "8902:30082@agent:0" --agents 2 --k3s-arg "--tls-san=${ip_k3d}"@server:* --api-port 192.168.1.83:6443'
-ssh -i $url_id_rsa root@$ip_k3d 'docker ps -a'
+
 ###############
 
 ###############################
 ###    4.3) List dckr components
 echo "########################################################"
-echo "########################################################"
+echo "*************************"
+echo "kubctl cluster-info : on  k3d servr : "
 ssh -i $url_id_rsa root@$ip_k3d 'kubectl cluster-info'
 echo "########################################################"
-echo "########################################################"
 
+echo "*************************"
+echo "kubctl get nodes : on  k3d servr : "
 ssh -i $url_id_rsa root@$ip_k3d 'kubectl get nodes'
 echo "########################################################"
-echo "########################################################"
 
+echo "*************************"
+echo "kubctl namespaces: on  k3d servr : "
 ssh -i $url_id_rsa root@$ip_k3d 'kubectl get ns'
 echo "########################################################"
-echo "########################################################"
 
+
+echo "*************************"
+echo "kubctl get pv :  persitent volumes : on  k3d servr : "
 ssh -i $url_id_rsa root@$ip_k3d 'kubectl get pv -A'
 echo "########################################################"
-echo "########################################################"
 
+echo "*************************"
+echo "kubctl get pvc : persitent volumes claim :on  k3d servr : "
 ssh -i $url_id_rsa root@$ip_k3d 'kubectl get pc -A'
 echo "########################################################"
-echo "########################################################"
 
+echo "*************************"
+echo "kubctl get -all -A : on  k3d servr : "
 ssh -i $url_id_rsa root@$ip_k3d 'kubectl get -all -A'
 echo "########################################################"
-echo "########################################################"
 
+echo "*************************"
+echo "kubctl get pods :on  k3d servr : "
 ssh -i $url_id_rsa root@$ip_k3d 'kubectl get pods -A'
 echo "########################################################"
-echo "########################################################"
 
+echo "*************************"
+echo "kubctl get svc : on  k3d servr : "
 ssh -i $url_id_rsa root@$ip_k3d 'kubectl get svc -A'
 echo "########################################################"
-echo "########################################################"
 
+echo "*************************"
+echo "kubctl get netwoRks: on  k3d servr : "
 ssh -i $url_id_rsa root@$ip_k3d 'kubectl get networks -A'
 echo "########################################################"
-echo "########################################################"
 
+echo "*************************"
+echo "kubctl get deployment : on  k3d servr : "
 ssh -i $url_id_rsa root@$ip_k3d 'kubectl get deployement -A'
 echo "########################################################"
-echo "########################################################"
 
+echo "*************************"
+echo "kubctl get statefullset : on  k3d servr : "
 ssh -i $url_id_rsa root@$ip_k3d 'kubectl get statefulset -A'
 echo "########################################################"
 echo "########################################################"
@@ -233,7 +263,11 @@ echo "########################################################"
 
 ###############################
 ###    4.4) Verify the creation of the cluster k3s [my-cluster] composed with one loadbalancer, one ctl master and 2 workers
+echo "########################################################"
+echo "*************************"
+echo "docker ps -a on  k3d servr : "
 ssh -i $url_id_rsa root@$ip_k3d 'docker ps -a'
+echo "########################################################"
 ####  cpa@debiana8:~/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins2$ sudo docker ps -a
 ##### => CONTAINER ID   IMAGE                            COMMAND                  CREATED          STATUS          PORTS                  NAMES
 ##### => e84a8bbebb9d   ghcr.io/k3d-io/k3d-proxy:5.8.3   "/bin/sh -c nginx-pr…"   28 seconds ago   Up 22 seconds   80/tcp, 0.0.0.0:46673->6443/tcp, 0.0.0.0:8900->30080/tcp, :::8900->30080/tcp, 0.0.0.0:8901->30081/tcp, :::8901->30081/tcp, 0.0.0.0:8902->30082/tcp, :::8902->30082/tcp   k3d-mycluster-serverlb
@@ -241,69 +275,6 @@ ssh -i $url_id_rsa root@$ip_k3d 'docker ps -a'
 ##### 7599073a5501   rancher/k3s:v1.31.5-k3s1         "/bin/k3d-entrypoint…"   30 seconds ago   Up 24 seconds                                                                                                                                                                            k3d-mycluster-agent-0
 ##### 959371b1b206   rancher/k3s:v1.31.5-k3s1         "/bin/k3d-entrypoint…"   30 seconds ago   Up 27 seconds                                                                                                                                                                            k3d-mycluster-server-0
 ##### 371040630af2   jenkins/jenkins:lts              "/usr/bin/tini -- /u…"   2 hours ago      Up 2 hours      0.0.0.0:50000->50000/tcp, :::50000->50000/tcp, 0.0.0.0:8280->8080/tcp, :::8280->8080/tcp                                                                                 jenkins
-###############
-
-###############################
-###    4.5) Consult information about cluster k3s [my-cluster] composed with one loadbalancer, one ctl master and 2 workers
-ssh -i $url_id_rsa root@$ip_k3d 'kubectl cluster-info'
-
-####  cpa@debiana8:~/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins2$ sudo kubectl cluster-info
-##### => Kubernetes control plane is running at https://0.0.0.0:46673
-##### => CoreDNS is running at https://0.0.0.0:46673/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
-##### => Metrics-server is running at https://0.0.0.0:46673/api/v1/namespaces/kube-system/services/https:metrics-server:https/proxy
-##### =>
-##### => To further debug and diagnose cluster problems, use 'kubectl cluster-info dump'.
-###############
-
-###############################
-###    4.6) List the 3 nodes of cluster k3s [my-cluster] composed with one ctl master and 2 workers
-ssh -i $url_id_rsa root@$ip_k3d 'kubectl get nodes'
-####  cpa@debiana8:~/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins2$ sudo kubectl get nodes -o wide
-##### => NAME                     STATUS   ROLES                  AGE   VERSION        INTERNAL-IP   EXTERNAL-IP   OS-IMAGE           KERNEL-##### => VERSION   CONTAINER-RUNTIME
-##### => k3d-mycluster-agent-0    Ready    <none>                 13m   v1.31.5+k3s1   172.21.0.5    <none>        K3s v1.31.5+k3s1   6.8.12-9-pve     containerd://1.7.23-k3s2
-##### => k3d-mycluster-agent-1    Ready    <none>                 13m   v1.31.5+k3s1   172.21.0.4    <none>        K3s v1.31.5+k3s1   6.8.12-9-pve     containerd://1.7.23-k3s2
-##### => k3d-mycluster-server-0   Ready    control-plane,master   13m   v1.31.5+k3s1   172.21.0.3    <none>        K3s v1.31.5+k3s1   6.8.12-9-pve     containerd://1.7.23-k3s2
-###############
-
-###############################
-###   4.7) List all components of kubectl server
-ssh -i $url_id_rsa root@$ip_k3d 'kubectl get all -A'
-####  cpa@debiana8:~/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins2$ sudo kubectl get all -A
-##### => NAMESPACE     NAME                                          READY   STATUS      RESTARTS   AGE
-##### => kube-system   pod/coredns-ccb96694c-8dxxh                   1/1     Running     0          17m
-##### => kube-system   pod/helm-install-traefik-crd-tm6dz            0/1     Completed   0          17m
-##### => kube-system   pod/helm-install-traefik-qlhdm                0/1     Completed   0          17m
-##### => kube-system   pod/local-path-provisioner-5cf85fd84d-xzrxv   1/1     Running     0          17m
-##### => kube-system   pod/metrics-server-5985cbc9d7-4vsfg           1/1     Running     0          17m
-##### => kube-system   pod/svclb-traefik-745790f4-qjn67              2/2     Running     0          16m
-##### => kube-system   pod/svclb-traefik-745790f4-r2h78              2/2     Running     0          16m
-##### => kube-system   pod/svclb-traefik-745790f4-zq7q9              2/2     Running     0          16m
-##### => kube-system   pod/traefik-5d45fc8cc9-hvlmb                  1/1     Running     0          16m
-##### =>
-##### => NAMESPACE     NAME                     TYPE           CLUSTER-IP     EXTERNAL-IP                        PORT(S)                      AGE
-##### => default       service/kubernetes       ClusterIP      10.43.0.1      <none>                             443/TCP                      17m
-##### => kube-system   service/kube-dns         ClusterIP      10.43.0.10     <none>                             53/UDP,53/TCP,9153/TCP       17m
-##### => kube-system   service/metrics-server   ClusterIP      10.43.85.172   <none>                             443/TCP                      17m
-##### => kube-system   service/traefik          LoadBalancer   10.43.54.116   172.21.0.3,172.21.0.4,172.21.0.5   80:31953/TCP,443:31849/TCP   16m
-##### =>
-##### => NAMESPACE     NAME                                    DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE
-##### => kube-system   daemonset.apps/svclb-traefik-745790f4   3         3         3       3            3           <none>          16m
-##### =>
-##### => NAMESPACE     NAME                                     READY   UP-TO-DATE   AVAILABLE   AGE
-##### => kube-system   deployment.apps/coredns                  1/1     1            1           17m
-##### => kube-system   deployment.apps/local-path-provisioner   1/1     1            1           17m
-##### => kube-system   deployment.apps/metrics-server           1/1     1            1           17m
-##### => kube-system   deployment.apps/traefik                  1/1     1            1           16m
-##### =>
-##### => NAMESPACE     NAME                                                DESIRED   CURRENT   READY   AGE
-##### => kube-system   replicaset.apps/coredns-ccb96694c                   1         1         1       17m
-##### => kube-system   replicaset.apps/local-path-provisioner-5cf85fd84d   1         1         1       17m
-##### => kube-system   replicaset.apps/metrics-server-5985cbc9d7           1         1         1       17m
-##### => kube-system   replicaset.apps/traefik-5d45fc8cc9                  1         1         1       16m
-##### =>
-##### => NAMESPACE     NAME                                 STATUS     COMPLETIONS   DURATION   AGE
-##### => kube-system   job.batch/helm-install-traefik       Complete   1/1           12s        17m
-##### => kube-system   job.batch/helm-install-traefik-crd   Complete   1/1           9s         17m
 ###############
 ###############################
 ################################################################
@@ -337,7 +308,7 @@ ls -lha ./datas/data-k3d
 ssh -i $url_id_rsa root@$ip_k3d 'docker exec k3d-mycluster-server-0 cat /etc/rancher/k3s/k3s.yaml'
 ssh -i $url_id_rsa root@$ip_k3d 'docker exec k3d-mycluster-server-0 cat /etc/rancher/k3s/k3s.yaml' > ./datas/data-k3d/k3s.yaml
 cat ./datas/data-k3d/k3s.yaml
-sleep 15
+sleep 3
 ##########
 
 ####################
@@ -369,16 +340,17 @@ cat ./datas/data-k3d/k3s_v2.yaml
 ###                           sudo docker cp ./datas/data-k3d/k3s_v2.yaml jenkins:/usr/local/k3s.yaml
 cat ./datas/data-k3d/k3s_v2.yaml
 scp -i $url_id_rsa /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins/datas/data-k3d/k3s_v2.yaml root@$ip_jenkins:/usr/local/k3s.yaml
+ssh -i $url_id_rsa root@$ip_jenkins 'ls -lha /usr/local/k3s.yaml'
 ###############
 
 ###############################
-## 7.3) Verify copy on the vm jenkins server
+##    5.3) Verify copy on the vm jenkins server
 ###                           sudo docker exec -it jenkins cat /usr/local/k3s.yaml
 ssh -i $url_id_rsa root@$ip_jenkins 'cat /usr/local/k3s.yaml'
 ###############
 
 ###############################
-## 7.3) Update environment KUBECONFIG on vm jenkins server
+##    5.4) Update environment KUBECONFIG on vm jenkins server
 ###                          sudo docker exec -it jenkins /bin/sh -c "export KUBECONFIG='/usr/local/k3s.yaml' && kubectl get pods --all-namespaces"
 ###                          export KUBECONFIG="/usr/local/k3s.yaml"'
 ssh -i $url_id_rsa root@$ip_jenkins 'kubectl --kubeconfig /usr/local/k3s.yaml get nodes'
@@ -404,6 +376,8 @@ ssh -i $url_id_rsa root@$ip_k3d 'helm repo add rancher-latest https://releases.r
 
 ###                          sudo helm install rancher rancher-latest/rancher --namespace cattle-system --create-namespace --set ingress.enabled=false --set tls=external --set replicas=1
 ssh -i $url_id_rsa root@$ip_k3d 'helm install rancher rancher-latest/rancher --namespace cattle-system --create-namespace --set ingress.enabled=false --set tls=external --set replicas=1'
+ssh -i $url_id_rsa root@$ip_k3d 'docker ps -a'
+sleep 6
 ###############
 
 ###############################
@@ -457,7 +431,17 @@ sleep 15
 ####################
 ####          6.4.2) on the terminal of vm pve k3d server execute the command :
 ####             kubectl get secret --namespace cattle-system bootstrap-secret -o go-template='{{.data.bootstrapPassword|base64decode}}{{"\n"}}'
-
+echo "########################################################"
+echo "*************************"
+echo "execute cmd  on gnome-terminal k3d :"
+echo "kubectl get secret --namespace cattle-system bootstrap-secret -o go-template='{{.data.bootstrapPassword|base64decode}}'"
+echo "########################################################"
+sleep 6
+echo "########################################################"
+echo "*************************"
+echo "docker ps -a on  k3d servr : "
+ssh -i $url_id_rsa root@$ip_k3d 'docker ps -a'
+echo "########################################################"
 ###############################
 ################################################################
 
@@ -478,14 +462,16 @@ sleep 15
 ###############################
 
 ###############################
-## 7.1) Excute script ./docker-compose.yml script to build container docker Jenkins server
+## 7.0) Excute script ./docker-compose.yml script to build container docker Jenkins server
 # sudo docker compose up -d
+###############
 
-# sudo docker compose up -d
-ssh -i $url_id_rsa root@$ip_jenkins ' rm -r /app'
-ssh -i $url_id_rsa root@$ip_jenkins 'ls -lha /app'
-ssh -i $url_id_rsa root@$ip_jenkins 'mkdir -p /app'
-ssh -i $url_id_rsa root@$ip_jenkins 'ls -lha /app'
+###############################
+## 7.1) Configure jenkins server and copy data from the project dm jenkins
+##########
+####################
+####          7.1.1) Procedure to assure that docker is well configure about docker group
+####################
 ssh -i $url_id_rsa root@$ip_jenkins 'groupadd docker'
 ssh -i $url_id_rsa root@$ip_jenkins 'usermod -aG docker jenkins'
 ssh -i $url_id_rsa root@$ip_jenkins 'reboot'
@@ -493,55 +479,180 @@ sleep 2
 gnome-terminal --tab --name="jenkins" --command "ssh -i $url_id_rsa root@$ip_jenkins"
 ssh -i $url_id_rsa root@$ip_jenkins 'newgrp docker'
 ssh -i $url_id_rsa root@$ip_jenkins 'systemctl restart docker.service'
+##########
+##########
 
+####################
+
+####################
+####          7.1.2) Update access on the jenkins server : replacxe the port 8080 by the port 8280
+#####              B01) Change Jenkins Port 8080
+######                  update  variable HTTP_PORT of /etc/default/jenkins file et modifiez la fo example  8082.
+######                  https://search.brave.com/search?q=changer+le+port+8080+jenkins&source=desktop&summary=1&conversation=db7acd09354d14ca679e9c
+#######                       sed -i "s|server: https://127.0.0.1:6443|s'erver: https://$$ip_jenkins:6443|g" ./datas/data-k3d/k3s.yaml
+##############
+######             B02) How to change port for jenkins window service when 8080 is being used; 11 months ago; Modified 9 months ago; Part of CI/CD Collectivesudo systemctl stop jenkins :
+######                  https://stackoverflow.com/questions/23769478/how-to-change-port-for-jenkins-window-service-when-8080-is-being-used
+##############
+
+
+#######                       sudo nano /etc/default/jenkins
+#######                   In ubuntu
+#######                       systemctl stop jenkins
+#######                     CHANGE THIS: HTTP_PORT=9090
+#######                       sudo systemctl edit --full jenkins
+
+#######                     CHANGE THIS: Environment="JENKINS_PORT=9090"
+#######                       sudo systemctl daemon-reload
+#######                       sudo systemctl restart jenkins
+##########
+
+####################
+####                  7.1.2.1) Method 1
+
+ssh -i $url_id_rsa root@$ip_jenkins 'cat /etc/default/jenkins'
+ssh -i $url_id_rsa root@$ip_jenkins 'nano /etc/default/jenkins'
+ssh -i $url_id_rsa root@$ip_jenkins 'sed -i "s|HTTP_PORT=8080|HTTP_PORT=8082|g" /etc/default/jenkins'
+ssh -i $url_id_rsa root@$ip_jenkins 'cat /etc/default/jenkins'
+ssh -i $url_id_rsa root@$ip_jenkins 'systemctl restart jenkins'
+##########
+
+####################
+####                  7.1.2.2) Method 2
+ssh -i $url_id_rsa root@$ip_jenkins 'systemctl stop jenkins'
+ssh -i $url_id_rsa root@$ip_jenkins 'systemctl status jenkins'
+ssh -i $url_id_rsa root@$ip_jenkins 'cat /etc/systemd/system/jenkins.service'
+ssh -i $url_id_rsa root@$ip_jenkins 'sed -i "s|JENKINS_PORT=8080|JENKINS_PORT=8082|g" /etc/systemd/system/jenkins.service'
+ssh -i $url_id_rsa root@$ip_jenkins 'cat /etc/systemd/system/jenkins.service'
+ssh -i $url_id_rsa root@$ip_jenkins 'systemctl daemon-reload'
+ssh -i $url_id_rsa root@$ip_jenkins 'systemctl restart jenkins'
+ssh -i $url_id_rsa root@$ip_jenkins 'systemctl status jenkins'
+##########
+
+####################
+####                  7.1.2.3) Verify the update of access port of jenkins server
+curl $ip_jenkins:8082
+##########
+
+####################
+####         7.1.3) Copy the fastapi files and script of the homework jenkins
+ssh -i $url_id_rsa root@$ip_jenkins ' rm -r /app'
+ssh -i $url_id_rsa root@$ip_jenkins 'ls -lha /app'
+ssh -i $url_id_rsa root@$ip_jenkins 'mkdir -p /app'
+ssh -i $url_id_rsa root@$ip_jenkins 'ls -lha /app'
 scp -r -i $url_id_rsa /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins/dr01-python-microservices6/cast-service root@$ip_jenkins:/app/
 ssh -i $url_id_rsa root@$ip_jenkins 'ls -lha /app/cast-service/'
 
 scp -r -i $url_id_rsa /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins/dr01-python-microservices6/movie-service root@$ip_jenkins:/app/movie-service
 ssh -i $url_id_rsa root@$ip_jenkins 'ls -lha /app/movie-service/'
 
-###############
+scp -i $url_id_rsa /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins/dr01-python-microservices6/docker-compose.yml root@$ip_jenkins:/app/
 
+scp -i $url_id_rsa /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins/dr01-python-microservices6/nginx_config.conf root@$ip_jenkins:/app/
+
+scp -i $url_id_rsa /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins/dr01-python-microservices6/README.md root@$ip_jenkins:/app/
+
+
+ssh -i $url_id_rsa root@$ip_jenkins 'ls -lha /app/'
+##########
 
 
 ###############################
-# 7.2) Verification
+### 7.2)  List then delete all ctnr dckr
+echo "########################################################"
+echo "*************************"
+echo "docker ps -a  on gnome-terminal jenkins :"
+ssh -i $url_id_rsa root@$ip_jenkins 'docker ps -a'
+ssh -i $url_id_rsa root@$ip_jenkins 'docker rm -f $(sudo docker ps -aq)'
+ssh -i $url_id_rsa root@$ip_jenkins 'docker ps -a'
+###############
+
+###############################
+### 7.3) List and delete all dckr images
+echo "########################################################"
+echo "*************************"
+echo "docker images on gnome-terminal jenkins :"
+ssh -i $url_id_rsa root@$ip_jenkins 'docker images'
+ssh -i $url_id_rsa root@$ip_jenkins 'docker image rmi -f $(sudo docker images -q)'
+ssh -i $url_id_rsa root@$ip_jenkins 'docker images'
+###############
+
+###############################
+### 7.4) List and delete all dckr volumes
+echo "########################################################"
+echo "*************************"
+echo "docker volume ls  on gnome-terminal jenkins :"
+ssh -i $url_id_rsa root@$ip_jenkins 'docker volume ls'
+ssh -i $url_id_rsa root@$ip_jenkins 'docker volume rm -f $(sudo docker volume ls -q)'
+ssh -i $url_id_rsa root@$ip_jenkins 'docker volume ls'
+###############
+
+###############################
+### 7.5) List and delete all dckr networks
+echo "########################################################"
+echo "*************************"
+echo "docker network ls  on gnome-terminal jenkins :"
+ssh -i $url_id_rsa root@$ip_jenkins 'docker network ls'
+ssh -i $url_id_rsa root@$ip_jenkins 'docker network rm $(sudo docker network ls -q)'
+ssh -i $url_id_rsa root@$ip_jenkins 'docker network ls'
+###############
+###############################
+################################################################
+
+
+################################################################
+#  8) Verification on vm k3d
 ##########
-####################
-####          7.2.1) Display all VM docker
-echo " 7.2.1) ############################### "
+###############
+
+###############################
+###   8.1) Display all VM docker
+echo " 8.1) ############################### "
+echo "*************************"
+echo "docker images / volumes / ctnr  on gnome-terminal k3d :"
 ssh -i $url_id_rsa root@$ip_k3d 'docker images'
 ssh -i $url_id_rsa root@$ip_k3d 'docker volume ls -a'
 ssh -i $url_id_rsa root@$ip_k3d 'docker ps -a'
-##########
+###############
 
-####################
-####          7.2.2) Display all nodes of the k3d cluster
-echo " 7.2.2) ############################### "
+###############################
+###   8.2) Display all nodes of the k3d cluster
+echo " 8.2) ############################### "
+echo "*************************"
+echo "kubctl get all -A -o wide from jenkins to k3d server :"
 ssh -i $url_id_rsa root@$ip_k3d 'docker exec -it jenkins kubectl --kubeconfig /usr/local/k3s.yaml get all -A -o wide'
 ##########
 
 ####################
-####          7.2.3) Display all nodes of the k3d cluster
-echo " 7.2.3) ############################### "
+####   8.3) Display all nodes of the k3d cluster
+echo " 8.3) ############################### "
+echo "*************************"
+echo "kubctl get pods -A -o wide from jenkins to k3d server :"
 ssh -i $url_id_rsa root@$ip_jenkins 'kubectl --kubeconfig /usr/local/k3s.yaml get pods -A -o wide'
 ##########
 
 ####################
-####          7.4.4) Display all namerspaces of the k3d cluster
-echo " 7.2.4) ############################### "
+####   8.4) Display all namerspaces of the k3d cluster
+echo " 8.4) ############################### "
+echo "*************************"
+echo "kubctl get namesopaces -o wide from jenkins to k3d server :"
 ssh -i $url_id_rsa root@$ip_jenkins 'kubectl --kubeconfig /usr/local/k3s.yaml get ns -A -o wide'
 ##########
 
 ####################
-####          7.4.5) Display all pods of the k3d cluster
-echo " 7.2.5) ############################### "
-ssh -i $url_id_rsa root@$ip_jenkins 'kubectl --kubeconfig /usr/local/k3s.yaml get pods -A -o wide'
+####   8.5) Display all pods of the k3d cluster
+echo " 8.5) ############################### "
+echo "*************************"
+echo "kubctl get svc -A -o wide from jenkins to k3d server :"
+ssh -i $url_id_rsa root@$ip_jenkins 'kubectl --kubeconfig /usr/local/k3s.yaml get svc -A -o wide'
 ##########
 
 ####################
-####           7.4.6) Display the password rancher monitoring k3s cluster
-#kubectl get secret --namespace cattle-system bootstrap-secret -o go-template='{{.data.bootstrapPassword|base64decode}}{{"\n"}}'
+####    8.6) Display the password rancher monitoring k3s cluster
+# echo " 8.6) ############################### "
+# echo "*************************"
+# echo "kubctl get svc -A -o wide from jenkins to k3d server :"
+# kubectl get secret --namespace cattle-system bootstrap-secret -o go-template='{{.data.bootstrapPassword|base64decode}}{{"\n"}}'
 ################################################################
 
 ################################################################
