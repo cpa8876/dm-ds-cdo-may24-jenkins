@@ -7,7 +7,7 @@ pipeline {
     DOCKER_IMAGE = "ds-fastapi"  // DOCKER_IMAGE="ds-fastapi"
     DOCKER_IMAGE1 = "movie-ds-fastapi"   // DOCKER_IMAGE1="movie-ds-fastapi"
     DOCKER_IMAGE2 = "casts-ds-fastapi"   // DOCKER_IMAGE2="casts-ds-fastapi"
-    DOCKER_TAG = "v.${BUILD_ID}.0" // we will tag our images with the current build in order to increment the value by 1 with each new build DOCKER_TAG =
+    DOCKER_TAG = "v.${BUILD_ID}.0" // we will tag our images with the current build in order to increment the value by 1 with each new build DOCKER_TAG="v.75.0"
     }
   stages {
     stage('Docker Build'){
@@ -28,8 +28,10 @@ pipeline {
         script {// docker run --network=dm-jenkins-cpa-infra_my-net -d -p 8800:8000 --name my-ctnr-ds-fastapi $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG
           sh '''
             cd /app
+            docker rm $(docker ps -aq)
             docker volume create postgres_data_movie
             docker volume create postgres_data_cast
+            docker network create dm-jenkins-cpa-infra_my-net
             docker run -d --name cast_db --net dm-jenkins-cpa-infra_my-net -v postgres_data_cast:/var/lib/postgresql/data/ -e POSTGRES_USER=cast_db_username -e POSTGRES_PASSWORD=cast_db_password -e POSTGRES_DB=cast_db_dev --health-cmd "CMD-SHELL,pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}" --health-interval 10s --health-retries 5 --health-start-period 30s --health-timeout 10s postgres:12.1-alpine
             sleep 6
             docker run -d --name cast_service --net dm-jenkins-cpa-infra_my-net -p 8002:8000 -e DATABASE_URI=postgresql://cast_db_username:cast_db_password@cast_db/cast_db_dev $DOCKER_ID/$DOCKER_IMAGE2:$DOCKER_TAG uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
