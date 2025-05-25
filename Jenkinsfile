@@ -26,8 +26,7 @@ pipeline {
     stage('Docker run'){ // run container from our builded image
       steps {
         script {// docker run --network=dm-jenkins-cpa-infra_my-net -d -p 8800:8000 --name my-ctnr-ds-fastapi $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG
-                    // docker rm -f $(docker ps -aq)
-            // docker network rm dm-jenkins-cpa-infra_my-net
+                    // docker rm -f $(docker ps -aq); docker network rm dm-jenkins-cpa-infra_my-net
           sh '''
             cd /app
             docker volume create postgres_data_movie
@@ -54,7 +53,7 @@ pipeline {
           sh '''
             apt update -y && apt full-upgrade-y && apt install curl -y
             echo -e "\n\n -------------------------------------------------------------------"
-            echo -e "Tests acceptance access on contenaires  cast_db, movie_db, cast _sezrvice, movie_service and loadbalancer\n  "
+            echo -e "Tests acceptance access on contenaires  cast_db, movie_db, cast _service, movie_service and loadbalancer\n  "
             echo -e "\n\n ------------------------------------------"
             echo -e "\n Test-01 : Sql query on cast_db : select * from pg_database :"
             docker exec cast_db psql -h localhost -p 5432 -U cast_db_username -d cast_db_dev -c "select * from pg_database"
@@ -253,9 +252,11 @@ pipeline {
     // some block
                 // helm upgrade --install app fastapi --values=values.yml --namespace dev
                 // cf B52 helm --kubeconfig : https://helm.sh/docs/helm/helm/
+
           sh '''
-            cd /app
+            cd /app/fastapiapp
             ls -lha
+            kubectl --kubeconfig /usr/local/k3s.yaml apply -f fastapi-cast.yaml
             cp /fastapi/values-dev.yaml /fastapiapp/values.yaml
             cat /fastapiapp/values.yaml
             sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml

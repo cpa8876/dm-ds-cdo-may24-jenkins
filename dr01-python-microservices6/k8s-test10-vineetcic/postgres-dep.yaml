@@ -1,0 +1,79 @@
+# Create a PostgreSQL consolidated manifest file for k8s Deployment. ; Vineet Kumar ; Vineet Kumar ; Follow 2 min read; Jun 23, 2024
+# [3~https://vineetcic.medium.com/create-a-postgresql-consolidated-manifest-file-for-k8s-9a0ef362b3ec
+# https://vineetcic.medium.com/create-a-postgresql-consolidated-manifest-file-for-k8s-9a0ef362b3ec
+# 4. If stateful kind deployment is required then apply following manifest file
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-vol
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: storage-class-name
+  volumeMode: Filesystem
+
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres-deployment
+  labels:
+    app: postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  serviceName: postgres      
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      initContainers:
+      - name: init-postgres
+        image: busybox
+        command: ["sh", "-c", "rm -rf /var/lib/postgresql/data/*"]
+        volumeMounts:
+        - mountPath: /var/lib/postgresql/data
+          name: postgres-vol
+      containers:
+      - name: postgres
+        image: postgres
+        ports:
+        - containerPort: 5432
+        env:
+        - name: POSTGRES_DB
+          value: dbname
+        - name: POSTGRES_USER
+          value: dbuser
+        - name: POSTGRES_PASSWORD
+          value: dbpassword  
+        volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: postgres-vol
+  volumeClaimTemplates:
+  - metadata:
+      name: postgres-vol
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 10Gi              
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres
+  labels:
+    app: postgres
+spec:
+  ports:
+  - port: 5432
+    targetPort: 5432
+  selector:
+    app: postgres
+  type: ClusterIP

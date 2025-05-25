@@ -1,0 +1,141 @@
+# /home/cpa/Documents/CPA/44_JENKINS/DOC-REF/DR12-MEDIUM-DEVOPS-PART4/test/postgres/postgres-service.yaml
+# # DevOps Project — Part 4 / Dergham Lahcene /Dergham Lahcene; 8 min read; Feb 25, 2023
+# https://medium.com/@l.dergham/devops-project-part-4-92d6641ed752
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-service
+spec:
+  selector:
+    app: postgres
+  ports:
+    - name: postgres-service-port
+      port: 5432
+      targetPort: 5432
+---
+# /home/cpa/Documents/CPA/44_JENKINS/DOC-REF/DR12-MEDIUM-DEVOPS-PART4/test/postgres/postgres-secret.yaml
+# DevOps Project — Part 4 / Dergham Lahcene /Dergham Lahcene; 8 min read; Feb 25, 2023
+# https://medium.com/@l.dergham/devops-project-part-4-92d6641ed752
+# To encode the username, passwd and database name we use the same command:
+#    echo -n "postgres_user" | base64
+#    echo -n "postgres_passwd" | base64
+#    echo -n "postgres_db" | base64
+
+#postgres-secret.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: postgres-secret
+type: Opaque
+data:
+  postgres-username: ZmFzdGFwaV91c2Vy
+  postgres-password: ZmFzdGFwaV9wYXNzd2Q=
+  postgres-database: ZmFzdGFwaV9kYg==
+---
+# /home/cpa/Documents/CPA/44_JENKINS/DOC-REF/DR12-MEDIUM-DEVOPS-PART4/test/postgres/postgres-deployment.yaml
+## DevOps Project — Part 4 / Dergham Lahcene /Dergham Lahcene; 8 min read; Feb 25, 2023
+# https://medium.com/@l.dergham/devops-project-part-4-92d6641ed752
+# DevOps Project — Part 4 / Dergham Lahcene /Dergham Lahcene; 8 min read; Feb 25, 2023
+# https://medium.com/@l.dergham/devops-project-part-4-92d6641ed752
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgres
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: postgres-username
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: postgres-password
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: postgres-database
+          ports:
+            - containerPort: 5432
+---
+# /home/cpa/Documents/CPA/44_JENKINS/DOC-REF/DR12-MEDIUM-DEVOPS-PART4/test/fastapi/.fastapi-service.yaml
+# # DevOps Project — Part 4 / Dergham Lahcene /Dergham Lahcene; 8 min read; Feb 25, 2023
+# https://medium.com/@l.dergham/devops-project-part-4-92d6641ed752
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: fastapi
+spec:
+  type: ClusterIP
+  selector:
+    app: fastapi
+  ports:
+    - name: http
+      port: 5000
+      targetPort: 5000
+      protocol: TCP
+---
+# /home/cpa/Documents/CPA/44_JENKINS/DOC-REF/DR12-MEDIUM-DEVOPS-PART4/test/fastapi/fastapi-secret.yaml
+# DevOps Project — Part 4 / Dergham Lahcene /Dergham Lahcene; 8 min read; Feb 25, 2023
+# https://medium.com/@l.dergham/devops-project-part-4-92d6641ed752
+# to encode URL, Here’s an example :
+# echo -n "postgresql://user:password@localhost:5432/mydatabase" | base64
+# => output: cG9zdGdyZXNxbDovL3VzZXI6cGFzc3dvcmRAbG9jYWxob3N0OjU0MzIvbXlkYXRhYmFzZQ==
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: fastapi-secret
+  labels:
+    app: fastapi
+data:
+  URL : cG9zdGdyZXNxbDovL2Zhc3RhcGlfdXNlcjpmYXN0YXBpX3Bhc3N3ZEBwb3N0Z3Jlcy1zZXJ2aWNlOjU0MzIvZmFzdGFwaV9kYg==
+---
+# /home/cpa/Documents/CPA/44_JENKINS/DOC-REF/DR12-MEDIUM-DEVOPS-PART4/test/fastapi/.fastapi-deployment.yaml
+# # DevOps Project — Part 4 / Dergham Lahcene /Dergham Lahcene; 8 min read; Feb 25, 2023
+# https://medium.com/@l.dergham/devops-project-part-4-92d6641ed752
+#
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fastapi
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fastapi
+  template:
+    metadata:
+      labels:
+        app: fastapi
+    spec:
+      containers:
+        - name: fastapi
+          image: lahcenedergham/fastapi-image:latest
+          env:
+          - name: DATABASE_URL
+            valueFrom:
+              secretKeyRef:
+                name: fastapi-secret
+                key: URL
+          ports:
+            - containerPort: 5000
+---

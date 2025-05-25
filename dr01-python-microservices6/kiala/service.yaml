@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: kiada
+  name: kiada
+spec:
+  ports:
+  - name: kiadaport
+    port: 80
+    targetPort: 8080
+    protocol: TCP
+  selector:
+    app: kiada
+  type: ClusterIP
