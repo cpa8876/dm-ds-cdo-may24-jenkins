@@ -1,0 +1,70 @@
+# # /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins/dr01-python-microservices6/cast-service/k8s/fastapi-cast-deployment.yaml
+##################
+### BIBLIO
+#### DM-JENKINS-B62-3 -  DevOps Project — Part 4 / Dergham Lahcene /Dergham Lahcene; 8 min read; Feb 25, 2023
+#####  https://medium.com/@l.dergham/devops-project-part-4-92d6641ed752
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: fastapi-cast-secret
+  labels:
+    app: fastapi-cast
+data:
+# echo $(echo -n "postgresql://fastapi_user:fastapi_passwd@cast-db-service:5432/fastapi_db" | base64)
+# => cG9zdGdyZXNxbDovL2Zhc3RhcGlfdXNlcjpmYXN0YXBpX3Bhc3N3ZEBjYXN0LWRiLXNlcnZpY2U6 NTQzMi9mYXN0YXBpX2Ri
+  URL: cG9zdGdyZXNxbDovL2Zhc3RhcGlfdXNlcjpmYXN0YXBpX3Bhc3N3ZEBjYXN0LWRiLXNlcnZpY2U6NTQzMi9mYXN0YXBpX2Ri
+---
+# fastapi-cast-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: fastapi-cast-service
+spec:
+  type: ClusterIP
+  selector:
+    app: fastapi-cast-deployment
+  ports:
+    - name: http
+      port: 5000
+      targetPort: 5000
+      protocol: TCP
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fastapi-cast-configmap
+data:
+  database-url: cast-db-service
+---
+# fastapi-cast-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fastapi-cast-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fastapi-cast-deployment
+  template:
+    metadata:
+      labels:
+        app: fastapi-cast-deployment
+    spec:
+      containers:
+        - name: fastapi-cast-ctnr
+#          image: lahcenedergham/fastapi-image:latest
+           image: cpa8876/casts-ds-fastapi
+           command: ["uvicorn", "app.main:app", "--reload", "--host 0.0.0.0", "--port 5000"]
+          env:
+          - name: DATABASE_URL
+#             value: "postgresql://fastapi_user:fastapi_passwd@10.43.162.83:5432/fastapi_db" 
+#            value: "postgresql://fastapi_user:fastapi_passwd@cast-db-service:5432/fastapi_db" 
+            valueFrom:
+              secretKeyRef:
+                name: fastapi-cast-secret
+                key: URL
+          ports:
+            - containerPort: 5000
+---
