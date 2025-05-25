@@ -1320,7 +1320,9 @@ spec:
     spec:
       containers:
         - name: fastapi-cast-ctnr
-          image: lahcenedergham/fastapi-image:latest
+#          image: lahcenedergham/fastapi-image:latest
+           image: cpa8876/casts-ds-fastapi
+           command: ["uvicorn", "app.main:app", "--reload", "--host 0.0.0.0", "--port 5000"]
           env:
           - name: DATABASE_URL
 #             value: "postgresql://fastapi_user:fastapi_passwd@10.43.162.83:5432/fastapi_db" 

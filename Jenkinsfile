@@ -25,7 +25,7 @@ pipeline {
       }
     stage('Docker run'){ // run container from our builded image
       steps {
-        script {// docker run --network=dm-jenkins-cpa-infra_my-net -d -p 8800:8000 --name my-ctnr-ds-fastapi $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG
+        script {// docker run --network=dm-jenkins-cpa-infra_my-net -d -p 8800:5000 --name my-ctnr-ds-fastapi $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG
                     // docker rm -f $(docker ps -aq); docker network rm dm-jenkins-cpa-infra_my-net
           sh '''
             cd /app
@@ -34,11 +34,11 @@ pipeline {
             docker network create dm-jenkins-cpa-infra_my-net
             docker run -d --name cast_db --net dm-jenkins-cpa-infra_my-net -v postgres_data_cast:/var/lib/postgresql/data/ -e POSTGRES_USER=cast_db_username -e POSTGRES_PASSWORD=cast_db_password -e POSTGRES_DB=cast_db_dev --health-cmd "CMD-SHELL,pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}" --health-interval 10s --health-retries 5 --health-start-period 30s --health-timeout 10s postgres:12.1-alpine
             sleep 6
-            docker run -d --name cast_service --net dm-jenkins-cpa-infra_my-net -p 8002:8000 -e DATABASE_URI=postgresql://cast_db_username:cast_db_password@cast_db/cast_db_dev $DOCKER_ID/$DOCKER_IMAGE2:$DOCKER_TAG uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+            docker run -d --name cast_service --net dm-jenkins-cpa-infra_my-net -p 8002:5000 -e DATABASE_URI=postgresql://cast_db_username:cast_db_password@cast_db/cast_db_dev $DOCKER_ID/$DOCKER_IMAGE2:$DOCKER_TAG uvicorn app.main:app --reload --host 0.0.0.0 --port 5000
             sleep 2
             docker run -d  --name movie_db --net dm-jenkins-cpa-infra_my-net -v postgres_data_movie:/var/lib/postgresql/data/ -e POSTGRES_USER=movie_db_username -e POSTGRES_PASSWORD=movie_db_password -e POSTGRES_DB=movie_db_dev --health-cmd "CMD-SHELL,pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}" --health-interval 10s --health-retries 5 --health-start-period 30s --health-timeout 10s postgres:12.1-alpine &
             sleep 6
-            docker run -d --name movie_service --net dm-jenkins-cpa-infra_my-net -p 8001:8000 -e DATABASE_URL=postgresql://movie_db_username:movie_db_password@movie_db/movie_db_dev -e CAST_SERVICE_HOST_URL=http://cast_service:8000/api/v1/casts/ $DOCKER_ID/$DOCKER_IMAGE1:$DOCKER_TAG uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+            docker run -d --name movie_service --net dm-jenkins-cpa-infra_my-net -p 8001:5000 -e DATABASE_URL=postgresql://movie_db_username:movie_db_password@movie_db/movie_db_dev -e CAST_SERVICE_HOST_URL=http://cast_service:5000/api/v1/casts/ $DOCKER_ID/$DOCKER_IMAGE1:$DOCKER_TAG uvicorn app.main:app --reload --host 0.0.0.0 --port 5000
             sleep 2
             docker run -d --name nginx --net dm-jenkins-cpa-infra_my-net -p 8080:8080 nginx:latest
             docker cp nginx_config.conf nginx:/etc/nginx/conf.d/default.conf
@@ -57,12 +57,12 @@ pipeline {
             echo -e "\n\n ------------------------------------------"
             echo -e "\n Test-01 : Sql query on cast_db : select * from pg_database :"
             docker exec cast_db psql -h localhost -p 5432 -U cast_db_username -d cast_db_dev -c "select * from pg_database"
-            echo -e "\n\n Test-02 : curl on ip-cast_service:8000/api/v1/casts/docs"
-            curl $(docker exec cast_service hostname -i):8000/api/v1/casts/docs
+            echo -e "\n\n Test-02 : curl on ip-cast_service:5000/api/v1/casts/docs"
+            curl $(docker exec cast_service hostname -i):5000/api/v1/casts/docs
             echo -e "\n Test-03 : Sql query on movie_db : select * from pg_database :"
             docker exec movie_db psql -h localhost -p 5432 -U movie_db_username -d movie_db_dev -c "select * from pg_database"
-            echo -e "\n\n Test-04 : curl on ip-movie_service:8000/api/v1/casts/docs"
-            curl $(docker exec movie_service hostname -i):8000/api/v1/movies/docs
+            echo -e "\n\n Test-04 : curl on ip-movie_service:5000/api/v1/casts/docs"
+            curl $(docker exec movie_service hostname -i):5000/api/v1/movies/docs
             echo -e "\n\n Test-05 : curl on ip-nginx:8080/api/v1/movies/docs"
             curl $(docker exec nginx hostname -i):8080/api/v1/movies/docs
             echo -e "\n\n Test-06 : curl on ip-nginx:8080/api/v1/casts/docs"
