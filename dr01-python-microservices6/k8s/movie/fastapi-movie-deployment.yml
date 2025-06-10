@@ -1,0 +1,78 @@
+# # /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins/dr01-python-microservices6/movie-service/k8s/fastapi-movie-deployment.yaml
+##################
+### BIBLIO
+#### DM-JENKINS-B62-3 -  DevOps Project — Part 4 / Dergham Lahcene /Dergham Lahcene; 8 min read; Feb 25, 2023
+#####  https://medium.com/@l.dergham/devops-project-part-4-92d6641ed752
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: fastapi-movie-secret
+  namespace: dev
+  labels:
+    app: fastapi-movie
+data:
+# export DATABASE_URL="postgresql://username:password@hostname/dbname"
+# echo $(echo -n "postgresql://fastapi_user:fastapi_passwd@movie-db-service/fastapi_db" | base64)
+# => cG9zdGdyZXNxbDovL2Zhc3RhcGlfdXNlcjpmYXN0YXBpX3Bhc3N3ZEBtb3ZpZS1kYi1zZXJ2aWNlL2Zhc3RhcGlfZGI=
+  URL: cG9zdGdyZXNxbDovL2Zhc3RhcGlfdXNlcjpmYXN0YXBpX3Bhc3N3ZEBtb3ZpZS1kYi1zZXJ2aWNlL2Zhc3RhcGlfZGI=
+---
+# fastapi-movie-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: fastapi-movie-service
+  namespace: dev
+spec:
+  type: ClusterIP
+  selector:
+    app: fastapi-movie-deployment
+  ports:
+    - name: http2
+      port: 5001
+      targetPort: 5001
+      protocol: TCP
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fastapi-movie-configmap
+  namespace: dev
+data:
+  database-url: movie-db-service
+---
+# fastapi-movie-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fastapi-movie-deployment
+  namespace: dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fastapi-movie-deployment
+  template:
+    metadata:
+      labels:
+        app: fastapi-movie-deployment
+    spec:
+      containers:
+        - name: fastapi-movie-ctnr
+#          image: lahcenedergham/fastapi-image:latest
+          image: cpa8876/movie-ds-fastapi:v.32.0
+#          command: ["uvicorn", "app.main:app", "--reload", "--host 0.0.0.0", "--port 5000"] # uvicorn app.main:app --reload --host 0.0.0.0 --port 5000
+          command: ["/bin/sh"]     # https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/
+          args: ["-c", "while true; do cd /app; uvicorn app.main:app --reload --host 0.0.0.0 --port 5001; done"]
+#          command: ["sleep", "3600"]  # kubectl get po -o wide; kubectl exec -it fastapi-movie-deployment-7b994c9bdf-h8zcn -- /bin/bash; uvicorn app.main:app --reload --host 0.0.0.0 --port 5000
+          env:
+            - name: DATABASE_URL
+#             value: "postgresql://fastapi_user:fastapi_passwd@10.43.162.83:5432/fastapi_db" 
+#              value: "postgresql://fastapi_user:fastapi_passwd@movie-db-service/fastapi_db"
+              valueFrom:
+                secretKeyRef:
+                  name: fastapi-movie-secret
+                  key: URL
+          ports:
+            - containerPort: 5001
+---

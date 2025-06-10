@@ -1,0 +1,50 @@
+---
+# nginx-svc.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-cpa-svc
+  namespace: dev
+spec:
+  type: NodePort
+#  type: ClusterIP
+  selector:
+    app: nginx-cpa
+  ports:
+    - protocol: TCP
+      port: 80
+ #     targetPort: 80
+---
+# nginx-dep.yml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-cpa-dep
+  namespace: dev
+spec:
+  selector:
+    matchLabels:
+      app: nginx-cpa
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: nginx-cpa
+    spec:
+#      nodeSelector:
+#        compute1: minikube
+#      volumes:
+#      - name: nginx-conf
+#        configMap:
+#          name: nginx-conf
+      containers:
+      - name: nginx-cpa-dep
+        image: nginx:1.23.3
+        ports:
+        - containerPort: 80
+#        securityContext:
+#          allowPrivilegeEscalation: false
+#        volumeMounts:
+#          - name: nginx-conf
+#            mountPath: /usr/share/nginx/html
+---

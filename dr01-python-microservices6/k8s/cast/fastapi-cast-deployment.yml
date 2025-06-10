@@ -8,18 +8,21 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: fastapi-cast-secret
+  namespace: dev
   labels:
     app: fastapi-cast
 data:
-# echo $(echo -n "postgresql://fastapi_user:fastapi_passwd@cast-db-service:5432/fastapi_db" | base64)
-# => cG9zdGdyZXNxbDovL2Zhc3RhcGlfdXNlcjpmYXN0YXBpX3Bhc3N3ZEBjYXN0LWRiLXNlcnZpY2U6 NTQzMi9mYXN0YXBpX2Ri
-  URL: cG9zdGdyZXNxbDovL2Zhc3RhcGlfdXNlcjpmYXN0YXBpX3Bhc3N3ZEBjYXN0LWRiLXNlcnZpY2U6NTQzMi9mYXN0YXBpX2Ri
+# export DATABASE_URL="postgresql://username:password@hostname/dbname"
+# echo $(echo -n "postgresql://fastapi_user:fastapi_passwd@cast-db-service/fastapi_db" | base64)
+# => cG9zdGdyZXNxbDovL2Zhc3RhcGlfdXNlcjpmYXN0YXBpX3Bhc3N3ZEBjYXN0LWRiLXNlcnZpY2UvZmFzdGFwaV9kYg==
+  URL: cG9zdGdyZXNxbDovL2Zhc3RhcGlfdXNlcjpmYXN0YXBpX3Bhc3N3ZEBjYXN0LWRiLXNlcnZpY2UvZmFzdGFwaV9kYg==
 ---
 # fastapi-cast-service.yaml
 apiVersion: v1
 kind: Service
 metadata:
   name: fastapi-cast-service
+  namespace: dev
 spec:
   type: ClusterIP
   selector:
@@ -34,6 +37,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: fastapi-cast-configmap
+  namespace: dev
 data:
   database-url: cast-db-service
 ---
@@ -42,6 +46,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: fastapi-cast-deployment
+  namespace: dev
 spec:
   replicas: 1
   selector:
@@ -54,9 +59,16 @@ spec:
     spec:
       containers:
         - name: fastapi-cast-ctnr
-          image: cpa8876/casts-ds-fastapi # image: lahcenedergham/fastapi-image:latest
-          env:          # value: "postgresql://fastapi_user:fastapi_passwd@10.43.162.83:5432/fastapi_db" ,  value: "postgresql://fastapi_user:fastapi_passwd@cast-db-service:5432/fastapi_db"
+#          image: lahcenedergham/fastapi-image:latest
+          image: cpa8876/casts-ds-fastapi:v.32.0
+#          command: ["uvicorn", "app.main:app", "--reload", "--host 0.0.0.0", "--port 5000"] # uvicorn app.main:app --reload --host 0.0.0.0 --port 5000
+          command: ["/bin/sh"]     # https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/
+          args: ["-c", "while true; do cd /app; uvicorn app.main:app --reload --host 0.0.0.0 --port 5000;done"]
+#          command: ["sleep", "3600"]  # kubectl get po -o wide; kubectl exec -it fastapi-cast-deployment-7b994c9bdf-h8zcn -- /bin/bash; uvicorn app.main:app --reload --host 0.0.0.0 --port 5000
+          env:
             - name: DATABASE_URI
+#             value: "postgresql://fastapi_user:fastapi_passwd@10.43.162.83:5432/fastapi_db" 
+#              value: "postgresql://fastapi_user:fastapi_passwd@cast-db-service/fastapi_db"
               valueFrom:
                 secretKeyRef:
                   name: fastapi-cast-secret

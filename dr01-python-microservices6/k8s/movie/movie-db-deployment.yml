@@ -1,0 +1,109 @@
+# /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins/dr01-python-microservices6/movie-service/k8s/movie-deployment.yaml
+### BIBLIO
+#### DM-JENKINS-B62-3 -  DevOps Project — Part 4 / Dergham Lahcene /Dergham Lahcene; 8 min read; Feb 25, 2023
+#####  https://medium.com/@l.dergham/devops-project-part-4-92d6641ed752
+---
+# K8s/B18) How to Deploy Postgres to Kubernetes Cluster; Published on January 19, 2024; https://www.digitalocean.com/community/tutorials/how-to-deploy-postgres-to-kubernetes-cluster
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: movies-db-volume-pv
+  labels:
+    type: local
+    app: movies-db
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: /data/postgresql2
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: movies-db-pvc
+  namespace: dev
+  labels:
+    app: movies-db
+    namespace: dev
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: movie-db-secret
+  namespace: dev
+type: Opaque
+data:
+  movie-db-username: ZmFzdGFwaV91c2Vy       # echo fastapi_user  :=> fastapi_user
+  movie-db-password: ZmFzdGFwaV9wYXNzd2Q=   # echo fastapi_passwd  :=> fastapi_passwd
+  movie-db-database: ZmFzdGFwaV9kYg==       # echo fastapi_db  :=> fastapi_db
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: movie-db-service
+  namespace: dev
+spec:
+  selector:
+    app: movie-db
+  ports:
+    - name: movie-db-service
+      port: 5432
+      targetPort: 5432
+---
+apiVersion: apps/v1
+#kind: Deployment
+kind: StatefulSet
+metadata:
+  name: movie-db-sts
+  namespace: dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: movie-db
+  template:
+    metadata:
+      labels:
+        app: movie-db
+    spec:
+      containers:
+        - name: movie-db
+          image: postgres
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: movie-db-secret
+                  key: movie-db-username
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: movie-db-secret
+                  key: movie-db-password
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: movie-db-secret
+                  key: movie-db-database
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: movie-db-data
+      volumes:
+        - name: movie-db-data
+          persistentVolumeClaim:
+            claimName: movies-db-pvc
+---
