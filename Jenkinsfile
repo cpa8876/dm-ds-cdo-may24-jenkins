@@ -254,6 +254,7 @@ pipeline {
                 // cf B52 helm --kubeconfig : https://helm.sh/docs/helm/helm/
 
           sh '''
+            su -S cpa
             cd /app/fastapiapp
             ls -lha
             kubectl --kubeconfig /usr/local/k3s.yaml apply -f fastapi-cast.yaml
