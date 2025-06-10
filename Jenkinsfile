@@ -243,9 +243,9 @@ pipeline {
         }
       }
     stage('Deploiement en dev'){
-      #environment {
+      environment {
         #KUBECONFIG = credentials("config") // we retrieve  kubeconfig from secret file called config saved on jenkins
-      #}
+      }
       steps {
         script {
           // withKubeConfig(caCertificate: '', clusterName: 'k3d-mycluster', contextName: 'k3d-mycluster', credentialsId: 'k8s-jenkins-secret', namespace: '', restrictKubeConfigAccess: false, serverUrl: 'https://0.0.0.0:41521') {
