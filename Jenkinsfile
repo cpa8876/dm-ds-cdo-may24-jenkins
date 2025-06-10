@@ -277,12 +277,12 @@ pipeline {
             cat $CLIENTCRT > /home/jenkins/.minikube/profiles/minikube/client.crt
             cat /home/jenkins/.minikube/profiles/minikube/client.crt
 
-            cat $KUBECONFIG > /home/jenkins/.minikube/profiles/minikube/client.key
+            cat $CLIENTKEY > /home/jenkins/.minikube/profiles/minikube/client.key
             cat /home/jenkins/.minikube/profiles/minikube/client.key
             whoami
             pwd
             hostname -I
-            kubectl --kubeconfig get nodes
+            kubectl --kubeconfig /home/jenkins/.minikube/config get nodes
 
           '''
           // kubectl --kubeconfig /usr/local/k3s.yaml delete namespace dev
