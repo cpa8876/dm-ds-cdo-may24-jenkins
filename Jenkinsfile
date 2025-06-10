@@ -255,7 +255,7 @@ pipeline {
                 // kubectl --kubeconfig /usr/local/k3s.yaml apply -f fastapi-cast.yaml
                 //             sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
 
-            helm upgrade --kubeconfig /usr/local/k3s.yaml --install fastapi-dev /charts --namespace dev --create-namespace
+            //helm upgrade --kubeconfig /usr/local/k3s.yaml --install fastapi-dev /charts --namespace dev --create-namespace
 
           sh '''
             cd /app/fastapiapp
