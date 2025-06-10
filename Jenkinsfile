@@ -252,16 +252,19 @@ pipeline {
     // some block
                 // helm upgrade --install app fastapi --values=values.yml --namespace dev
                 // cf B52 helm --kubeconfig : https://helm.sh/docs/helm/helm/
+                // kubectl --kubeconfig /usr/local/k3s.yaml apply -f fastapi-cast.yaml
+                //             sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
+
+            helm upgrade --kubeconfig /usr/local/k3s.yaml --install fastapi-dev /charts --namespace dev --create-namespace
 
           sh '''
             cd /app/fastapiapp
             ls -lha
-            kubectl --kubeconfig /usr/local/k3s.yaml apply -f fastapi-cast.yaml
+            whoami
+            pwd
+            hostname -I
             cp /fastapi/values-dev.yaml /fastapiapp/values.yaml
             cat /fastapiapp/values.yaml
-            sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
-
-            helm upgrade --kubeconfig /usr/local/k3s.yaml --install fastapi-dev /charts --namespace dev --create-namespace
           '''
           // kubectl --kubeconfig /usr/local/k3s.yaml delete namespace dev
         //}
