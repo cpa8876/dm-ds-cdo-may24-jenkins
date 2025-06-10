@@ -243,9 +243,12 @@ pipeline {
         }
       }
     stage('Deploiement en dev'){
-      //environment {
-        //KUBECONFIG = credentials("config") // we retrieve  kubeconfig from secret file called config saved on jenkins
-      //}
+      environment {
+        KUBECONFIG = credentials("config") // we retrieve  kubeconfig from secret file called config saved on jenkins
+        CACRT= credentials("cacrt") // we retrieve  kubeconfig from secret file called config saved on jenkins
+        CLIENTCRT = credentials("clientcrt") // we retrieve  kubeconfig from secret file called config saved on jenkins
+        CLIENTKEY = credentials("clientkey") // we retrieve  kubeconfig from secret file called config saved on jenkins
+      }
       steps {
         script {
           // withKubeConfig(caCertificate: '', clusterName: 'k3d-mycluster', contextName: 'k3d-mycluster', credentialsId: 'k8s-jenkins-secret', namespace: '', restrictKubeConfigAccess: false, serverUrl: 'https://0.0.0.0:41521') {
@@ -256,15 +259,31 @@ pipeline {
                 //             sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
 
             //helm upgrade --kubeconfig /usr/local/k3s.yaml --install fastapi-dev /charts --namespace dev --create-namespace
+            //             cp /fastapi/values-dev.yaml /fastapiapp/values.yaml
+            // cat /fastapiapp/values.yaml
 
           sh '''
+            
             cd /app/fastapiapp
             ls -lha
+            mkdir -p /home/jenkins/.minikube/profiles/minikube/
+            ls -lha /home/jenkins/.minikube/profiles/minikube/
+            cat $KUBECONFIG > /home/jenkins/.minikube/config
+
+            cat $CACRT> /home/jenkins/.minikube/ca.crt
+            cat /home/jenkins/.minikube/ca.crt
+
+            cat /home/jenkins/.minikube/config
+            cat $CLIENTCRT > /home/jenkins/.minikube/profiles/minikube/client.crt
+            cat /home/jenkins/.minikube/profiles/minikube/client.crt
+
+            cat $KUBECONFIG > /home/jenkins/.minikube/profiles/minikube/client.key
+            cat /home/jenkins/.minikube/profiles/minikube/client.key
             whoami
             pwd
             hostname -I
-            cp /fastapi/values-dev.yaml /fastapiapp/values.yaml
-            cat /fastapiapp/values.yaml
+            kubectl --kubeconfig get nodes
+
           '''
           // kubectl --kubeconfig /usr/local/k3s.yaml delete namespace dev
         //}
