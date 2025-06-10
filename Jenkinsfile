@@ -243,9 +243,9 @@ pipeline {
         }
       }
     stage('Deploiement en dev'){
-      environment {
-        KUBECONFIG = credentials("config") // we retrieve  kubeconfig from secret file called config saved on jenkins
-      }
+      #environment {
+        #KUBECONFIG = credentials("config") // we retrieve  kubeconfig from secret file called config saved on jenkins
+      #}
       steps {
         script {
           // withKubeConfig(caCertificate: '', clusterName: 'k3d-mycluster', contextName: 'k3d-mycluster', credentialsId: 'k8s-jenkins-secret', namespace: '', restrictKubeConfigAccess: false, serverUrl: 'https://0.0.0.0:41521') {
@@ -254,7 +254,6 @@ pipeline {
                 // cf B52 helm --kubeconfig : https://helm.sh/docs/helm/helm/
 
           sh '''
-            su -S cpa
             cd /app/fastapiapp
             ls -lha
             kubectl --kubeconfig /usr/local/k3s.yaml apply -f fastapi-cast.yaml
