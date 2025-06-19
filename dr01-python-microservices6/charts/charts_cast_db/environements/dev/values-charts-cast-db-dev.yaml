@@ -1,0 +1,21 @@
+---
+# https://search.brave.com/search?q=deploy+postgresql++with+helm+define+database+name+user+and+password&summary=1&conversation=dc22ae482ce1d03139eac3
+auth:
+  username: fastapi_user      # echo fastapi_user  :=> fastapi_user
+#  password: fastapi_passwd  # echo fastapi_passwd  :=> fastapi_passwd
+  database: fastapi_db      # echo fastapi_db  :=> fastapi_db
+#   postgresPassword: postgres_passwd
+# https://search.brave.com/search?q=deploy+postgresql++with+helm+define+database+name+user+and+password+secret&summary=1&conversation=110039d2dbb5f96f6df3bc
+#auth:
+  existingSecret: cast-db-secret
+  secretKeys:
+#    adminPasswordKey: postgres-password
+    userPasswordKey: cast-db-password
+#    password: cast-db-password # APP_DB_PASSWORD
+  port: 5432
+  # initdbArgs 
+  # initdbWalDir
+  dataDir: /var/lib/postgresql/data/pgdata
+
+# https://search.brave.com/search?q=helm+--+create+namespace+example&summary=1&conversation=49770f42daf4f2e1b3ec9e
+---
