@@ -8,6 +8,10 @@ pipeline {
     DOCKER_IMAGE1 = "movie-ds-fastapi"   // DOCKER_IMAGE1="movie-ds-fastapi"
     DOCKER_IMAGE2 = "casts-ds-fastapi"   // DOCKER_IMAGE2="casts-ds-fastapi"
     DOCKER_TAG = "v.${BUILD_ID}.0" // we will tag our images with the current build in order to increment the value by 1 with each new build DOCKER_TAG="v.75.0"
+    URL_REPO_GH_LOCAL="/var/lib/jenkins/workspace/dm-jenkins"  //Repo local github synchronized with https://github.com/cpa8876/dm-ds-cdo-may24-jenkins.git
+    URL_REP_DOCKERFILE_FAT="$URL_REPO_GH_LOCAL/dr01-python-microservices6"  // Directory containned script Dockerfile of fastapi-movie and fastapi-cast
+    URL_REP_DCKR_FAT_CAST= "*$URL_REP_DOCKERFILE_FAT/movie-service"                   // Directory containned script Dockerfile of fastapi-cast 
+    URL_REP_DCKR_FAT_MOVIE= "*$URL_REP_DOCKERFILE_FAT/cast-service"                   // Directory containned script Dockerfile of fastapi-cast   
     }
   stages {
     stage('Docker Build'){
@@ -15,9 +19,9 @@ pipeline {
           sh '''
             pwd
             docker rm -f $DOCKER_ID/$DOCKER_IMAGE1
-            docker build -t $DOCKER_ID/$DOCKER_IMAGE1:$DOCKER_TAG ./movie-service
+            docker build -t $DOCKER_ID/$DOCKER_IMAGE1:$DOCKER_TAG $URL_REP_DCKR_FAT_CAST
             docker rm -f $DOCKER_ID/$DOCKER_IMAGE2
-            docker build -t $DOCKER_ID/$DOCKER_IMAGE2:$DOCKER_TAG ./cast-service
+            docker build -t $DOCKER_ID/$DOCKER_IMAGE2:$DOCKER_TAG URL_REP_DCKR_FAT_MOVIE
             docker image ls -a | grep fastapi
             sleep 6
           '''
