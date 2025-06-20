@@ -58,7 +58,6 @@ pipeline {
       steps {
         script {//curl localhost or curl 127.0.0.1:8480 "curl -svo /dev/null http://localhost" or docker exec -it my-ctnr-ds-fastapi curl localhost
           sh '''
-            apt update -y && apt full-upgrade-y && apt install curl -y
             echo -e "\n\n -------------------------------------------------------------------"
             echo -e "Tests acceptance access on contenaires  cast_db, movie_db, cast _service, movie_service and loadbalancer\n  "
             echo -e "\n\n ------------------------------------------"
