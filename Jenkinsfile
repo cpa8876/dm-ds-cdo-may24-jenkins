@@ -37,7 +37,7 @@ pipeline {
             test_existance=$(docker ps -q)
             [ -z "$test_existance" ] || bash -c 'docker rm -f $(docker ps -aq)'
             test_existance=$(docker network ls | grep dm-jenkins-cpa-infra_my-net | awk '{ print $2 }')
-            [ -z "$test_existance" ] || bash -c 'docker network rm -f $test_existance'
+            [ -z "$test_existance" ] || bash -c "docker network rm -f $test_existance"
             docker network create dm-jenkins-cpa-infra_my-net
             docker run -d --name cast_db --net dm-jenkins-cpa-infra_my-net -v postgres_data_cast:/var/lib/postgresql/data/ -e POSTGRES_USER=cast_db_username -e POSTGRES_PASSWORD=cast_db_password -e POSTGRES_DB=cast_db_dev --health-cmd "CMD-SHELL,pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}" --health-interval 10s --health-retries 5 --health-start-period 30s --health-timeout 10s postgres:12.1-alpine
             sleep 6
