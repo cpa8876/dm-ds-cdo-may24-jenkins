@@ -14,9 +14,9 @@ pipeline {
       steps {
           sh '''
             docker rm -f $DOCKER_ID/$DOCKER_IMAGE1
-            docker build -t $DOCKER_ID/$DOCKER_IMAGE1:$DOCKER_TAG ./movie-service
+            docker build -t $DOCKER_ID/$DOCKER_IMAGE1:$DOCKER_TAG movie-service
             docker rm -f $DOCKER_ID/$DOCKER_IMAGE2
-            docker build -t $DOCKER_ID/$DOCKER_IMAGE2:$DOCKER_TAG ./cast-service
+            docker build -t $DOCKER_ID/$DOCKER_IMAGE2:$DOCKER_TAG cast-service
             docker image ls -a | grep fastapi
             sleep 6
           '''
