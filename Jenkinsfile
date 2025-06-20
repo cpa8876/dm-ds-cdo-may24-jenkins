@@ -270,9 +270,6 @@ pipeline {
             // cat /fastapiapp/values.yaml
 
           sh '''
-            
-            cd /app/fastapiapp
-            ls -lha
             mkdir -p /home/jenkins/.minikube/profiles/minikube/
             ls -lha /home/jenkins/.minikube/profiles/minikube/
             cat $KUBECONFIG > /home/jenkins/.minikube/config
