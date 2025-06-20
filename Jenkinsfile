@@ -36,6 +36,7 @@ pipeline {
             docker volume create postgres_data_cast
             test_existance=$(docker ps -q)
             [ -z "$test_existance" ] || bash -c 'docker rm -f $(docker ps -aq)'
+            sleep 10
             test_existance=$(docker network ls | grep dm-jenkins-cpa-infra_my-net | awk '{ print $2 }')
             [ -z "$test_existance" ] || bash -c "docker network rm -f $test_existance"
             docker network create dm-jenkins-cpa-infra_my-net
