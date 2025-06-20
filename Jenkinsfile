@@ -19,9 +19,9 @@ pipeline {
           sh '''
             pwd
             docker rm -f $DOCKER_ID/$DOCKER_IMAGE1
-            docker build -t $DOCKER_ID/$DOCKER_IMAGE1:$DOCKER_TAG $URL_REP_DCKR_FAT_CAST
+            docker build -t $DOCKER_ID/$DOCKER_IMAGE1:$DOCKER_TAG $URL_REP_DCKR_FAT_MOVIE
             docker rm -f $DOCKER_ID/$DOCKER_IMAGE2
-            docker build -t $DOCKER_ID/$DOCKER_IMAGE2:$DOCKER_TAG $URL_REP_DCKR_FAT_MOVIE
+            docker build -t $DOCKER_ID/$DOCKER_IMAGE2:$DOCKER_TAG $URL_REP_DCKR_FAT_CAST
             docker image ls -a | grep fastapi
             sleep 6
           '''
