@@ -46,7 +46,7 @@ pipeline {
             docker run -d --name movie_service --net dm-jenkins-cpa-infra_my-net -p 8001:5000 -e DATABASE_URL=postgresql://movie_db_username:movie_db_password@movie_db/movie_db_dev -e CAST_SERVICE_HOST_URL=http://cast_service:5000/api/v1/casts/ $DOCKER_ID/$DOCKER_IMAGE1:$DOCKER_TAG uvicorn app.main:app --reload --host 0.0.0.0 --port 5000
             sleep 2
             docker run -d --name nginx --net dm-jenkins-cpa-infra_my-net -p 8080:8080 nginx:latest
-            docker cp nginx_config.conf nginx:/etc/nginx/conf.d/default.conf
+            docker cp $URL_REP_DOCKERFILE_FAT/nginx_config.conf nginx:/etc/nginx/conf.d/default.conf
             docker restart nginx
           '''
             }
