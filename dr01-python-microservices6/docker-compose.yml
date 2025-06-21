@@ -1,4 +1,7 @@
 # /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/python-microservices/docker-compose.yml
+## VERSIONS
+### 21/06/2025 16:44 : container Port:5000
+### /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/ARCHIVES/docker-compose.yml_V2_20250621.1643_Port-8000 : Container port:8000
 version: '3.7'
 
 services:
@@ -26,11 +29,11 @@ services:
       movie_db:
         condition: service_healthy
         restart: true
-    command: uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+    command: uvicorn app.main:app --reload --host 0.0.0.0 --port 5000
     volumes:
       - ./movie-service/:/app/
     ports:
-      - 8001:8000
+      - 8001:5000
     environment:
       - DATABASE_URL=postgresql://movie_db_username:movie_db_password@movie_db/movie_db_dev
       - CAST_SERVICE_HOST_URL=http://movie_db_username:movie_db_password@movie_db_dev
@@ -60,11 +63,11 @@ services:
       cast_db:
         condition: service_healthy
         restart: true
-    command: uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+    command: uvicorn app.main:app --reload --host 0.0.0.0 --port 5000
     volumes:
       - ./cast-service/:/app/
     ports:
-      - 8002:8000
+      - 8002:5000
     environment:
       - DATABASE_URI=postgresql://cast_db_username:cast_db_password@cast_db/cast_db_dev
     networks:

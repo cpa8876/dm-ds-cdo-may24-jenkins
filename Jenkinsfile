@@ -1,4 +1,10 @@
   //# /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins/Jenkinsfile
+  //
+  // ## VERSIONS
+  // ### 21/06/2025 16:27 : Remplacement des cmd docker file par le docker compose dans le satge Docker run
+  // ### /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/ARCHIVES/Jenkinsfile_V5_Dckr_cmd_20250621.1330 : version av ec cmd docker
+
+
 pipeline {
   agent any // Jenkins will be able to select all available agents
   environment { // Declaration of environment variables
@@ -32,25 +38,8 @@ pipeline {
         script {// docker run --network=dm-jenkins-cpa-infra_my-net -d -p 8800:5000 --name my-ctnr-ds-fastapi $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG
                     // docker rm -f $(docker ps -aq); docker network rm dm-jenkins-cpa-infra_my-net
           sh '''
-            docker volume create postgres_data_movie
-            docker volume create postgres_data_cast
-            test_existance=$(docker ps -q)
-            [ -z "$test_existance" ] || bash -c 'docker rm -f $(docker ps -aq)'
-            sleep 10
-            test_existance=$(docker network ls | grep dm-jenkins-cpa-infra_my-net | awk '{ print $2 }')
-            [ -z "$test_existance" ] || bash -c "docker network rm -f $test_existance"
-            docker network create dm-jenkins-cpa-infra_my-net
-            docker run -d --name cast_db --net dm-jenkins-cpa-infra_my-net -v postgres_data_cast:/var/lib/postgresql/data/ -e POSTGRES_USER=cast_db_username -e POSTGRES_PASSWORD=cast_db_password -e POSTGRES_DB=cast_db_dev --health-cmd "CMD-SHELL,pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}" --health-interval 10s --health-retries 5 --health-start-period 30s --health-timeout 10s postgres:12.1-alpine
-            sleep 6
-            docker run -d --name cast_service --net dm-jenkins-cpa-infra_my-net -p 8002:5000 -e DATABASE_URI=postgresql://cast_db_username:cast_db_password@cast_db/cast_db_dev $DOCKER_ID/$DOCKER_IMAGE2:$DOCKER_TAG uvicorn app.main:app --reload --host 0.0.0.0 --port 5000
-            sleep 2
-            docker run -d  --name movie_db --net dm-jenkins-cpa-infra_my-net -v postgres_data_movie:/var/lib/postgresql/data/ -e POSTGRES_USER=movie_db_username -e POSTGRES_PASSWORD=movie_db_password -e POSTGRES_DB=movie_db_dev --health-cmd "CMD-SHELL,pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}" --health-interval 10s --health-retries 5 --health-start-period 30s --health-timeout 10s postgres:12.1-alpine &
-            sleep 6
-            docker run -d --name movie_service --net dm-jenkins-cpa-infra_my-net -p 8001:5000 -e DATABASE_URL=postgresql://movie_db_username:movie_db_password@movie_db/movie_db_dev -e CAST_SERVICE_HOST_URL=http://cast_service:5000/api/v1/casts/ $DOCKER_ID/$DOCKER_IMAGE1:$DOCKER_TAG uvicorn app.main:app --reload --host 0.0.0.0 --port 5000
-            sleep 2
-            docker run -d --name nginx --net dm-jenkins-cpa-infra_my-net -p 8080:8080 nginx:latest
-            docker cp $URL_REP_DOCKERFILE_FAT/nginx_config.conf nginx:/etc/nginx/conf.d/default.conf
-            docker restart nginx
+            docker compose up -d
+            docker ps -a
           '''
             }
          }
@@ -63,22 +52,22 @@ pipeline {
             echo -e "Tests acceptance access on contenaires  cast_db, movie_db, cast _service, movie_service and loadbalancer\n  "
             echo -e "\n\n ------------------------------------------"
             echo -e "\n Test-01 : Sql query on cast_db : select * from pg_database :"
-            docker exec cast_db psql -h localhost -p 5432 -U cast_db_username -d cast_db_dev -c "select * from pg_database"
-            echo -e "\n\n Test-02 : curl on ip-cast_service:5000/api/v1/casts/docs"
-            curl $(docker exec cast_service hostname -i):5000/api/v1/casts/docs
-            echo -e "\n Test-03 : Sql query on movie_db : select * from pg_database :"
-            docker exec movie_db psql -h localhost -p 5432 -U movie_db_username -d movie_db_dev -c "select * from pg_database"
-            echo -e "\n\n Test-04 : curl on ip-movie_service:5000/api/v1/casts/docs"
-            curl $(docker exec movie_service hostname -i):5000/api/v1/movies/docs
-            echo -e "\n\n Test-05 : curl on ip-nginx:8080/api/v1/movies/docs"
-            curl $(docker exec nginx hostname -i):8080/api/v1/movies/docs
-            echo -e "\n\n Test-06 : curl on ip-nginx:8080/api/v1/casts/docs"
-            curl $(docker exec nginx hostname -i):8080/api/v1/casts/docs
+            docker exec dr01-python-microservices6-cast_db-1 psql -h localhost -p 5432 -U cast_db_username -d cast_db_dev -c "select * from pg_database"
+            echo -e "\n\n Test-02 : curl on dr01-python-microservices6-cast_service-1:5000/api/v1/casts/docs"
+            curl $(docker exec dr01-python-microservices6-cast_service-1 hostname -i):5000/api/v1/casts/docs
+            echo -e "\n Test-03 : Sql query on dr01-python-microservices6-movie_db-1 : select * from pg_database :"
+            docker exec dr01-python-microservices6-movie_db-1 psql -h localhost -p 5432 -U movie_db_username -d movie_db_dev -c "select * from pg_database"
+            echo -e "\n\n Test-04 : curl on dr01-python-microservices6-movie_service-1:5000/api/v1/casts/docs"
+            curl $(docker exec dr01-python-microservices6-movie_service-1 hostname -i):5000/api/v1/movies/docs
+            echo -e "\n\n Test-05 : curl on dr01-python-microservices6-nginx-1:8080/api/v1/movies/docs"
+            curl $(docker exec dr01-python-microservices6-nginx-1 hostname -i):8080/api/v1/movies/docs
+            echo -e "\n\n Test-06 : curl on dr01-python-microservices6-nginx-1:8080/api/v1/casts/docs"
+            curl $(docker exec dr01-python-microservices6-nginx-1 hostname -i):8080/api/v1/casts/docs
             echo -e "\n\n -------------------------------------------------------------------"
             echo -e "Tests acceptance CRUD movies fastapi with contenair nginx (loadbalancer) application\n  "
             echo -e "\n\n ------------------------------------------"
-            echo -e "\n\n Test-07 : curl -X POST on ip-nginx:8080/api/v1/movies/ for id=1 Star wars IX"
-            curl -X 'POST'   $(docker exec nginx hostname -i):8080/api/v1/movies/   -H 'accept: application/json'   -H 'Content-Type: application/json'   -d '{
+            echo -e "\n\n Test-07 : curl -X POST on dr01-python-microservices6-nginx-1:8080/api/v1/movies/ for id=1 Star wars IX"
+            curl -X 'POST'   $(docker exec dr01-python-microservices6-nginx-1 hostname -i):8080/api/v1/movies/   -H 'accept: application/json'   -H 'Content-Type: application/json'   -d '{
   "id": 1,
   "name": "Star Wars: Episode IX - The Rise of Skywalker",
   "plot": "The surviving members of the resistance face the First Order once again.",
@@ -96,7 +85,7 @@ pipeline {
   ]
 }'
             echo -e "\n\n Test-08 : curl -X POST on ip-nginx:8080/api/v1/movies/ for id=2 Star wars VI"
-            curl -X 'POST'   $(docker exec nginx hostname -i):8080/api/v1/movies/   -H 'accept: application/json'   -H 'Content-Type: application/json'   -d '{
+            curl -X 'POST'   $(docker exec dr01-python-microservices6-nginx-1 hostname -i):8080/api/v1/movies/   -H 'accept: application/json'   -H 'Content-Type: application/json'   -d '{
   "id": 2,
   "name": "Star Wars: Episode VI - Return of the Jedi",
   "plot": "The evil Galactic Empire is building a new Death Star space station to permanently destroy the Rebel Alliance, its main opposition.",
@@ -111,8 +100,8 @@ pipeline {
    5
   ]
 }'
-            echo -e "\n\n Test-09 : curl -X POST on ip-nginx:8080/api/v1/movies/ for id=3 Star wars V"
-            curl -X 'POST'   $(docker exec nginx hostname -i):8080/api/v1/movies/   -H 'accept: application/json'   -H 'Content-Type: application/json'   -d '{
+            echo -e "\n\n Test-09 : curl -X POST on dr01-python-microservices6-nginx-1:8080/api/v1/movies/ for id=3 Star wars V"
+            curl -X 'POST'   $(docker exec dr01-python-microservices6-nginx-1 hostname -i):8080/api/v1/movies/   -H 'accept: application/json'   -H 'Content-Type: application/json'   -d '{
  "id": 3,
   "name": "Star Wars: Episode V - The Empire Strikes Back",
   "plot": "Set three years after the events of Star Wars, the film recounts the battle between the malevolent Galactic Empire, ",
@@ -127,17 +116,17 @@ pipeline {
     5
   ]
 }'
-            echo -e "\n\n Test-10 : curl -X GET ALL on ip-nginx:8080/api/v1/movies/"
+            echo -e "\n\n Test-10 : curl -X GET ALL on dr01-python-microservices6-nginx-1:8080/api/v1/movies/"
             curl -X 'GET' \
-  $(docker exec nginx hostname -i):8080/api/v1/movies/ \
+  $(docker exec dr01-python-microservices6-nginx-1 hostname -i):8080/api/v1/movies/ \
   -H 'accept: application/json'
-            echo -e "\n\n Test-11 : curl -X GET id=1 on ip-nginx:8080/api/v1/movies/1"
+            echo -e "\n\n Test-11 : curl -X GET id=1 on dr01-python-microservices6-nginx-1:8080/api/v1/movies/1"
             curl -X 'GET' \
-  $(docker exec nginx hostname -i):8080/api/v1/movies/1/ \
+  $(docker exec dr01-python-microservices6-nginx-1 hostname -i):8080/api/v1/movies/1/ \
   -H 'accept: application/json'
-            echo -e "\n\n Test-12 : curl -X PUT update id=1 on ip-nginx:8080/api/v1/movies/1"
+            echo -e "\n\n Test-12 : curl -X PUT update id=1 on dr01-python-microservices6-nginx-1:8080/api/v1/movies/1"
             curl -X 'PUT' \
-  $(docker exec nginx hostname -i):8080/api/v1/movies/1 \
+  $(docker exec dr01-python-microservices6-nginx-1 hostname -i):8080/api/v1/movies/1 \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{
@@ -153,76 +142,76 @@ pipeline {
    1
   ]
 }'
-            echo -e "\n\n Test-13 : curl -X GET ALL on ip-nginx:8080/api/v1/movies/"
+            echo -e "\n\n Test-13 : curl -X GET ALL on dr01-python-microservices6-nginx-1:8080/api/v1/movies/"
             curl -X 'GET' \
-  $(docker exec nginx hostname -i):8080/api/v1/movies/ \
+  $(docker exec dr01-python-microservices6-nginx-1 hostname -i):8080/api/v1/movies/ \
   -H 'accept: application/json'
-            echo -e "\n\n Test-14 : curl -X DELETE id=1 on ip-nginx:8080/api/v1/movies/1"
+            echo -e "\n\n Test-14 : curl -X DELETE id=1 on dr01-python-microservices6-nginx-1:8080/api/v1/movies/1"
             curl -X 'DELETE' \
-  $(docker exec nginx hostname -i):8080/api/v1/movies/1 \
+  $(docker exec dr01-python-microservices6-nginx-1 hostname -i):8080/api/v1/movies/1 \
   -H 'accept: application/json'
-            echo -e "\n\n Test-15 : curl -X GET ALL on ip-nginx:8080/api/v1/movies/"
+            echo -e "\n\n Test-15 : curl -X GET ALL on dr01-python-microservices6-nginx-1:8080/api/v1/movies/"
             curl -X 'GET' \
-  $(docker exec nginx hostname -i):8080/api/v1/movies/ \
+  $(docker exec dr01-python-microservices6-nginx-1 hostname -i):8080/api/v1/movies/ \
   -H 'accept: application/json'
             echo -e "\n\n -------------------------------------------------------------------"
             echo -e "Tests acceptance CRUD casts fastapi application\n  "
             echo -e "\n\n ------------------------------------------"
-            echo -e "\n\n Test-16 : curl -X GET ALL on ip-nginx:8080/api/v1/casts/"
+            echo -e "\n\n Test-16 : curl -X GET ALL on dr01-python-microservices6-nginx-1:8080/api/v1/casts/"
             curl -X 'POST' \
-  http://$(docker exec nginx hostname -i):8080/api/v1/casts/ \
+  http://$(docker exec dr01-python-microservices6-nginx-1 hostname -i):8080/api/v1/casts/ \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{
   "name": "Adam Driver",
   "nationality": "USA"
 }'
-            echo -e "\n\n Test-17 : curl -X GET POST  create id=1 cast on ip-nginx:8080/api/v1/casts/"
+            echo -e "\n\n Test-17 : curl -X GET POST  create id=1 cast on dr01-python-microservices6-nginx-1:8080/api/v1/casts/"
             curl -X 'POST' \
-  http://$(docker exec nginx hostname -i):8080/api/v1/casts/ \
+  http://$(docker exec dr01-python-microservices6-nginx-1 hostname -i):8080/api/v1/casts/ \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{
   "name": "Daisy Ridley",
   "nationality": "USA"
 }'
-            echo -e "\n\n Test-18 : curl -X POST create id=2 cast ALL on ip-nginx:8080/api/v1/casts/"
+            echo -e "\n\n Test-18 : curl -X POST create id=2 cast ALL on dr01-python-microservices6-nginx-1:8080/api/v1/casts/"
            curl -X 'POST' \
-  http://$(docker exec nginx hostname -i):8080/api/v1/casts/ \
+  http://$(docker exec dr01-python-microservices6-nginx-1 hostname -i):8080/api/v1/casts/ \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{
   "name": "Carrie FISHER",
   "nationality": "USA"
 }'
-            echo -e "\n\n Test-19 : curl -X POST create id=3 cast on ip-nginx:8080/api/v1/casts/"
-            curl -X 'POST'   http://$(docker exec nginx hostname -i):8080/api/v1/casts/   -H 'accept: application/json'   -H 'Content-Type: application/json'   -d '{
+            echo -e "\n\n Test-19 : curl -X POST create id=3 cast on dr01-python-microservices6-nginx-1:8080/api/v1/casts/"
+            curl -X 'POST'   http://$(docker exec dr01-python-microservices6-nginx-1 hostname -i):8080/api/v1/casts/   -H 'accept: application/json'   -H 'Content-Type: application/json'   -d '{
   "name": "Mark HAMILL",
   "nationality": "USA"
 }'
-            echo -e "\n\n Test-20 : curl -X POST create id=4 cast on ip-nginx:8080/api/v1/casts/"
-            curl -X 'POST'   http://$(docker exec nginx hostname -i):8080/api/v1/casts/   -H 'accept: application/json'   -H 'Content-Type: application/json'   -d '{
+            echo -e "\n\n Test-20 : curl -X POST create id=4 cast on dr01-python-microservices6-nginx-1:8080/api/v1/casts/"
+            curl -X 'POST'   http://$(docker exec dr01-python-microservices6-nginx-1 hostname -i):8080/api/v1/casts/   -H 'accept: application/json'   -H 'Content-Type: application/json'   -d '{
   "name": "Harisson FORD",
   "nationality": "USA"
 }'
-            echo -e "\n\n Test-21 : curl -X GET ALL on ip-nginx:8080/api/v1/casts/"
+            echo -e "\n\n Test-21 : curl -X GET ALL on dr01-python-microservices6-nginx-1:8080/api/v1/casts/"
             curl -X 'GET' \
-  http://$(docker exec nginx hostname -i):8080/api/v1/casts/ \
+  http://$(docker exec dr01-python-microservices6-nginx-1 hostname -i):8080/api/v1/casts/ \
   -H 'accept: application/json'
-            echo -e "\n\n Test-22 : curl -X GET id=1 on ip-nginx:8080/api/v1/casts/1"
+            echo -e "\n\n Test-22 : curl -X GET id=1 on dr01-python-microservices6-nginx-1:8080/api/v1/casts/1"
             curl -X 'GET' \
-  http://$(docker exec nginx hostname -i):8080/api/v1/casts/1/ \
+  http://$(docker exec dr01-python-microservices6-nginx-1 hostname -i):8080/api/v1/casts/1/ \
   -H 'accept: application/json'
-            echo -e "\n\n Test-23 : curl -X DELETE id=1 on ip-nginx:8080/api/v1/casts/"
+            echo -e "\n\n Test-23 : curl -X DELETE id=1 on dr01-python-microservices6-nginx-1:8080/api/v1/casts/"
             curl -X 'DELETE' \
-  http://$(docker exec nginx hostname -i):8080/api/v1/casts/1 \
+  http://$(docker exec dr01-python-microservices6-nginx-1 hostname -i):8080/api/v1/casts/1 \
   -H 'accept: application/json'
-            echo -e "\n\n Test-24 : curl -X GET ALL on ip-nginx:8080/api/v1/casts/"
+            echo -e "\n\n Test-24 : curl -X GET ALL on dr01-python-microservices6-nginx-1:8080/api/v1/casts/"
             curl -X 'GET' \
-  http://$(docker exec nginx hostname -i):8080/api/v1/casts/ \
+  http://$(docker exec dr01-python-microservices6-nginx-1 hostname -i):8080/api/v1/casts/ \
   -H 'accept: application/json'
 
-            docker rm -f nginx movie_service movie_db cast_service cast_db
+            docker rm -f dr01-python-microservices6-nginx-1 movie_service movie_db cast_service cast_db
             docker ps -a
             '''
           }

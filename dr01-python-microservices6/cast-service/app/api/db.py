@@ -20,3 +20,4 @@ casts = Table(
 )
 
 database = Database(DATABASE_URI)
+exit
