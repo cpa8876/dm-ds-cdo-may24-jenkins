@@ -38,7 +38,7 @@ pipeline {
         script {// docker run --network=dm-jenkins-cpa-infra_my-net -d -p 8800:5000 --name my-ctnr-ds-fastapi $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG
                     // docker rm -f $(docker ps -aq); docker network rm dm-jenkins-cpa-infra_my-net
           sh '''
-            cd $ URL_REP_DOCKERFILE_FAT
+            cd $URL_REP_DOCKERFILE_FAT
             docker compose up -d 
             docker ps -a
           '''
