@@ -298,18 +298,17 @@ pipeline {
             cd $URL_REP_HELM_FAT_CAST_DB
             # cp /fastapi/values-dev.yaml /fastapiapp/values.yaml
             
-            echo "manifest k8s to deploy persistant volume with cmd : cat /environments/dev/ns.k8s.cast.db.dev.yaml" 
+            echo "manifest k8s to deploy persistant volume with cmd : cat ./environments/dev/ns.k8s.cast.db.dev.yaml" 
             cat ./environments/dev/ns.k8s.cast.db.dev.yaml
-            echo "manifest k8s to deploy persistant volume with cmd : cat /environments/dev/pv.k8s.cast.db.dev.yaml" 
-            cat ./environments/dev/pv.dev.yaml
-            echo "manifest k8s to deploy persistant volume with cmd : cat /environments/dev/pvc.k8s.cast.db.dev.yaml" 
-            cat ./environments/dev/pv.dev.yaml
-            echo "manifest k8s to deploy persistant volume with cmd : cat /environments/dev/secrets.k8s.cast.db.dev" 
+            echo "manifest k8s to deploy persistant volume with cmd : cat ./environments/dev/pv.k8s.cast.db.dev.yaml" 
+            cat ./environments/dev/pv.k8s.cast.db.dev.yaml
+            echo "manifest k8s to deploy persistant volume with cmd : cat ./environments/dev/pvc.k8s.cast.db.dev.yaml" 
+            cat ./environments/dev/pvc.k8s.cast.db.dev.yaml
+            echo "manifest k8s to deploy persistant volume with cmd : cat ./environments/dev/secrets.k8s.cast.db.dev" 
             cat ./environments/dev/secrets.dev.yaml
-            echo "manifest k8s to deploy persistant volume with cmd : cat /environments/dev/values.charts.cast.db.dev.yaml" 
-            cat ./environments/dev/values.dev.yaml
-            # sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
-            
+            echo "manifest k8s to deploy persistant volume with cmd : cat ./environments/dev/secrets.k8s.cast.db.dev.yaml" 
+            cat ./environments/dev/secrets.k8s.cast.db.dev.yaml
+                    
             echo -e "\n####             11.7.2.1) List namespaces of the cluster minikube with cmd : kubectl --kubeconfig ~/.kube/config get ns -A -o wide 
             kubectl --kubeconfig ~/.kube/config get ns -A -o wide
 
