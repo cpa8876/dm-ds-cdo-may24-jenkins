@@ -19,10 +19,10 @@ pipeline {
     URL_REP_DCKR_FAT_CAST= "$URL_REP_DOCKERFILE_FAT/cast-service"            // Directory containned script Dockerfile of fastapi-cast 
     URL_REP_DCKR_FAT_MOVIE= "$URL_REP_DOCKERFILE_FAT/movie-service"          // Directory containned script Dockerfile of fastapi-movie   
     URL_REP_HELM_FAT="$URL_REPO_GH_LOCAL/charts"                             // Directory containned chart helm of fastapi-movie and fastapi-cast
-    URL_REP_HELM_FAT_CAST_DB= "$URL_REP_CHARTS_FAT/cast-db"                  // Directory containned chart helm of fastapi-cast_db 
-    URL_REP_HELM_FAT_MOVIE_DB= "$URL_REP_CHARTS_FAT/movie-db"                // Directory containned chart helm of fastapi-movie_db  
-    URL_REP_HELM_FAT_CAST_SERVICE= "$URL_REP_CHARTS_FAT/cast-service"        // Directory containned chart helm of cast_service
-    URL_REP_HELM_FAT_MOVIE_SERVICE= "$URL_REP_CHARTS_FAT/movie-service"      // Directory containned chart helm of fastapi-movie_service 
+    URL_REP_HELM_FAT_CAST_DB= "$URL_REP_HELM_FAT/cast-db"                  // Directory containned chart helm of fastapi-cast_db 
+    URL_REP_HELM_FAT_MOVIE_DB= "$URL_REP_HELM_FAT/movie-db"                // Directory containned chart helm of fastapi-movie_db  
+    URL_REP_HELM_FAT_CAST_SERVICE= "$URL_REP_HELM_FAT/cast-service"        // Directory containned chart helm of cast_service
+    URL_REP_HELM_FAT_MOVIE_SERVICE= "$URL_REP_HELM_FAT/movie-service"      // Directory containned chart helm of fastapi-movie_service 
 
     }
   stages {
