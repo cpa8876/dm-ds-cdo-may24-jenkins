@@ -8,16 +8,22 @@
 pipeline {
   agent any // Jenkins will be able to select all available agents
   environment { // Declaration of environment variables
-    nom = 'datascientest' // nom="datascientest"
-    DOCKER_ID = "cpa8876" // replace this with your docker-id DOCKER_ID="cpa8876"
-    DOCKER_IMAGE = "ds-fastapi"  // DOCKER_IMAGE="ds-fastapi"
-    DOCKER_IMAGE1 = "movie-ds-fastapi"   // DOCKER_IMAGE1="movie-ds-fastapi"
-    DOCKER_IMAGE2 = "casts-ds-fastapi"   // DOCKER_IMAGE2="casts-ds-fastapi"
-    DOCKER_TAG = "v.${BUILD_ID}.0" // we will tag our images with the current build in order to increment the value by 1 with each new build DOCKER_TAG="v.75.0"
-    URL_REPO_GH_LOCAL="/var/lib/jenkins/workspace/dm-jenkins"  //Repo local github synchronized with https://github.com/cpa8876/dm-ds-cdo-may24-jenkins.git
-    URL_REP_DOCKERFILE_FAT="$URL_REPO_GH_LOCAL/dr01-python-microservices6"  // Directory containned script Dockerfile of fastapi-movie and fastapi-cast
-    URL_REP_DCKR_FAT_CAST= "$URL_REP_DOCKERFILE_FAT/cast-service"                   // Directory containned script Dockerfile of fastapi-cast 
-    URL_REP_DCKR_FAT_MOVIE= "$URL_REP_DOCKERFILE_FAT/movie-service"                   // Directory containned script Dockerfile of fastapi-movie   
+    nom = 'datascientest'                                                    // nom="datascientest"
+    DOCKER_ID = "cpa8876"                                                    // replace this with your docker-id DOCKER_ID="cpa8876"
+    DOCKER_IMAGE = "ds-fastapi"                                              // DOCKER_IMAGE="ds-fastapi"
+    DOCKER_IMAGE1 = "movie-ds-fastapi"                                       // DOCKER_IMAGE1="movie-ds-fastapi"
+    DOCKER_IMAGE2 = "casts-ds-fastapi"                                       // DOCKER_IMAGE2="casts-ds-fastapi"
+    DOCKER_TAG = "v.${BUILD_ID}.0"                                           // we will tag our images with the current build in order to increment the value by 1 with each new build DOCKER_TAG="v.75.0"
+    URL_REPO_GH_LOCAL="/var/lib/jenkins/workspace/dm-jenkins"                //Repo local github synchronized with https://github.com/cpa8876/dm-ds-cdo-may24-jenkins.git
+    URL_REP_DOCKERFILE_FAT="$URL_REPO_GH_LOCAL/dr01-python-microservices6"   // Directory containned script Dockerfile of fastapi-movie and fastapi-cast
+    URL_REP_DCKR_FAT_CAST= "$URL_REP_DOCKERFILE_FAT/cast-service"            // Directory containned script Dockerfile of fastapi-cast 
+    URL_REP_DCKR_FAT_MOVIE= "$URL_REP_DOCKERFILE_FAT/movie-service"          // Directory containned script Dockerfile of fastapi-movie   
+    URL_REP_HELM_FAT="$URL_REPO_GH_LOCAL/charts"                             // Directory containned chart helm of fastapi-movie and fastapi-cast
+    URL_REP_HELM_FAT_CAST_DB= "$URL_REP_CHARTS_FAT/cast-db"                  // Directory containned chart helm of fastapi-cast_db 
+    URL_REP_HELM_FAT_MOVIE_DB= "$URL_REP_CHARTS_FAT/movie-db"                // Directory containned chart helm of fastapi-movie_db  
+    URL_REP_HELM_FAT_CAST_SERVICE= "$URL_REP_CHARTS_FAT/cast-service"        // Directory containned chart helm of cast_service
+    URL_REP_HELM_FAT_MOVIE_SERVICE= "$URL_REP_CHARTS_FAT/movie-service"      // Directory containned chart helm of fastapi-movie_service 
+
     }
   stages {
     stage('Docker Build'){
@@ -258,13 +264,42 @@ pipeline {
             //helm upgrade --kubeconfig /usr/local/k3s.yaml --install fastapi-dev /charts --namespace dev --create-namespace
             //             cp /fastapi/values-dev.yaml /fastapiapp/values.yaml
             // cat /fastapiapp/values.yaml
+            // sudo sed -i 's+cpa+'jenkins'+g' /home/jenkins/.minikube/config
+            // 1) delete and restart minikube from pc developper on minikube server
+            // ssh -i $url_id_rsa_cpa cpa@$ip_minikube  'minikube delete --all'
+            // sleep 15
+            // ssh -i $url_id_rsa_cpa cpa@$ip_minikube  'minikube start --apiserver-ips=192.168.1.83 --listen-address=0.0.0.0 --cpus max --memory 5120mb'
+            // sleep 15
+            //
+            // 2) Create config file and copy variables and certificate files mentionned on the config filez of the cluster minikube  to enable access of jenkins server on minikube cluster saved on minikube server (5.1.2.3)
+            //   echo -e "\n####        5.1.2.5) Save number of access port of minikube server used to connect on minikube cluster 8443 with cmd : \n $: port=$(echo $(ssh -i $url_id_rsa_cpa cpa@$ip_minikube 'docker port minikube' | grep 8443) | tail -c-6); echo $port;"
+            //
+            // echo -e "\n####        5.1.2.6) Save ip of minikube server with cmd : \n $: ip_minikube2=$(ssh -i $url_id_rsa_cpa cpa@$ip_minikube 'minikube ip'); echo $ip_minikube;"
+            // ip_minikube2=$(ssh -i $url_id_rsa_cpa cpa@$ip_minikube 'minikube ip')
+            //
+            // echo -e "\n####        5.1.2.7) create a directory to save certificate files useb by minikube cluster /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/.minikube/profiles/minikube with cmd : \n $:rm -r ../.minikube; mkdir -p ../.minikube/profiles/minikube/; ls -lha ../.minikube/profiles/minikube"
+            //
+            // echo -e "\n####        5.1.2.8) copy client.crt and client.key certrificates with cmd : \n $: scp -r -i $url_id_rsa_cpa cpa@$ip_minikube:/home/cpa/.minikube/profiles/minikube/client* ../.minikube/profiles/minikube/ "
+            // echo "$(ssh -i $url_id_rsa_cpa cpa@$ip_minikube 'kubectl config view --raw')" >  $url_pccpa_dir_kconfig/$filename_pccpa_kconfig
+            // 
+            // echo -e "\n####        5.1.2.9) Copy ca.crt from PC developper to jenkins server to test with the user cpa on jenkins server with cmd  : \n $: cd $url_rep_project; \ncd datas/.minikube; \nrm -r ca.crt; \npwd; \nls -lha; \nscp -r -i $url_id_rsa_cpa cpa@$ip_minikube:/home/cpa/.minikube/ca.crt .; \npwd; \nls -lha; \ncat ca.crt;"
+            //
+            // echo -e "\n####        5.1.2.10) Copy client.crt from PC developper to jenkins server to test with the user cpa on jenkins server with cmd : \n $: scp -r -i $url_id_rsa_cpa ./profiles/minikube/client.crt cpa@$ip_jenkins:/home/cpa/.minikube/profiles/minikube/; \nssh -i $url_id_rsa_cpa cpa@$ip_jenkins \"bash -c ' cat /home/cpa/.minikube/profiles/minikube/client.crt;'\""
+            //
+            //
+            // echo -e "\n####        5.1.2.11) Copy client.key from PC developper to jenkins server to test with the user cpa on jenkins server with cmd : \n $: scp -r -i $url_id_rsa_cpa ./profiles/minikube/client.key cpa@$ip_jenkins:/home/cpa/.minikube/profiles/minikube/; \nssh -i $url_id_rsa_cpa cpa@$ip_jenkins \"bash -c ' cat /home/cpa/.minikube/profiles/minikube/client.key;'\""
+            //
+            // echo -e "\n####        5.1.2.15) Copy config file of the minikub cluster with cmd : \n $: echo \"$(ssh -i $url_id_rsa_cpa cpa@$ip_minikube 'kubectl config view --raw')\" >  $url_pccpa_dir_kconfig/$filename_pccpa_kconfig; \ncat $url_pccpa_dir_kconfig/$filename_pccpa_kconfig"
+            //
+            // echo -e "\n####          5.1.3) Copy ./$filename_pccpa_kconfig  to ./$filename_pccpa_kconfig2 and update ./$filename_pccpa_kconfig2 replace ip_minikube_cluster by ip_minikube_server with cmd : \n $: cd $url_pccpa_dir_kconfig; \n pwd; \n ls -lha; \n cp ./$filename_pccpa_kconfig ./$filename_pccpa_kconfig2; \n cat $url_pccpa_dir_kconfig/$filename_pccpa_kconfig2; \n sed 's+'$ip_minikube2':8443+'$ip_minikube:$port'+g' -i $url_pccpa_dir_kconfig/$filename_pccpa_kconfig2; \n pwd; \n ls -lha; \n cat $url_pccpa_dir_kconfig/$filename_pccpa_kconfig2"
 
           sh '''
+            echo "Create configuration files to enable jenkins server to connect to cluster of the minikube server  with kubectl cmd" 
             mkdir -p /home/jenkins/.minikube/profiles/minikube/
             ls -lha /home/jenkins/.minikube/profiles/minikube/
             cat $KUBECONFIG > /home/jenkins/.minikube/config
 
-            cat $CACRT> /home/jenkins/.minikube/ca.crt
+            echo $CACRT> /home/jenkins/.minikube/ca.crt
             cat /home/jenkins/.minikube/ca.crt
 
             cat /home/jenkins/.minikube/config
@@ -279,6 +314,132 @@ pipeline {
             kubectl --kubeconfig /home/jenkins/.minikube/config get nodes
 
           '''
+
+          sh '''
+            echo "Deploy helm chart on DEV environment" 
+            rm -Rf ~/.kube
+            mkdir -p ~/.kube
+            tree ~/.kube
+            cat $KUBECONFIG > ~/.kube/config
+            cd $URL_REP_HELM_FAT_CAST_DB
+            # cp /fastapi/values-dev.yaml /fastapiapp/values.yaml
+            
+            echo "manifest k8s to deploy persistant volume with cmd : cat /environments/dev/ns.k8s.cast.db.dev.yaml" 
+            cat ./environments/dev/ns.k8s.cast.db.dev.yaml
+            echo "manifest k8s to deploy persistant volume with cmd : cat /environments/dev/pv.k8s.cast.db.dev.yaml" 
+            cat ./environments/dev/pv.dev.yaml
+            echo "manifest k8s to deploy persistant volume with cmd : cat /environments/dev/pvc.k8s.cast.db.dev.yaml" 
+            cat ./environments/dev/pv.dev.yaml
+            echo "manifest k8s to deploy persistant volume with cmd : cat /environments/dev/secrets.k8s.cast.db.dev" 
+            cat ./environments/dev/secrets.dev.yaml
+            echo "manifest k8s to deploy persistant volume with cmd : cat /environments/dev/values.charts.cast.db.dev.yaml" 
+            cat ./environments/dev/values.dev.yaml
+            # sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
+            
+            echo -e "\n####             11.7.2.1) List namespaces of the cluster minikube with cmd : kubectl --kubeconfig ~/.kube/config get ns -A -o wide 
+            kubectl --kubeconfig ~/.kube/config get ns -A -o wide
+
+            echo -e "\n####             11.7.2.2) Delete namespace dev on cluster minikube with cmd : \n $: kubectl --kubeconfig ~/.kube/config delete ns dev'"
+            kubectl --kubeconfig ~/.kube/config delete ns dev"
+
+            echo -e "\n####             11.7.2.3) List namespaces of the cluster minikube with cmd : kubectl --kubeconfig ~/.kube/config get ns -A -o wide 
+            kubectl --kubeconfig ~/.kube/config get ns -A -o wide
+            # helm upgrade --kubeconfig ~/.kube/config --install fastapi-dev /fastapiapp --namespace dev --create-namespace
+
+            echo -e "\n\n###          11.7.3) Deploy namespace from jenkins server on minikube server with cmd k8s : \n $: cd /app/charts/charts_cast_db/environements/dev; kubectl --kubeconfig ~/.kube/config apply -f namespace-dev.yaml"
+            
+            echo -e "\n####             11.7.3.1)  Deploy namespace dev on minikube srvr from jenkins servr with cmd : \n $: kubectl --kubeconfig ~/.kube/config get ns -A -o wide'"
+            kubectl --kubeconfig ~/.kube/config apply -f /app/charts/charts_cast_db/environements/dev/ns.k8s.cast.db.dev.yaml
+
+            echo -e "\n####             11.7.3.2) List namespaces of the cluster minikube with cmd : kubectl --kubeconfig ~/.kube/config get ns -A -o wide 
+            kubectl --kubeconfig ~/.kube/config get ns -A -o wide
+            # helm upgrade --kubeconfig ~/.kube/config --install fastapi-dev /fastapiapp --namespace dev --create-namespace
+            
+            echo -e "\n\n###          11.7.4) Deploy secrets from jenkins server on minikube server with cmd k8s : \n $: kubectl --kubeconfig ~/.kube/config apply -f charts/cast-db/environments/secrets.dev.yaml"
+            echo -e "\n####             11.7.4.1)  List secrets deployed on namespace dev on minikube srvr from jenkins srvr with cmd : \n $: kubectl --kubeconfig ~/.kube/config get secrets -n dev -A -o wide'"
+            kubectl --kubeconfig ~/.kube/config get secrets -n dev
+            echo -e "\n####             11.7.4.2)  Delete secrets deployed on namespace dev on minikube srvr from jenkins servr with cmd : \n $: kubectl --kubeconfig ~/.kube/config delete secrets cast-db-secret'"
+            kubectl --kubeconfig ~/.kube/config delete secrets cast-db-secret -n dev
+            echo -e "\n####             11.7.4.3)  Deploy secrets from jenkins server on namespace dev on minikube srvr from jenkins servr with cmd : \n $: kubectl --kubeconfig ~/.kube/config get ns -A -o wide'"
+            kubectl --kubeconfig ~/.kube/config apply -f /app/charts/charts_cast_db/environements/dev/secret-cast-db-dev.yaml
+            echo -e "\n####             11.7.4.4) List secrets from jenkins server on namespace dev on minikube srvr from jenkins servr after to have deleted namespace dev with cmd : \n $: kubectl --kubeconfig ~/.kube/config get secrets -n dev -A -o wide'"
+            kubectl --kubeconfig ~/.kube/config get secrets -n dev -A -o wide
+
+            echo -e "\n\n###          11.7.5) Deploy pv from jenkins server on minikube server with cmd k8s : \n $: cd /app/charts/charts_cast_db/environements/dev; kubectl --kubeconfig ~/.kube/config apply -f charts/cast-db/environments/pv.dev.yaml"
+            echo -e "\n####             11.7.5.1)  List pv deployed on namespace dev on minikube srvr from jenkins srvr with cmd : \n $: kubectl --kubeconfig ~/.kube/config get  pv -n dev -A -o wide'"
+            kubectl --kubeconfig ~/.kube/config get pv -n dev'
+            echo -e "\n####             11.7.5.2)  Delete pv deployed on namespace dev on minikube srvr from jenkins servr with cmd : \n $: kubectl --kubeconfig ~/.kube/config delete pv casts-db-volume-pv -n dev;"
+            kubectl --kubeconfig ~/.kube/config delete pv casts-db-volume-pv -n dev
+            echo -e "\n####             11.7.5.3)  List pv deployed on namespace dev on minikube srvr from jenkins srvr with cmd : \n $: kubectl --kubeconfig ~/.kube/config get  pv -n dev -A -o wide'"
+            kubectl --kubeconfig ~/.kube/config get pv -n dev
+            echo -e "\n####             11.7.5.4)  Deploy pv from jenkins server on namespace dev on minikube srvr from jenkins servr with cmd : \n $: kubectl --kubeconfig ~/.kube/config get ns -A -o wide'"
+            kubectl --kubeconfig ~/.kube/config apply -f /app/charts/charts_cast_db/environements/dev/pv-dev.yaml
+            echo -e "\n####             11.7.5.5)  List pv deployed on namespace dev on minikube srvr from jenkins srvr with cmd : \n $: kubectl --kubeconfig ~/.kube/config get  pv -n dev -A -o wide'"
+            kubectl --kubeconfig ~/.kube/config get pv -n dev
+
+            echo -e "\n\n###          11.7.5) Deploy pvc from jenkins server on minikube server with cmd k8s : \n $: cd /app/charts/charts_cast_db/environements/dev; kubectl --kubeconfig ~/.kube/config apply -f charts/cast-db/environments/pvc.dev.yaml"
+            echo -e "\n####             11.7.5.1)  List pvc deployed on namespace dev on minikube srvr from jenkins srvr with cmd : \n $: kubectl --kubeconfig ~/.kube/config get  pvc -n dev -A -o wide'"
+            kubectl --kubeconfig ~/.kube/config get pvc -n dev'
+            echo -e "\n####             11.7.5.2)  Delete pvc deployed on namespace dev on minikube srvr from jenkins servr with cmd : \n $: kubectl --kubeconfig ~/.kube/config delete pvc casts-db-volume-pvc -n dev;"
+            kubectl --kubeconfig ~/.kube/config delete pvc casts-db-volume-pvc -n dev
+            echo -e "\n####             11.7.5.3)  List pvc deployed on namespace dev on minikube srvr from jenkins srvr with cmd : \n $: kubectl --kubeconfig ~/.kube/config get  pvc -n dev -A -o wide'"
+            kubectl --kubeconfig ~/.kube/config get pvc -n dev
+            echo -e "\n####             11.7.5.4)  Deploy pvc from jenkins server on namespace dev on minikube srvr from jenkins servr with cmd : \n $: kubectl --kubeconfig ~/.kube/config get ns -A -o wide'"
+            kubectl --kubeconfig ~/.kube/config apply -f /app/charts/charts_cast_db/environements/dev/pvc-dev.yaml
+            echo -e "\n####             11.7.5.5)  List pvc deployed on namespace dev on minikube srvr from jenkins srvr with cmd : \n $: kubectl --kubeconfig ~/.kube/config get  pvc -n dev -A -o wide'"
+            kubectl --kubeconfig ~/.kube/config get pvc -n dev
+
+            echo -e "\n\n###          11.7.7) Deploy cast-db from jenkins server on minikube server with cmd helm and charts : \n $: cd /home/cpa/charts/charts_cast_db/environements/dev; kubectl apply -f namespace-dev.yaml"
+            echo -e "\n####             11.7.7.1)  List helm charts deployed on namespace dev on minikube srvr from jenkins srvr with cmd : \n $: helm --kubeconfig ~/.kube/config  ls''"
+            helm --kubeconfig ~/.kube/config  ls
+            echo -e "\n####             11.7.7.2)  Add the Helm repository  and Update the Helm repository: :$ \n helm repo add bitnami https://charts.bitnami.com/bitnami; helm repo update;"
+            echo -e "\n####             11.7.7.2.1) Add repo bitnami with cmd : \n $: helm --kubeconfig ~/.kube/config  repo add bitnami https://charts.bitnami.com/bitnami;"
+            helm --kubeconfig ~/.kube/config  repo add bitnami https://charts.bitnami.com/bitnami;
+            echo -e "\n####             11.7.7.2.2) Update repo bitnami with cmd : \n $: 'helm --kubeconfig ~/.kube/config  repo update;"
+            helm --kubeconfig ~/.kube/config  repo update;
+            echo -e "\n####             11.7.7.2.3) List repo bitnami present on the jenkins servr with cmd : \n $: 'helm --kubeconfig ~/.kube/config  repo ls;"
+            'helm --kubeconfig ~/.kube/config  repo ls;'"
+
+            echo -e "\n####             11.7.8)  Deploy namespace dev on minikube srvr from jenkins servr with cmd : \n $: kubectl --kubeconfig ~/.kube/config  get ns -A -o wide'"
+            echo -e "\n####             11.7.7.8.1) List helm charts deployed from the jenkins server on minikube servr with cmd : \n $: 'helm --kubeconfig ~/.kube/config  ls -A;
+            helm --kubeconfig ~/.kube/config  ls -A;"
+            echo -e "\n####             11.7.8.2) Deploy on namespace dev from the jenkins server on minikube srvr the cast-db-charts(dev postgrersql database uised by fastapi-cast with the cmd ) : \n $: kubectl --kubeconfig ~/.kube/config  get ns -A -o wide'"
+            helm install --kubeconfig ~/.kube/config  cast-db-charts-dev bitnami/postgresql --set persistence.existingClaim=postgresql-pv-claim --set volumePermissions.enabled=true --create-namespace --namespace dev -f values-charts-cast-db-dev.yaml
+            echo -e "\n####             11.7.7.8.3) List helm charts deployed from the jenkins server on minikube servr with cmd : \n $: 'helm --kubeconfig ~/.kube/config  ls -n dev;"
+            helm --kubeconfig ~/.kube/config  ls -n dev;
+
+            echo -e "\n\n###         11.7.9) Test config deployment cast-db-charts-dev-postgresql-0 with cmd : \n $: kubectl -n dev exec cast-db-charts-dev-postgresql-0--  env PGPASSWORD=fastapi_passwd psql -h cast-db-charts-dev-postgresql-0 -U fastapi_user -d fastapi_db -c \"select * from pg_database;\""
+            echo -e "\n####             11.7.9.1) List pods deployed with helm charts deployed from the jenkins server on minikube servr with cmd : \n $: kubectl --kubeconfig ~/.kube/config  get pods -n dev;"
+            kubectl --kubeconfig ~/.kube/config  get pods -n dev
+            echo -e "\n####             11.7.9.2)  Obtain the password database cast-db-chartts-dev-0 "
+            fastapi_password=$(kubectl --kubeconfig ~/.kube/config  get secrets -n dev cast-db-secret -o jsonpath="{.data.cast-db-password}" | base64 -d'")
+            echo -e "\n####             11.7.9.3) Sql query on cast-db-charts-dev deployed from jenkins server on minikube server with helm charts deployed from the jenkins server on minikube servr with cmd : \n "
+            kubectl --kubeconfig ~/.kube/config  -n dev exec cast-db-charts-dev-postgresql-0 --  env PGPASSWORD=fastapi_passwd psql -h cast-db-charts-dev-postgresql-0 -U fastapi_user -d fastapi_db -c "select * from pg_database;"
+
+            echo -e "\n\n###         11.7.10) Delete all elements deployed"
+            echo -e "\n####             11.7.10.1) List ns dev from jenkins server deployed on minikube server with cmd : \n $: kubectl --kubeconfig ~/.kube/config  get ns dev "
+            kubectl --kubeconfig ~/.kube/config  get ns dev'"
+            echo -e "\n####             11.7.10.2) Delete ns dev and all elements that is contained inside with cmd : kubectl --kubeconfig ~/.kube/config  delete ns dev' "
+            kubectl --kubeconfig ~/.kube/config  delete ns dev
+            echo -e "\n####             11.7.10.3) List ns dev from jenkins server deployed on minikube server with cmd : \n $: kubectl --kubeconfig ~/.kube/config  get ns dev "
+            kubectl --kubeconfig ~/.kube/config  get ns dev
+            echo -e "\n####             11.7.10.4) List pvc on  ns dev from jenkins server deployed on minikube server with cmd : \n $: kubectl --kubeconfig ~/.kube/config  get pvc -A -o wide "
+            kubectl --kubeconfig ~/.kube/config  get pvc -A -o wide
+            echo -e "\n####             11.7.10.5) List pv on  ns dev from jenkins server deployed on minikube server with cmd : \n $: kubectl --kubeconfig ~/.kube/config  get pv "
+            kubectl --kubeconfig ~/.kube/config  get pv
+            echo -e "\n####             11.7.10.6) Delete pv on  ns dev from jenkins server deployed on minikube server with cmd : \n $:kubectl --kubeconfig ~/.kube/config  delete pv casts-db-volume-pv"
+            kubectl --kubeconfig ~/.kube/config  delete pv casts-db-volume-pv
+            echo -e "\n####             11.7.10.7) List pv on  ns dev from jenkins server deployed on minikube server with cmd : \n $: kubectl --kubeconfig ~/.kube/config  get pv "
+            kubectl --kubeconfig ~/.kube/config  get pv
+            
+            echo -e "\n####             11.7.10.8) Uninstall helm charts used to deploy on namespace dev from the jenkins server on minikube srvr the cast-db-charts(dev postgrersql database uised by fastapi-cast with the cmd ) : \n $: helm uninstall --kubeconfig ~/.kube/config  cast-db-charts-dev
+            'helm uninstall --kubeconfig ~/.kube/config  cast-db-charts-dev
+            echo -e "\n####             11.7.7.10.9) List helm charts deployed from the jenkins server on minikube servr with cmd : \n $: helm --kubeconfig ~/.kube/config  ls -n dev;"
+            helm --kubeconfig ~/.kube/config  ls -n dev;
+            echo -e "\n####             11.7.10.10) List all elements from jenkins server deployed on minikube server with cmd : \n $: kubectl --kubeconfig ~/.kube/config  get all -A -o wide"
+            kubectl --kubeconfig ~/.kube/config  get all -A -o wide
+          '''
+
           // kubectl --kubeconfig /usr/local/k3s.yaml delete namespace dev
         //}
         }

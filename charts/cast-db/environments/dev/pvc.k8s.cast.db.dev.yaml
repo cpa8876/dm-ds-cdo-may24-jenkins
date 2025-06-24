@@ -1,0 +1,20 @@
+# /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins/charts/cast-db/environments/dev/pvc.dev.yaml
+# K8s/B18) How to Deploy Postgres to Kubernetes Cluster; Published on January 19, 2024; 
+# https://www.digitalocean.com/community/tutorials/how-to-deploy-postgres-to-kubernetes-cluster
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: casts-db-pvc
+  namespace: dev
+  labels:
+    app: casts-db
+    namespace: dev
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
+---

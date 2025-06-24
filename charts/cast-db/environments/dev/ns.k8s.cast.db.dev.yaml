@@ -1,0 +1,9 @@
+# DM-JENKIN§S-B623 -  DevOps Project — Part 4 / Dergham Lahcene /Dergham Lahcene; 8 min read; Feb 25, 2023
+# https://medium.com/@l.dergham/devops-project-part-4-92d6641ed752
+#
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: dev
+  labels:
+    name: fastapi-dm-jenkins
