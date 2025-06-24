@@ -304,8 +304,6 @@ pipeline {
             cat ./environments/dev/pv.k8s.cast.db.dev.yaml
             echo "manifest k8s to deploy persistant volume with cmd : cat ./environments/dev/pvc.k8s.cast.db.dev.yaml" 
             cat ./environments/dev/pvc.k8s.cast.db.dev.yaml
-            echo "manifest k8s to deploy persistant volume with cmd : cat ./environments/dev/secrets.k8s.cast.db.dev" 
-            cat ./environments/dev/secrets.dev.yaml
             echo "manifest k8s to deploy persistant volume with cmd : cat ./environments/dev/secrets.k8s.cast.db.dev.yaml" 
             cat ./environments/dev/secrets.k8s.cast.db.dev.yaml
                     
