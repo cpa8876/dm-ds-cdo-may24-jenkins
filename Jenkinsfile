@@ -277,37 +277,15 @@ pipeline {
             // echo -e "\n####        5.1.2.6) Save ip of minikube server with cmd : \n $: ip_minikube2=$(ssh -i $url_id_rsa_cpa cpa@$ip_minikube 'minikube ip'); echo $ip_minikube;"
             // ip_minikube2=$(ssh -i $url_id_rsa_cpa cpa@$ip_minikube 'minikube ip')
             //
-            // echo -e "\n####        5.1.2.7) create a directory to save certificate files useb by minikube cluster /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/.minikube/profiles/minikube with cmd : \n $:rm -r ../.minikube; mkdir -p ../.minikube/profiles/minikube/; ls -lha ../.minikube/profiles/minikube"
+            // echo -e "\n####        5.1.2.15) Copy config file of the minikub cluster with cmd : \n $: echo "$(ssh -i $url_id_rsa_cpa cpa@$ip_minikube 'kubectl config view --raw --flatten')" >  $url_pccpa_dir_kconfig/config"
             //
-            // echo -e "\n####        5.1.2.8) copy client.crt and client.key certrificates with cmd : \n $: scp -r -i $url_id_rsa_cpa cpa@$ip_minikube:/home/cpa/.minikube/profiles/minikube/client* ../.minikube/profiles/minikube/ "
-            // echo "$(ssh -i $url_id_rsa_cpa cpa@$ip_minikube 'kubectl config view --raw')" >  $url_pccpa_dir_kconfig/$filename_pccpa_kconfig
-            // 
-            // echo -e "\n####        5.1.2.9) Copy ca.crt from PC developper to jenkins server to test with the user cpa on jenkins server with cmd  : \n $: cd $url_rep_project; \ncd datas/.minikube; \nrm -r ca.crt; \npwd; \nls -lha; \nscp -r -i $url_id_rsa_cpa cpa@$ip_minikube:/home/cpa/.minikube/ca.crt .; \npwd; \nls -lha; \ncat ca.crt;"
-            //
-            // echo -e "\n####        5.1.2.10) Copy client.crt from PC developper to jenkins server to test with the user cpa on jenkins server with cmd : \n $: scp -r -i $url_id_rsa_cpa ./profiles/minikube/client.crt cpa@$ip_jenkins:/home/cpa/.minikube/profiles/minikube/; \nssh -i $url_id_rsa_cpa cpa@$ip_jenkins \"bash -c ' cat /home/cpa/.minikube/profiles/minikube/client.crt;'\""
-            //
-            //
-            // echo -e "\n####        5.1.2.11) Copy client.key from PC developper to jenkins server to test with the user cpa on jenkins server with cmd : \n $: scp -r -i $url_id_rsa_cpa ./profiles/minikube/client.key cpa@$ip_jenkins:/home/cpa/.minikube/profiles/minikube/; \nssh -i $url_id_rsa_cpa cpa@$ip_jenkins \"bash -c ' cat /home/cpa/.minikube/profiles/minikube/client.key;'\""
-            //
-            // echo -e "\n####        5.1.2.15) Copy config file of the minikub cluster with cmd : \n $: echo \"$(ssh -i $url_id_rsa_cpa cpa@$ip_minikube 'kubectl config view --raw')\" >  $url_pccpa_dir_kconfig/$filename_pccpa_kconfig; \ncat $url_pccpa_dir_kconfig/$filename_pccpa_kconfig"
-            //
-            // echo -e "\n####          5.1.3) Copy ./$filename_pccpa_kconfig  to ./$filename_pccpa_kconfig2 and update ./$filename_pccpa_kconfig2 replace ip_minikube_cluster by ip_minikube_server with cmd : \n $: cd $url_pccpa_dir_kconfig; \n pwd; \n ls -lha; \n cp ./$filename_pccpa_kconfig ./$filename_pccpa_kconfig2; \n cat $url_pccpa_dir_kconfig/$filename_pccpa_kconfig2; \n sed 's+'$ip_minikube2':8443+'$ip_minikube:$port'+g' -i $url_pccpa_dir_kconfig/$filename_pccpa_kconfig2; \n pwd; \n ls -lha; \n cat $url_pccpa_dir_kconfig/$filename_pccpa_kconfig2"
+            // echo -e "\n####          5.1.3) Copy ./$filename_pccpa_kconfig  to ./$filename_pccpa_kconfig2 and update ./$filename_pccpa_kconfig2 replace ip_minikube_cluster by ip_minikube_server with cmd : \n $: cd $url_pccpa_dir_kconfig; \n pwd; \n ls -lha; \n cp $url_pccpa_dir_kconfig/config $url_pccpa_dir_kconfig/config2; \n cat $url_pccpa_dir_kconfig/config2; \nsed 's+'$ip_minikube2':8443+'$ip_minikube:$port'+g' -i $url_pccpa_dir_kconfig/config2; \n pwd; \n ls -lha; \n cat $url_pccpa_dir_kconfig/config2"
 
           sh '''
             echo "Create configuration files to enable jenkins server to connect to cluster of the minikube server  with kubectl cmd" 
             mkdir -p /home/jenkins/.minikube/profiles/minikube/
             ls -lha /home/jenkins/.minikube/profiles/minikube/
             cat $KUBECONFIG > /home/jenkins/.minikube/config
-
-            echo $CACRT> /home/jenkins/.minikube/ca.crt
-            cat /home/jenkins/.minikube/ca.crt
-
-            cat /home/jenkins/.minikube/config
-            cat $CLIENTCRT > /home/jenkins/.minikube/profiles/minikube/client.crt
-            cat /home/jenkins/.minikube/profiles/minikube/client.crt
-
-            cat $CLIENTKEY > /home/jenkins/.minikube/profiles/minikube/client.key
-            cat /home/jenkins/.minikube/profiles/minikube/client.key
             whoami
             pwd
             hostname -I
@@ -317,10 +295,6 @@ pipeline {
 
           sh '''
             echo "Deploy helm chart on DEV environment" 
-            rm -Rf ~/.kube
-            mkdir -p ~/.kube
-            tree ~/.kube
-            cat $KUBECONFIG > ~/.kube/config
             cd $URL_REP_HELM_FAT_CAST_DB
             # cp /fastapi/values-dev.yaml /fastapiapp/values.yaml
             

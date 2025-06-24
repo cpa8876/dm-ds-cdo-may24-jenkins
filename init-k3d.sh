@@ -826,7 +826,8 @@ echo "*************************"
 
 echo -e "\n####        5.1.2.6) Save ip of minikube server with cmd : \n $: ip_minikube2=$(ssh -i $url_id_rsa_cpa cpa@$ip_minikube 'minikube ip'); echo $ip_minikube;"
 ip_minikube2=$(ssh -i $url_id_rsa_cpa cpa@$ip_minikube 'minikube ip')
-echo $ip_minikube
+echo $ip_minikube2
+ssh -i $url_id_rsa_cpa cpa@$ip_minikube 'docker port minikube'
 #####  => cpa@debian-pve:~$ docker port minikube
 #####  => 22/tcp -> 127.0.0.1:32793
 #####  => 2376/tcp -> 127.0.0.1:32794
@@ -852,6 +853,9 @@ ls -lha
 echo "*************************"
  
 echo -e "\n####        5.1.2.8) copy client.crt and client.key certrificates with cmd : \n $: scp -r -i $url_id_rsa_cpa cpa@$ip_minikube:/home/cpa/.minikube/profiles/minikube/client* ../.minikube/profiles/minikube/ "
+cd $url_rep_project_n0/.minikube/profiles/minikube/;
+pwd;
+ls -lha
 scp -r -i $url_id_rsa_cpa cpa@$ip_minikube:/home/cpa/.minikube/profiles/minikube/client* .
 pwd;
 ls -lha  ;
@@ -859,28 +863,40 @@ cat ./client.crt;
 cat ./client.key;
 echo "*************************"
  
-echo -e "\n####        5.1.2.9) Copy ca.crt from PC developper to jenkins server to test with the user cpa on jenkins server with cmd  : \n $: cd $url_rep_project; \ncd datas/.minikube; \nrm -r ca.crt; \npwd; \nls -lha; \nscp -r -i $url_id_rsa_cpa cpa@$ip_minikube:/home/cpa/.minikube/ca.crt .; \npwd; \nls -lha; \ncat ca.crt;"
-cd $url_rep_project_n0
-cd ./.minikube;
+echo -e "\n####        5.1.2.9) Copy ca.crt from minikube server to PC developper to test with the user cpa on jenkins server with cmd  : \n $: cd $url_rep_project; \ncd datas/.minikube; \nrm -r ca.crt; \npwd; \nls -lha; \nscp -r -i $url_id_rsa_cpa cpa@$ip_minikube:/home/cpa/.minikube/ca.crt .; \npwd; \nls -lha; \ncat ca.crt;"
+cd $url_rep_project_n0/.minikube;
+pwd;
+ls -lha
 rm -r ca.crt
 pwd;
 ls -lha;
+ssh -i $url_id_rsa_cpa cpa@$ip_jenkins "bash -c 'echo -e \"cat /home/cpa/.minikube/ca.crt\n\"; cat /home/cpa/.minikube/ca.crt'"
 scp -r -i $url_id_rsa_cpa cpa@$ip_minikube:/home/cpa/.minikube/ca.crt .
 pwd;
-ls -lha;
-cat ca.crt;
+ls -lha $url_rep_project_n0/.minikube/ca.crt;
+cat $url_rep_project_n0/.minikube/ca.crt;
 echo "*************************"
  
 echo -e "\n####        5.1.2.10) Copy client.crt from PC developper to jenkins server to test with the user cpa on jenkins server with cmd : \n $: scp -r -i $url_id_rsa_cpa ./profiles/minikube/client.crt cpa@$ip_jenkins:/home/cpa/.minikube/profiles/minikube/; \nssh -i $url_id_rsa_cpa cpa@$ip_jenkins \"bash -c ' cat /home/cpa/.minikube/profiles/minikube/client.crt;'\""
-scp -r -i $url_id_rsa_cpa ./profiles/minikube/client.crt cpa@$ip_jenkins:/home/cpa/.minikube//profiles/minikube/
+ls -lha $url_rep_project_n0/.minikube/profiles/minikube/client.crt
+cat $url_rep_project_n0/.minikube/profiles/minikube/client.crt
+scp -r -i $url_id_rsa_cpa $url_rep_project_n0/.minikube/profiles/minikube/client.crt cpa@$ip_jenkins:/home/cpa/.minikube//profiles/minikube/
 ssh -i $url_id_rsa_cpa cpa@$ip_jenkins "bash -c ' cat /home/cpa/.minikube/profiles/minikube/client.crt'"
 echo "*************************"
  
 echo -e "\n####        5.1.2.11) Copy client.key from PC developper to jenkins server to test with the user cpa on jenkins server with cmd : \n $: scp -r -i $url_id_rsa_cpa ./profiles/minikube/client.key cpa@$ip_jenkins:/home/cpa/.minikube/profiles/minikube/; \nssh -i $url_id_rsa_cpa cpa@$ip_jenkins \"bash -c ' cat /home/cpa/.minikube/profiles/minikube/client.key;'\""
-scp -r -i $url_id_rsa_cpa ./profiles/minikube/client.key cpa@$ip_jenkins:/home/cpa/.minikube//profiles/minikube/
+ls -lha $url_rep_project_n0/.minikube/profiles/minikube/client.key
+cat $url_rep_project_n0/.minikube/profiles/minikube/client.key
+scp -r -i $url_id_rsa_cpa $url_rep_project_n0/.minikube/profiles/minikube/client.key cpa@$ip_jenkins:/home/cpa/.minikube//profiles/minikube/
 ssh -i $url_id_rsa_cpa cpa@$ip_jenkins "bash -c ' cat /home/cpa/.minikube/profiles/minikube/client.key'"
+
 echo "*************************"
- 
+echo -e "\n####        5.1.2.12) Copy ca.crt from PC developper to jenkins server to test with the user cpa on jenkins server with cmd : \n $: scp -r -i $url_id_rsa_cpa ./profiles/minikube/client.crt cpa@$ip_jenkins:/home/cpa/.minikube/profiles/minikube/; \nssh -i $url_id_rsa_cpa cpa@$ip_jenkins \"bash -c ' cat /home/cpa/.minikube/profiles/minikube/client.crt;'\""
+ls -lha $url_rep_project_n0/.minikube/ca.crt
+cat $url_rep_project_n0/.minikube/ca.crt
+scp -r -i $url_id_rsa_cpa $url_rep_project_n0/.minikube/ca.crt cpa@$ip_jenkins:/home/cpa/.minikube/
+ssh -i $url_id_rsa_cpa cpa@$ip_jenkins "bash -c ' cat /home/cpa/.minikube/ca.crt'"
+echo "*************************"
 
  
 echo -e "\n####        5.1.2.15) Copy config file of the minikub cluster with cmd : \n $: echo \"$(ssh -i $url_id_rsa_cpa cpa@$ip_minikube 'kubectl config view --raw')\" >  $url_pccpa_dir_kconfig/$filename_pccpa_kconfig; \ncat $url_pccpa_dir_kconfig/$filename_pccpa_kconfig"
@@ -890,10 +906,14 @@ pwd;
 ls -lha;
 #  minikube kubectl -- config view --flatten > ~/Download/remote-config
 echo "$(ssh -i $url_id_rsa_cpa cpa@$ip_minikube 'kubectl config view --raw')" >  $url_pccpa_dir_kconfig/$filename_pccpa_kconfig
+echo "$(ssh -i $url_id_rsa_cpa cpa@$ip_minikube 'kubectl config view --raw --flatten')" >  $url_pccpa_dir_kconfig/config
 pwd;
-ls -lha $filename_pccpa_kconfig;
-# echo "$(ssh -i $url_id_rsa_cpa cpa@$ip_minikube 'minikube kubectl -- config view --flatten')" >  ./kubeconfig-k3d-cpacluster.yaml
+ls -lha $url_pccpa_dir_kconfig/$filename_pccpa_kconfig;
 cat $url_pccpa_dir_kconfig/$filename_pccpa_kconfig
+
+ls -lha $url_pccpa_dir_kconfig/config
+cat $url_pccpa_dir_kconfig/config
+# echo "$(ssh -i $url_id_rsa_cpa cpa@$ip_minikube 'minikube kubectl -- config view --flatten')" >  ./kubeconfig-k3d-cpacluster.yaml
 ## scp -i $url_id_rsa_cpa ./kubeconfig-k3d-cpacluster.yaml root@$ip_minikube:/home/cpa/.config/k3d/kubeconfig-cpacluster.yaml
 ## ssh -i $url_id_rsa_cpa cpa@$ip_minikube 'cat /root/.config/k3d/kubeconfig-cpacluster.yaml'
 #ssh -i $url_id_rsa_cpa cpa@$ip_minikube 'export KUBECONFIG="/root/.config/k3d/kubeconfig-cpacluster.yaml"; echo $KUBECONFIG'
@@ -922,16 +942,26 @@ echo "ip_source: " $ip_source
 cd $url_pccpa_dir_kconfig
 pwd
 ls -lha
-cp ./$filename_pccpa_kconfig ./$filename_pccpa_kconfig2
+cp $url_pccpa_dir_kconfig/$filename_pccpa_kconfig $url_pccpa_dir_kconfig/$filename_pccpa_kconfig2
 ####              sed -i 's+127.0.0.1+'$ip_k3s_srvr'+g' ./datas/data-k3d/k3s_v2.yaml
 cat $url_pccpa_dir_kconfig/$filename_pccpa_kconfig2
+
+cp $url_pccpa_dir_kconfig/config $url_pccpa_dir_kconfig/config2
+####              sed -i 's+127.0.0.1+'$ip_k3s_srvr'+g' ./datas/data-k3d/k3s_v2.yaml
+cat $url_pccpa_dir_kconfig/config2
 
 ## sed -i 's+$ip_minikube:8443+'$ip_minikube:$port'+g' ./kubeconfig-k3d-cpacluster_v2.yaml
 sed 's+'$ip_minikube2':8443+'$ip_minikube:$port'+g' -i $url_pccpa_dir_kconfig/$filename_pccpa_kconfig2
 
-pwd
-ls -lha
+## sed -i 's+$ip_minikube:8443+'$ip_minikube:$port'+g' ./kubeconfig-k3d-cpacluster_v2.yaml
+sed 's+'$ip_minikube2':8443+'$ip_minikube:$port'+g' -i $url_pccpa_dir_kconfig/config2
+
+ls -lha $url_pccpa_dir_kconfig/$filename_pccpa_kconfig2
 cat $url_pccpa_dir_kconfig/$filename_pccpa_kconfig2
+
+ls -lha $url_pccpa_dir_kconfig/config2
+cat $url_pccpa_dir_kconfig/config2
+
 #sudo docker exec -it jenkins export KUBECONFIG=/datas/data-k3d/k3s_v2.yaml
 echo -e "###############"
 ###############
@@ -954,7 +984,7 @@ cat $url_pccpa_dir_kconfig/$filename_pccpa_kconfig3
 sed 's+'/home/cpa/'+'/home/jenkins/'+g' -i $url_pccpa_dir_kconfig/$filename_pccpa_kconfig3
 
 pwd
-ls -lha
+ls -lha $url_pccpa_dir_kconfig/$filename_pccpa_kconfig3
 cat $url_pccpa_dir_kconfig/$filename_pccpa_kconfig3
 #sudo docker exec -it jenkins export KUBECONFIG=/datas/data-k3d/k3s_v2.yaml
 echo -e "###############"
@@ -964,11 +994,12 @@ echo -e "###############################\n"
 
 ################################################################
 echo -e "\n################################################################"
-echo -e "\n\n##    5.2) Copy ./datas/data-k3d/k3s_v2.yaml jenkins:$url_jenkins_kconfig to enable acces of kubectl command from Jenkins server"
+echo -e "\n\n##    5.2) Copy ./datas/data-k3d/k3s_v2.yaml jenkins:$url_jenkins_dir_kconfig/ to enable acces of kubectl command from Jenkins server"
 ###                           sudo docker cp ./datas/data-k3d/k3s_v2.yaml jenkins:$url_jenkins_kconfig
-scp -i $url_id_rsa $url_pccpa_dir_kconfig/$filename_pccpa_kconfig2 root@$ip_jenkins:$url_jenkins_kconfig
-ssh -i $url_id_rsa_cpa cpa@$ip_jenkins "ls -lha $url_jenkins_kconfig"
-ssh -i  $url_id_rsa_cpa cpa@$ip_jenkins "cat $url_jenkins_kconfig"
+ssh -i $url_id_rsa_cpa cpa@$ip_jenkins "mkdir -p /home/cpa/.kube"
+scp -i $url_id_rsa $url_pccpa_dir_kconfig/$filename_pccpa_kconfig2 root@$ip_jenkins:/home/cpa/.kube/config
+ssh -i $url_id_rsa_cpa cpa@$ip_jenkins "ls -lha /home/cpa/.kube/config"
+ssh -i  $url_id_rsa_cpa cpa@$ip_jenkins "cat /home/cpa/.kube/config"
 echo -e "###############"
 ###############
 echo -e "###############################\n"
