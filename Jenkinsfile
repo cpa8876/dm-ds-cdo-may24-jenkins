@@ -332,7 +332,7 @@ pipeline {
             pwd
 
             echo -e "\n####             11.7.8.2) Deploy on namespace dev from the jenkins server on minikube srvr the cast-db-charts(dev postgrersql database uised by fastapi-cast with the cmd ) : \n $: kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE  get ns -A -o wide"
-            helm install --kubeconfig $URL_FILE_CONFIG_MINIKUBE  cast-db-charts-dev bitnami/postgresql --set persistence.existingClaim=postgresql-pv-claim --set volumePermissions.enabled=true --create-namespace --namespace dev -f $URL_REP_HELM_FAT_CAST_DB/environments/dev/values.charts.cast.db.dev.yaml
+            helm install --kubeconfig $URL_FILE_CONFIG_MINIKUBE  cast-db-charts-dev bitnami/postgresql --set persistence.existingClaim=postgresql-pv-claim --set volumePermissions.enabled=true --namespace dev --create-namespace -f $URL_REP_HELM_FAT_CAST_DB/environments/dev/values.charts.cast.db.dev.yaml
 
             echo -e "\n####             11.7.7.8.3) List persistant volumes with cmd : \n $:  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get pv -A"
             kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get pv -A 
