@@ -298,13 +298,13 @@ pipeline {
             cd $URL_REP_HELM_FAT_CAST_DB
             # cp /fastapi/values-dev.yaml /fastapiapp/values.yaml
             
-            echo "manifest k8s to deploy persistant volume with cmd : cat ./environments/dev/ns.k8s.cast.db.dev.yaml" 
+            echo "manifest k8s to deploy persistent volume with cmd : cat ./environments/dev/ns.k8s.cast.db.dev.yaml" 
             cat ./environments/dev/ns.k8s.cast.db.dev.yaml
-            echo "manifest k8s to deploy persistant volume with cmd : cat ./environments/dev/pv.k8s.cast.db.dev.yaml" 
+            echo "manifest k8s to deploy persistent volume with cmd : cat ./environments/dev/pv.k8s.cast.db.dev.yaml" 
             cat ./environments/dev/pv.k8s.cast.db.dev.yaml
-            echo "manifest k8s to deploy persistant volume with cmd : cat ./environments/dev/pvc.k8s.cast.db.dev.yaml" 
+            echo "manifest k8s to deploy persistent volume with cmd : cat ./environments/dev/pvc.k8s.cast.db.dev.yaml" 
             cat ./environments/dev/pvc.k8s.cast.db.dev.yaml
-            echo "manifest k8s to deploy persistant volume with cmd : cat ./environments/dev/secrets.k8s.cast.db.dev.yaml" 
+            echo "manifest k8s to deploy persistent volume with cmd : cat ./environments/dev/secrets.k8s.cast.db.dev.yaml" 
             cat ./environments/dev/secrets.k8s.cast.db.dev.yaml
                     
             echo -e "\n####             11.7.2.1) List namespaces of the cluster minikube with cmd : \n $: kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get ns -A -o wide" 
@@ -341,7 +341,7 @@ pipeline {
             helm install --kubeconfig $URL_FILE_CONFIG_MINIKUBE  cast-db-charts-dev bitnami/postgresql --set persistence.existingClaim=postgresql-pv-claim --set volumePermissions.enabled=true --namespace dev --create-namespace --values=$URL_REP_HELM_FAT_CAST_DB/environments/dev/values.charts.cast.db.dev.yaml  -f $URL_REP_HELM_FAT_CAST_DB/environments/dev/secrets.k8s.cast.db.dev.yaml -f $URL_REP_HELM_FAT_CAST_DB/environments/dev/pv.k8s.cast.db.dev.yaml -f $URL_REP_HELM_FAT_CAST_DB/environments/dev/pvc.k8s.cast.db.dev.yaml
 
 
-            echo -e "\n####             11.7.8.3) List persistant volumes with cmd : \n $:  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get pv -A"
+            echo -e "\n####             11.7.8.3) List persistent volumes with cmd : \n $:  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get pv -A"
             kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get pv -A 
             
             echo -e "\n####             11.7.8.4) List helm charts deployed from the jenkins server on minikube servr with cmd : \n $: 'helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE  ls -n dev;"
@@ -367,6 +367,7 @@ pipeline {
 
 
 
+
             echo -e "\n####             11.7.10.20) Delete every element from jenkins server deployed on minikube server with cmd : \n $: kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE delete ns dev; \nkubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get ns -n dev;  \nkubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get ns dev"
 
             echo -e "\n####             11.7.10.20.1) Delete cast-db-charts-dev helm release with cmd : \n $: test_dep=$(helm --kubeconfig /home/jenkins/.minikube/config ls -A -q); \n echo $test_dep; [ -z \"$test_dep\" ] && echo \"Empty\" ||   helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE delete -n dev cast-db-charts-dev; \nhelm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls -A"
@@ -383,7 +384,7 @@ pipeline {
             echo -e "\n####             11.7.10.20.3) List namespaces with cmd : \n $:  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get ns -A -o wide "
             kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get ns -A -o wide;
 
-            echo -e "\n####             11.7.10.20.3) List persistant volumes with cmd : \n $:  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get pv -A -o wide "
+            echo -e "\n####             11.7.10.20.3) List persistent volumes with cmd : \n $:  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get pv -A -o wide "
             kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get pv -A -o wide;
 
             echo -e "\n####             11.7.10.20.3) List persistent volume claims with cmd : \n $:  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get pvc -A -o wide "
