@@ -328,6 +328,7 @@ pipeline {
           
             echo -e "\n####             11.7.7.8.1) List helm charts deployed from the jenkins server on minikube servr with cmd : \n $: 'helm --kubeconfig /home/jenkins/.minikube/config  ls -A;"
             helm --kubeconfig /home/jenkins/.minikube/config  ls -A;
+            pwd
 
             echo -e "\n####             11.7.8.2) Deploy on namespace dev from the jenkins server on minikube srvr the cast-db-charts(dev postgrersql database uised by fastapi-cast with the cmd ) : \n $: kubectl --kubeconfig /home/jenkins/.minikube/config  get ns -A -o wide"
             helm install --kubeconfig /home/jenkins/.minikube/config  cast-db-charts-dev bitnami/postgresql --set persistence.existingClaim=postgresql-pv-claim --set volumePermissions.enabled=true --create-namespace --namespace dev -f ./environments/dev/values-charts-cast-db-dev.yaml
