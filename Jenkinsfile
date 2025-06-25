@@ -332,6 +332,12 @@ pipeline {
             pwd
 
             echo -e "\n####             11.7.8.2) Deploy on namespace dev from the jenkins server on minikube srvr the cast-db-charts(dev postgrersql database uised by fastapi-cast with the cmd ) : \n $: kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE  get ns -A -o wide"
+            helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls -A;
+            test_dep=$(helm --kubeconfig /home/jenkins/.minikube/config ls -A -q);
+            echo $test_dep;
+            [ -z "$test_dep" ] && echo "Empty" ||   helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE delete -n dev cast-db-charts-dev
+            helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls -A
+
             helm install --kubeconfig $URL_FILE_CONFIG_MINIKUBE  cast-db-charts-dev bitnami/postgresql --set persistence.existingClaim=postgresql-pv-claim --set volumePermissions.enabled=true --namespace dev --create-namespace -f $URL_REP_HELM_FAT_CAST_DB/environments/dev/values.charts.cast.db.dev.yaml
 
             echo -e "\n####             11.7.7.8.3) List persistant volumes with cmd : \n $:  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get pv -A"
@@ -362,11 +368,18 @@ pipeline {
 
             echo -e "\n####             11.7.10.20) Delete every element from jenkins server deployed on minikube server with cmd : \n $: kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE delete ns dev; \nkubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get ns -n dev;  \nkubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get ns dev"
 
-            echo -e "\n####             11.7.10.20.1) Delete cast-db-charts-dev helm release with cmd : \n $: helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE delete -n dev cast-db-charts-dev"
-            helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE delete -n dev cast-db-charts-dev
+            echo -e "\n####             11.7.10.20.1) Delete cast-db-charts-dev helm release with cmd : \n $: test_dep=$(helm --kubeconfig /home/jenkins/.minikube/config ls -A -q); 
+            echo $test_dep;
+            [ -z \"$test_dep\" ] && echo \"Empty\" ||   helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE delete -n dev cast-db-charts-dev
+            helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls -A"
+            test_dep=$(helm --kubeconfig /home/jenkins/.minikube/config ls -A -q);
+            echo $test_dep;"
+            [ -z "$test_dep" ] && echo "Empty" ||   helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE delete -n dev cast-db-charts-dev
+            helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls -A
 
             echo -e "\n####             11.7.10.20.2) Delete ns dev with cmd : \n $:  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE delete ns dev"
-            kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE delete ns dev
+            test_dep=$(kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get ns dev -q)
+            [ -z "$test_dep" ] && echo "Empty" ||   kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE delete ns dev
 
             echo -e "\n####             11.7.10.20.3) List namespaces with cmd : \n $:  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get ns -A"
             kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get ns -A
