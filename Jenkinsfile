@@ -333,11 +333,34 @@ pipeline {
 
             echo -e "\n####             11.7.8.2) Deploy on namespace dev from the jenkins server on minikube srvr the cast-db-charts(dev postgrersql database uised by fastapi-cast with the cmd ) : \n $: kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE  get ns -A -o wide"
             helm install --kubeconfig $URL_FILE_CONFIG_MINIKUBE  cast-db-charts-dev bitnami/postgresql --set persistence.existingClaim=postgresql-pv-claim --set volumePermissions.enabled=true --create-namespace --namespace dev -f $URL_REP_HELM_FAT_CAST_DB/environments/dev/values.charts.cast.db.dev.yaml
+
+            echo -e "\n####             11.7.7.8.3) List persistant volumes with cmd : \n $:  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get pv -A"
+            kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get pv -A 
             
-            echo -e "\n####             11.7.7.8.3) List helm charts deployed from the jenkins server on minikube servr with cmd : \n $: 'helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE  ls -n dev;"
+            echo -e "\n####             11.7.7.8.4) List helm charts deployed from the jenkins server on minikube servr with cmd : \n $: 'helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE  ls -n dev;"
             helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE  ls -n dev;
 
-            echo -e "\n####             11.7.10.20) Delete List all elements from jenkins server deployed on minikube server with cmd : \n $: kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE delete ns dev; \nkubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get ns -A;  \nkubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get ns dev"
+            echo -e "\n####             11.7.7.8.5) List namespaces with cmd : \n $:  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get ns -n dev"
+            kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get ns -dev
+
+
+
+            echo -e "\n####             11.7.7.8.6) List persistent volume claims with cmd : \n $:  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get pvc -n dev"
+            kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get pvc -n dev
+
+            echo -e "\n####             11.7.7.8.7) List secrets with cmd : \n $:  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get secrets -n dev"
+            kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get secrets -n dev
+
+            echo -e "\n####             11.7.7.8.8) List services with cmd : \n $:  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get svc -n dev"
+            kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get svc -n dev
+
+            echo -e "\n####             11.7.7.8.9) List pods with cmd : \n $:  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get pods -n dev"
+            kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get pods -n dev
+
+
+
+
+            echo -e "\n####             11.7.10.20) Delete every element from jenkins server deployed on minikube server with cmd : \n $: kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE delete ns dev; \nkubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get ns -n dev;  \nkubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get ns dev"
 
             echo -e "\n####             11.7.10.20.1) Delete cast-db-charts-dev helm release with cmd : \n $: helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE delete -n dev cast-db-charts-dev"
             helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE delete -n dev cast-db-charts-dev
@@ -348,7 +371,7 @@ pipeline {
             echo -e "\n####             11.7.10.20.3) List namespaces with cmd : \n $:  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get ns -A"
             kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get ns -A
 
-            echo -e "\n####             11.7.10.20.3) List perstent volumes with cmd : \n $:  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get pv -A"
+            echo -e "\n####             11.7.10.20.3) List persistant volumes with cmd : \n $:  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get pv -A"
             kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get pv -A 
 
             echo -e "\n####             11.7.10.20.3) List persistent volume claims with cmd : \n $:  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get pvc -A"
