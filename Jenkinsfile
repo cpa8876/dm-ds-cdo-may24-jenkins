@@ -347,7 +347,7 @@ pipeline {
             helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE  ls -n dev;
 
             echo -e "\n####             11.7.7.8.5) List namespaces with cmd : \n $:  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get ns -n dev"
-            kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get ns -dev
+            kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get ns dev
 
 
 
