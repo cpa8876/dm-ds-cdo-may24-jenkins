@@ -342,7 +342,7 @@ pipeline {
 
 
             kubectl --kubeconfig /home/jenkins/.minikube/config delete ns dev
-            kubectl --kubeconfig /home/jenkins/.minikube/config get ns -A | grep dev
+            kubectl --kubeconfig /home/jenkins/.minikube/config get ns -A
             kubectl --kubeconfig /home/jenkins/.minikube/config get pv -A 
             kubectl --kubeconfig /home/jenkins/.minikube/config get pvc -A
             kubectl --kubeconfig /home/jenkins/.minikube/config get secrets -A
