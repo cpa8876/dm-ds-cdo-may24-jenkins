@@ -335,6 +335,17 @@ pipeline {
             
             echo -e "\n####             11.7.7.8.3) List helm charts deployed from the jenkins server on minikube servr with cmd : \n $: 'helm --kubeconfig /home/jenkins/.minikube/config  ls -n dev;"
             helm --kubeconfig /home/jenkins/.minikube/config  ls -n dev;
+
+            echo -e "\n####             11.7.10.20) Delete List all elements from jenkins server deployed on minikube server with cmd : \n $: kubectl --kubeconfig /home/jenkins/.minikube/config delete ns dev; \nkubectl --kubeconfig /home/jenkins/.minikube/config get ns -A;  \nkubectl --kubeconfig /home/jenkins/.minikube/config get ns dev"
+
+            helm --kubeconfig /home/jenkins/.minikube/config delete --purge cast-db-charts-dev
+
+            kubectl --kubeconfig /home/jenkins/.minikube/config delete ns dev
+            kubectl --kubeconfig /home/jenkins/.minikube/config get ns -A
+            kubectl --kubeconfig /home/jenkins/.minikube/config get ns dev
+            kubectl --kubeconfig /home/jenkins/.minikube/config get pv -A
+            kubectl --kubeconfig /home/jenkins/.minikube/config get pvc -A
+            kubectl --kubeconfig /home/jenkins/.minikube/config get secrets -A
           '''
 
           // kubectl --kubeconfig /usr/local/k3s.yaml delete namespace dev
