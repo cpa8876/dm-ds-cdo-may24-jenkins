@@ -23,6 +23,7 @@ pipeline {
     URL_REP_HELM_FAT_MOVIE_DB= "$URL_REP_HELM_FAT/movie-db"                // Directory containned chart helm of fastapi-movie_db  
     URL_REP_HELM_FAT_CAST_SERVICE= "$URL_REP_HELM_FAT/cast-service"        // Directory containned chart helm of cast_service
     URL_REP_HELM_FAT_MOVIE_SERVICE= "$URL_REP_HELM_FAT/movie-service"      // Directory containned chart helm of fastapi-movie_service 
+    URL_FILE_CONFIG_MINIKUBE="/home/jenkins/.minikube/config"
 
     }
   stages {
@@ -285,11 +286,11 @@ pipeline {
             echo "Create configuration files to enable jenkins server to connect to cluster of the minikube server  with kubectl cmd" 
             mkdir -p /home/jenkins/.minikube/profiles/minikube/
             ls -lha /home/jenkins/.minikube/profiles/minikube/
-            cat $KUBECONFIG > /home/jenkins/.minikube/config
+            cat $KUBECONFIG > $URL_FILE_CONFIG_MINIKUBE
             whoami
             pwd
             hostname -I
-            kubectl --kubeconfig /home/jenkins/.minikube/config get nodes
+            kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get nodes
 
           '''
 
@@ -307,60 +308,60 @@ pipeline {
             echo "manifest k8s to deploy persistant volume with cmd : cat ./environments/dev/secrets.k8s.cast.db.dev.yaml" 
             cat ./environments/dev/secrets.k8s.cast.db.dev.yaml
                     
-            echo -e "\n####             11.7.2.1) List namespaces of the cluster minikube with cmd : \n $: kubectl --kubeconfig /home/jenkins/.minikube/config get ns -A -o wide" 
-            kubectl --kubeconfig /home/jenkins/.minikube/config get ns -A -o wide
+            echo -e "\n####             11.7.2.1) List namespaces of the cluster minikube with cmd : \n $: kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get ns -A -o wide" 
+            kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get ns -A -o wide
 
-            echo -e "\n####             11.7.7.1)  List helm charts deployed on namespace dev on minikube srvr from jenkins srvr with cmd : \n $: helm --kubeconfig /home/jenkins/.minikube/config  ls"
-            helm --kubeconfig /home/jenkins/.minikube/config  ls
+            echo -e "\n####             11.7.7.1)  List helm charts deployed on namespace dev on minikube srvr from jenkins srvr with cmd : \n $: helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE  ls"
+            helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE  ls
 
             echo -e "\n####             11.7.7.2)  Add the Helm repository  and Update the Helm repository: :$ \n helm repo add bitnami https://charts.bitnami.com/bitnami; helm repo update;"
 
-            echo -e "\n####             11.7.7.2.1) Add repo bitnami with cmd : \n $: helm --kubeconfig /home/jenkins/.minikube/config  repo add bitnami https://charts.bitnami.com/bitnami;"
-            helm --kubeconfig /home/jenkins/.minikube/config  repo add bitnami https://charts.bitnami.com/bitnami;
+            echo -e "\n####             11.7.7.2.1) Add repo bitnami with cmd : \n $: helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE  repo add bitnami https://charts.bitnami.com/bitnami;"
+            helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE  repo add bitnami https://charts.bitnami.com/bitnami;
 
-            echo -e "\n####             11.7.7.2.2) Update repo bitnami with cmd : \n $: 'helm --kubeconfig /home/jenkins/.minikube/config  repo update;"
-            helm --kubeconfig /home/jenkins/.minikube/config  repo update;
+            echo -e "\n####             11.7.7.2.2) Update repo bitnami with cmd : \n $: 'helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE  repo update;"
+            helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE  repo update;
 
-            echo -e "\n####             11.7.7.2.3) List repo bitnami present on the jenkins servr with cmd : \n $: 'helm --kubeconfig /home/jenkins/.minikube/config  repo ls;"
-            helm --kubeconfig /home/jenkins/.minikube/config  repo ls;
+            echo -e "\n####             11.7.7.2.3) List repo bitnami present on the jenkins servr with cmd : \n $: 'helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE  repo ls;"
+            helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE  repo ls;
 
-            echo -e "\n####             11.7.8)  Deploy namespace dev on minikube srvr from jenkins servr with cmd : \n $: kubectl --kubeconfig /home/jenkins/.minikube/config  get ns -A -o wide"
+            echo -e "\n####             11.7.8)  Deploy namespace dev on minikube srvr from jenkins servr with cmd : \n $: kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE  get ns -A -o wide"
           
-            echo -e "\n####             11.7.7.8.1) List helm charts deployed from the jenkins server on minikube servr with cmd : \n $: 'helm --kubeconfig /home/jenkins/.minikube/config  ls -A;"
-            helm --kubeconfig /home/jenkins/.minikube/config  ls -A;
+            echo -e "\n####             11.7.7.8.1) List helm charts deployed from the jenkins server on minikube servr with cmd : \n $: 'helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE  ls -A;"
+            helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE  ls -A;
             pwd
 
-            echo -e "\n####             11.7.8.2) Deploy on namespace dev from the jenkins server on minikube srvr the cast-db-charts(dev postgrersql database uised by fastapi-cast with the cmd ) : \n $: kubectl --kubeconfig /home/jenkins/.minikube/config  get ns -A -o wide"
-            helm install --kubeconfig /home/jenkins/.minikube/config  cast-db-charts-dev bitnami/postgresql --set persistence.existingClaim=postgresql-pv-claim --set volumePermissions.enabled=true --create-namespace --namespace dev -f /var/lib/jenkins/workspace/dm-jenkins/charts/cast-db/environments/dev/values.charts.cast.db.dev.yaml
+            echo -e "\n####             11.7.8.2) Deploy on namespace dev from the jenkins server on minikube srvr the cast-db-charts(dev postgrersql database uised by fastapi-cast with the cmd ) : \n $: kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE  get ns -A -o wide"
+            helm install --kubeconfig $URL_FILE_CONFIG_MINIKUBE  cast-db-charts-dev bitnami/postgresql --set persistence.existingClaim=postgresql-pv-claim --set volumePermissions.enabled=true --create-namespace --namespace dev -f $URL_REP_HELM_FAT_CAST_DBenvironments/dev/values.charts.cast.db.dev.yaml
             
-            echo -e "\n####             11.7.7.8.3) List helm charts deployed from the jenkins server on minikube servr with cmd : \n $: 'helm --kubeconfig /home/jenkins/.minikube/config  ls -n dev;"
-            helm --kubeconfig /home/jenkins/.minikube/config  ls -n dev;
+            echo -e "\n####             11.7.7.8.3) List helm charts deployed from the jenkins server on minikube servr with cmd : \n $: 'helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE  ls -n dev;"
+            helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE  ls -n dev;
 
-            echo -e "\n####             11.7.10.20) Delete List all elements from jenkins server deployed on minikube server with cmd : \n $: kubectl --kubeconfig /home/jenkins/.minikube/config delete ns dev; \nkubectl --kubeconfig /home/jenkins/.minikube/config get ns -A;  \nkubectl --kubeconfig /home/jenkins/.minikube/config get ns dev"
+            echo -e "\n####             11.7.10.20) Delete List all elements from jenkins server deployed on minikube server with cmd : \n $: kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE delete ns dev; \nkubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get ns -A;  \nkubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get ns dev"
 
-            echo -e "\n####             11.7.10.20.1) Delete cast-db-charts-dev helm release with cmd : \n $: helm --kubeconfig /home/jenkins/.minikube/config delete -n dev cast-db-charts-dev"
-            helm --kubeconfig /home/jenkins/.minikube/config delete -n dev cast-db-charts-dev
+            echo -e "\n####             11.7.10.20.1) Delete cast-db-charts-dev helm release with cmd : \n $: helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE delete -n dev cast-db-charts-dev"
+            helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE delete -n dev cast-db-charts-dev
 
-            echo -e "\n####             11.7.10.20.2) Delete ns dev with cmd : \n $:  kubectl --kubeconfig /home/jenkins/.minikube/config delete ns dev"
-            kubectl --kubeconfig /home/jenkins/.minikube/config delete ns dev
+            echo -e "\n####             11.7.10.20.2) Delete ns dev with cmd : \n $:  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE delete ns dev"
+            kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE delete ns dev
 
-            echo -e "\n####             11.7.10.20.3) List namespaces with cmd : \n $:  kubectl --kubeconfig /home/jenkins/.minikube/config get ns -A"
-            kubectl --kubeconfig /home/jenkins/.minikube/config get ns -A
+            echo -e "\n####             11.7.10.20.3) List namespaces with cmd : \n $:  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get ns -A"
+            kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get ns -A
 
-            echo -e "\n####             11.7.10.20.3) List perstent volumes with cmd : \n $:  kubectl --kubeconfig /home/jenkins/.minikube/config get pv -A"
-            kubectl --kubeconfig /home/jenkins/.minikube/config get pv -A 
+            echo -e "\n####             11.7.10.20.3) List perstent volumes with cmd : \n $:  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get pv -A"
+            kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get pv -A 
 
-            echo -e "\n####             11.7.10.20.3) List persistent volume claims with cmd : \n $:  kubectl --kubeconfig /home/jenkins/.minikube/config get pvc -A"
-            kubectl --kubeconfig /home/jenkins/.minikube/config get pvc -A
+            echo -e "\n####             11.7.10.20.3) List persistent volume claims with cmd : \n $:  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get pvc -A"
+            kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get pvc -A
 
-            echo -e "\n####             11.7.10.20.3) List secrets with cmd : \n $:  kubectl --kubeconfig /home/jenkins/.minikube/config get secrets -A"
-            kubectl --kubeconfig /home/jenkins/.minikube/config get secrets -A
+            echo -e "\n####             11.7.10.20.3) List secrets with cmd : \n $:  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get secrets -A"
+            kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get secrets -A
 
-            echo -e "\n####             11.7.10.20.3) List services with cmd : \n $:  kubectl --kubeconfig /home/jenkins/.minikube/config get svc -A"
-            kubectl --kubeconfig /home/jenkins/.minikube/config get svc -A
+            echo -e "\n####             11.7.10.20.3) List services with cmd : \n $:  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get svc -A"
+            kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get svc -A
 
-            echo -e "\n####             11.7.10.20.3) List podss with cmd : \n $:  kubectl --kubeconfig /home/jenkins/.minikube/config get pods -A"
-            kubectl --kubeconfig /home/jenkins/.minikube/config get pods -A
+            echo -e "\n####             11.7.10.20.3) List pods with cmd : \n $:  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get pods -A"
+            kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get pods -A
           '''
 
           // kubectl --kubeconfig /usr/local/k3s.yaml delete namespace dev
