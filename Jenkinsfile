@@ -338,15 +338,28 @@ pipeline {
 
             echo -e "\n####             11.7.10.20) Delete List all elements from jenkins server deployed on minikube server with cmd : \n $: kubectl --kubeconfig /home/jenkins/.minikube/config delete ns dev; \nkubectl --kubeconfig /home/jenkins/.minikube/config get ns -A;  \nkubectl --kubeconfig /home/jenkins/.minikube/config get ns dev"
 
+            echo -e "\n####             11.7.10.20.1) Delete cast-db-charts-dev helm release with cmd : \n $: helm --kubeconfig /home/jenkins/.minikube/config delete -n dev cast-db-charts-dev"
             helm --kubeconfig /home/jenkins/.minikube/config delete -n dev cast-db-charts-dev
 
-
+            echo -e "\n####             11.7.10.20.2) Delete ns dev with cmd : \n $:  kubectl --kubeconfig /home/jenkins/.minikube/config delete ns dev"
             kubectl --kubeconfig /home/jenkins/.minikube/config delete ns dev
+
+            echo -e "\n####             11.7.10.20.3) List namespaces with cmd : \n $:  kubectl --kubeconfig /home/jenkins/.minikube/config get ns -A"
             kubectl --kubeconfig /home/jenkins/.minikube/config get ns -A
+
+            echo -e "\n####             11.7.10.20.3) List perstent volumes with cmd : \n $:  kubectl --kubeconfig /home/jenkins/.minikube/config get pv -A"
             kubectl --kubeconfig /home/jenkins/.minikube/config get pv -A 
+
+            echo -e "\n####             11.7.10.20.3) List persistent volume claims with cmd : \n $:  kubectl --kubeconfig /home/jenkins/.minikube/config get pvc -A"
             kubectl --kubeconfig /home/jenkins/.minikube/config get pvc -A
+
+            echo -e "\n####             11.7.10.20.3) List secrets with cmd : \n $:  kubectl --kubeconfig /home/jenkins/.minikube/config get secrets -A"
             kubectl --kubeconfig /home/jenkins/.minikube/config get secrets -A
+
+            echo -e "\n####             11.7.10.20.3) List services with cmd : \n $:  kubectl --kubeconfig /home/jenkins/.minikube/config get svc -A"
             kubectl --kubeconfig /home/jenkins/.minikube/config get svc -A
+
+            echo -e "\n####             11.7.10.20.3) List podss with cmd : \n $:  kubectl --kubeconfig /home/jenkins/.minikube/config get pods -A"
             kubectl --kubeconfig /home/jenkins/.minikube/config get pods -A
           '''
 
