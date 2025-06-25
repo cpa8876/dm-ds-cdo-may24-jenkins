@@ -8,23 +8,22 @@
 pipeline {
   agent any // Jenkins will be able to select all available agents
   environment { // Declaration of environment variables
-    nom = 'datascientest'                                                    // nom="datascientest"
-    DOCKER_ID = "cpa8876"                                                    // replace this with your docker-id DOCKER_ID="cpa8876"
-    DOCKER_IMAGE = "ds-fastapi"                                              // DOCKER_IMAGE="ds-fastapi"
-    DOCKER_IMAGE1 = "movie-ds-fastapi"                                       // DOCKER_IMAGE1="movie-ds-fastapi"
-    DOCKER_IMAGE2 = "casts-ds-fastapi"                                       // DOCKER_IMAGE2="casts-ds-fastapi"
-    DOCKER_TAG = "v.${BUILD_ID}.0"                                           // we will tag our images with the current build in order to increment the value by 1 with each new build DOCKER_TAG="v.75.0"
+    nom='datascientest'                                                    // nom="datascientest"
+    DOCKER_ID="cpa8876"                                                    // replace this with your docker-id DOCKER_ID="cpa8876"
+    DOCKER_IMAGE="ds-fastapi"                                              // DOCKER_IMAGE="ds-fastapi"
+    DOCKER_IMAGE1="movie-ds-fastapi"                                       // DOCKER_IMAGE1="movie-ds-fastapi"
+    DOCKER_IMAGE2="casts-ds-fastapi"                                       // DOCKER_IMAGE2="casts-ds-fastapi"
+    DOCKER_TAG="v.${BUILD_ID}.0"                                           // we will tag our images with the current build in order to increment the value by 1 with each new build DOCKER_TAG="v.75.0"
     URL_REPO_GH_LOCAL="/var/lib/jenkins/workspace/dm-jenkins"                //Repo local github synchronized with https://github.com/cpa8876/dm-ds-cdo-may24-jenkins.git
     URL_REP_DOCKERFILE_FAT="$URL_REPO_GH_LOCAL/dr01-python-microservices6"   // Directory containned script Dockerfile of fastapi-movie and fastapi-cast
-    URL_REP_DCKR_FAT_CAST= "$URL_REP_DOCKERFILE_FAT/cast-service"            // Directory containned script Dockerfile of fastapi-cast 
-    URL_REP_DCKR_FAT_MOVIE= "$URL_REP_DOCKERFILE_FAT/movie-service"          // Directory containned script Dockerfile of fastapi-movie   
+    URL_REP_DCKR_FAT_CAST="$URL_REP_DOCKERFILE_FAT/cast-service"            // Directory containned script Dockerfile of fastapi-cast 
+    URL_REP_DCKR_FAT_MOVIE="$URL_REP_DOCKERFILE_FAT/movie-service"          // Directory containned script Dockerfile of fastapi-movie   
     URL_REP_HELM_FAT="$URL_REPO_GH_LOCAL/charts"                             // Directory containned chart helm of fastapi-movie and fastapi-cast
-    URL_REP_HELM_FAT_CAST_DB= "$URL_REP_HELM_FAT/cast-db"                  // Directory containned chart helm of fastapi-cast_db 
-    URL_REP_HELM_FAT_MOVIE_DB= "$URL_REP_HELM_FAT/movie-db"                // Directory containned chart helm of fastapi-movie_db  
-    URL_REP_HELM_FAT_CAST_SERVICE= "$URL_REP_HELM_FAT/cast-service"        // Directory containned chart helm of cast_service
-    URL_REP_HELM_FAT_MOVIE_SERVICE= "$URL_REP_HELM_FAT/movie-service"      // Directory containned chart helm of fastapi-movie_service 
-    URL_FILE_CONFIG_MINIKUBE="/home/jenkins/.minikube/config"
-
+    URL_REP_HELM_FAT_CAST_DB="$URL_REP_HELM_FAT/cast-db"                  // Directory containned chart helm of fastapi-cast_db 
+    URL_REP_HELM_FAT_MOVIE_DB="$URL_REP_HELM_FAT/movie-db"                // Directory containned chart helm of fastapi-movie_db  
+    URL_REP_HELM_FAT_CAST_SERVICE="$URL_REP_HELM_FAT/cast-service"        // Directory containned chart helm of cast_service
+    URL_REP_HELM_FAT_MOVIE_SERVICE="$URL_REP_HELM_FAT/movie-service"      // Directory containned chart helm of fastapi-movie_service 
+    URL_FILE_CONFIG_MINIKUBE="/home/jenkins/.minikube/config"              // Url file of config to enable connect on minikube cluster
     }
   stages {
     stage('Docker Build'){
@@ -338,29 +337,31 @@ pipeline {
             [ -z "$test_dep" ] && echo "Empty" ||   helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE delete -n dev cast-db-charts-dev
             helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls -A
 
-            helm install --kubeconfig $URL_FILE_CONFIG_MINIKUBE  cast-db-charts-dev bitnami/postgresql --set persistence.existingClaim=postgresql-pv-claim --set volumePermissions.enabled=true --namespace dev --create-namespace -f $URL_REP_HELM_FAT_CAST_DB/environments/dev/values.charts.cast.db.dev.yaml
+            # helm install --kubeconfig $URL_FILE_CONFIG_MINIKUBE  cast-db-charts-dev bitnami/postgresql --set persistence.existingClaim=postgresql-pv-claim --set volumePermissions.enabled=true --namespace dev --create-namespace -f $URL_REP_HELM_FAT_CAST_DB/environments/dev/values.charts.cast.db.dev.yaml
+            helm install --kubeconfig $URL_FILE_CONFIG_MINIKUBE  cast-db-charts-dev bitnami/postgresql --set persistence.existingClaim=postgresql-pv-claim --set volumePermissions.enabled=true --namespace dev --create-namespace --values=$URL_REP_HELM_FAT_CAST_DB/environments/dev/values.charts.cast.db.dev.yaml  -f $URL_REP_HELM_FAT_CAST_DB/environments/dev/secrets.k8s.cast.db.dev.yaml -f $URL_REP_HELM_FAT_CAST_DB/environments/dev/pv.k8s.cast.db.dev.yaml -f $URL_REP_HELM_FAT_CAST_DB/environments/dev/pvc.k8s.cast.db.dev.yaml
 
-            echo -e "\n####             11.7.7.8.3) List persistant volumes with cmd : \n $:  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get pv -A"
+
+            echo -e "\n####             11.7.8.3) List persistant volumes with cmd : \n $:  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get pv -A"
             kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get pv -A 
             
-            echo -e "\n####             11.7.7.8.4) List helm charts deployed from the jenkins server on minikube servr with cmd : \n $: 'helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE  ls -n dev;"
+            echo -e "\n####             11.7.8.4) List helm charts deployed from the jenkins server on minikube servr with cmd : \n $: 'helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE  ls -n dev;"
             helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE  ls -n dev;
 
-            echo -e "\n####             11.7.7.8.5) List namespaces with cmd : \n $:  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get ns -n dev"
+            echo -e "\n####             11.7.8.5) List namespaces with cmd : \n $:  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get ns -n dev"
             kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get ns dev
 
 
 
-            echo -e "\n####             11.7.7.8.6) List persistent volume claims with cmd : \n $:  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get pvc -n dev"
+            echo -e "\n####             11.7.8.6) List persistent volume claims with cmd : \n $:  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get pvc -n dev"
             kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get pvc -n dev
 
-            echo -e "\n####             11.7.7.8.7) List secrets with cmd : \n $:  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get secrets -n dev"
+            echo -e "\n####             11.7.8.7) List secrets with cmd : \n $:  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get secrets -n dev"
             kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get secrets -n dev
 
-            echo -e "\n####             11.7.7.8.8) List services with cmd : \n $:  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get svc -n dev"
+            echo -e "\n####             11.7.8.8) List services with cmd : \n $:  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get svc -n dev"
             kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get svc -n dev
 
-            echo -e "\n####             11.7.7.8.9) List pods with cmd : \n $:  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get pods -n dev"
+            echo -e "\n####             11.7.8.9) List pods with cmd : \n $:  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get pods -n dev"
             kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get pods -n dev
 
 
