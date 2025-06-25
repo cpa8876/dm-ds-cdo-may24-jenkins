@@ -369,11 +369,11 @@ pipeline {
             echo -e "\n####             11.7.10.20) Delete every element from jenkins server deployed on minikube server with cmd : \n $: kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE delete ns dev; \nkubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get ns -n dev;  \nkubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get ns dev"
 
             echo -e "\n####             11.7.10.20.1) Delete cast-db-charts-dev helm release with cmd : \n $: test_dep=$(helm --kubeconfig /home/jenkins/.minikube/config ls -A -q); \n echo $test_dep; [ -z \"$test_dep\" ] && echo \"Empty\" ||   helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE delete -n dev cast-db-charts-dev; \nhelm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls -A"
-            
+
             test_dep=$(helm --kubeconfig /home/jenkins/.minikube/config ls -A -q);
-            echo $test_dep;"
-            [ -z "$test_dep" ] && echo "Empty" ||   helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE delete -n dev cast-db-charts-dev
-            helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls -A
+            echo $test_dep;
+            [ -z "$test_dep" ] && echo "Empty" ||   helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE delete -n dev cast-db-charts-dev;
+            helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls -A;
 
             echo -e "\n####             11.7.10.20.2) Delete ns dev with cmd : \n $:  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE delete ns dev"
             test_dep=$(kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get ns dev -q)
