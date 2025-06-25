@@ -375,27 +375,27 @@ pipeline {
             [ -z "$test_dep" ] && echo "Empty" ||   helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE delete -n dev cast-db-charts-dev;
             helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls -A;
 
-            echo -e "\n####             11.7.10.20.2) Delete ns dev with cmd : \n $:  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE delete ns dev"
-            test_dep=$(kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get ns dev -q)
-            [ -z "$test_dep" ] && echo "Empty" ||   kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE delete ns dev
+            echo -e "\n####             11.7.10.20.2) Delete ns dev with cmd : \n $:   test_dep=$(kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get ns dev --no-headers=true); \n [ -z \"$test_dep\" ] && echo \"Empty\" ||   kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE delete ns dev;"
+            test_dep=$(kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get ns dev --no-headers=true);
+            [ -z "$test_dep" ] && echo "Empty" ||   kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE delete ns dev;
 
-            echo -e "\n####             11.7.10.20.3) List namespaces with cmd : \n $:  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get ns -A"
-            kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get ns -A
+            echo -e "\n####             11.7.10.20.3) List namespaces with cmd : \n $:  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get ns -A -o wide "
+            kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get ns -A -o wide;
 
-            echo -e "\n####             11.7.10.20.3) List persistant volumes with cmd : \n $:  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get pv -A"
-            kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get pv -A 
+            echo -e "\n####             11.7.10.20.3) List persistant volumes with cmd : \n $:  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get pv -A -o wide "
+            kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get pv -A -o wide;
 
-            echo -e "\n####             11.7.10.20.3) List persistent volume claims with cmd : \n $:  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get pvc -A"
-            kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get pvc -A
+            echo -e "\n####             11.7.10.20.3) List persistent volume claims with cmd : \n $:  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get pvc -A -o wide "
+            kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get pvc -A -o wide;
 
-            echo -e "\n####             11.7.10.20.3) List secrets with cmd : \n $:  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get secrets -A"
-            kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get secrets -A
+            echo -e "\n####             11.7.10.20.3) List secrets with cmd : \n $:  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get secrets -A -o wide "
+            kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get secrets -A -o wide;
 
-            echo -e "\n####             11.7.10.20.3) List services with cmd : \n $:  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get svc -A"
-            kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get svc -A
+            echo -e "\n####             11.7.10.20.3) List services with cmd : \n $:  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get svc -A -o wide "
+            kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get svc -A -o wide;
 
-            echo -e "\n####             11.7.10.20.3) List pods with cmd : \n $:  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get pods -A"
-            kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get pods -A
+            echo -e "\n####             11.7.10.20.3) List pods with cmd : \n $:  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get pods -A -o wide "
+            kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get pods -A -o wide;
           '''
 
           // kubectl --kubeconfig /usr/local/k3s.yaml delete namespace dev
