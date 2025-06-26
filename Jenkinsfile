@@ -255,7 +255,7 @@ pipeline {
                 }
               
               when {
-                    env.BRANCH_NAME == 'develop'
+                    env.ref == 'refs/heads/develop'
                    }
               steps { 
                 script {
@@ -273,7 +273,7 @@ pipeline {
                   }
                 }
               when {
-                    env.BRANCH_NAME == 'staging'
+                    env.ref == 'refs/heads/staging'
                   }
               steps { 
                 script {
@@ -291,7 +291,7 @@ pipeline {
                   }
                 }
               when {
-                   env.BRANCH_NAME == 'qa'
+                   env.ref == 'refs/heads/qa'
                   }
                 steps { 
                 // Create an Approval Button with a timeout of 15minutes.
@@ -314,7 +314,7 @@ pipeline {
                     } 
                   }
               when {
-                   env.BRANCH_NAME == 'prod'
+                   env.ref == 'refs/heads/prod'
                   }
               steps { 
                 // Create an Approval Button with a timeout of 15minutes.
