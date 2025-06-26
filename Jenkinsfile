@@ -248,11 +248,11 @@ pipeline {
         }
       }
      stage('Deploy') {
+            environment {
+                      KUBECONFIG = credentials("kubeconfig-dev") // we retrieve  kubeconfig from secret file called config saved on jenkins
+                    }
             steps {
                 script {
-                    environment {
-                      KUBECONFIG = credentials("kubeconfig") // we retrieve  kubeconfig from secret file called config saved on jenkins
-                    }
                      if (env.ref == 'refs/heads/develop') {
                       sh '''
                         echo "Déploiement sur l'environnement DEV"
