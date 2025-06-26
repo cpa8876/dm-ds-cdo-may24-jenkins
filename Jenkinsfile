@@ -253,7 +253,7 @@ pipeline {
                     environment {
         KUBECONFIG = credentials("config") // we retrieve  kubeconfig from secret file called config saved on jenkins
                     }
-                     if (env.BRANCH_NAME == 'develop') {
+                     if (env.ref == 'refs/heads/develop') {
                       sh '''
                         echo "Déploiement sur l'environnement DEV"
                         // commandes de déploiement dev
@@ -265,17 +265,17 @@ pipeline {
                         hostname -I;
                         kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get nodes;
                       '''
-                    } else if (env.BRANCH_NAME == 'qa') {
+                    } else if (env.ref == 'refs/heads/qa') {
                       sh '''
                         echo "Déploiement sur l'environnement qa"
                         // commandes de déploiement staging
                       '''
-                    } else if (env.BRANCH_NAME == 'staging') {
+                    } else if (env.ref == 'refs/heads/staging') {
                       sh '''
                         echo "Déploiement sur l'environnement STAGING"
                         // commandes de déploiement staging
                       '''
-                    } else if (env.BRANCH_NAME == 'main' || env.BRANCH_NAME == 'master') {
+                    } else if (env.ref == 'refs/heads/main' || env.ref == 'refs/heads/master') {
                       sh '''
                         echo "Déploiement sur l'environnement PROD"
                         // commandes de déploiement production
