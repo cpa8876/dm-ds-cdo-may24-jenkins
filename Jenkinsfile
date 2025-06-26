@@ -251,7 +251,7 @@ pipeline {
             steps {
                 script {
                     environment {
-                                  KUBECONFIG = credentials("KUBECONFIG") // we retrieve  kubeconfig from secret file called config saved on jenkins
+                      KUBECONFIG = credentials("kubeconfig") // we retrieve  kubeconfig from secret file called config saved on jenkins
                     }
                      if (env.ref == 'refs/heads/develop') {
                       sh '''
@@ -259,6 +259,8 @@ pipeline {
                         mkdir -p /home/jenkins/.minikube/profiles/minikube/;
                         ls -lha /home/jenkins/.minikube/profiles/minikube/;
                         cat $KUBECONFIG > $URL_FILE_CONFIG_MINIKUBE;
+                        echo $URL_FILE_CONFIG_MINIKUBE
+                        cat $URL_FILE_CONFIG_MINIKUBE;
                         whoami;
                         pwd;
                         hostname -I;
