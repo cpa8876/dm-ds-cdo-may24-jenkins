@@ -249,91 +249,41 @@ pipeline {
             steps {
                 script {
                     environment {
-                      KUBECONFIG = credentials("config") // we retrieve  kubeconfig from secret file called config saved on jenkins
-                      }
-                     }
-                }
-            when {
-                  branch 'develop'
-                 }
-            steps { 
-              script {
-                sh '''
-                  echo "Déploiement sur l'environnement DEV"
-                  mkdir -p /home/jenkins/.minikube/profiles/minikube/;
-                  ls -lha /home/jenkins/.minikube/profiles/minikube/;
-                  cat $KUBECONFIG > $URL_FILE_CONFIG_MINIKUBE;
-                  whoami;
-                  pwd;
-                  hostname -I;
-                  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get nodes;
-                  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get all -n dev
-                 '''
-                }
-              }
-            when {
-                  branch 'staging'
-                }
-            steps { 
-              script {
-                sh '''
-                  echo "Déploiement sur l'environnement STAGING"
-                  mkdir -p /home/jenkins/.minikube/profiles/minikube/;
-                  ls -lha /home/jenkins/.minikube/profiles/minikube/;
-                  cat $KUBECONFIG > $URL_FILE_CONFIG_MINIKUBE;
-                  whoami;
-                  pwd;
-                  hostname -I;
-                  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get nodes;
-                  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get all -n satging
-                  '''
-                }
-              }
-            when {
-                  branch 'qa'
-                }
-            steps { 
-                // Create an Approval Button with a timeout of 15minutes.
-                // this require a manuel validation in order to deploy on production environment
-                    timeout(time: 15, unit: "MINUTES") {
-                    input message: 'Do you want to deploy in production ?', ok: 'Yes'
-                }
-                script {
-                  sh '''
-                    echo "Déploiement sur l'environnement QA
-                    mkdir -p /home/jenkins/.minikube/profiles/minikube/;
-                    ls -lha /home/jenkins/.minikube/profiles/minikube/;
-                    cat $KUBECONFIG > $URL_FILE_CONFIG_MINIKUBE;
-                    whoami;
-                    pwd;
-                    hostname -I;
-                    kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get nodes;
-                    kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get all -n qa
-                  '''                    
-                  } 
-                }
-            when {
-                  branch 'prod'
-                }
-            steps { 
-                // Create an Approval Button with a timeout of 15minutes.
-                // this require a manuel validation in order to deploy on production environment
-                    timeout(time: 15, unit: "MINUTES") {
-                    input message: 'Do you want to deploy in production ?', ok: 'Yes'
-                }
-                script {
-                  sh '''
-                    echo "Déploiement sur l'environnement PROD
-                    mkdir -p /home/jenkins/.minikube/profiles/minikube/;
-                    ls -lha /home/jenkins/.minikube/profiles/minikube/;
-                    cat $KUBECONFIG > $URL_FILE_CONFIG_MINIKUBE;
-                    whoami;
-                    pwd;
-                    hostname -I;
-                    kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get nodes;
-                    kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get all -n prod
-                  '''                    
-                  } 
+        KUBECONFIG = credentials("config") // we retrieve  kubeconfig from secret file called config saved on jenkins
+                    }
+                     if (env.BRANCH_NAME == 'develop') {
+                      sh '''
+                        echo "Déploiement sur l'environnement DEV"
+                        // commandes de déploiement dev
+                        mkdir -p /home/jenkins/.minikube/profiles/minikube/;
+                        ls -lha /home/jenkins/.minikube/profiles/minikube/;
+                        cat $KUBECONFIG > $URL_FILE_CONFIG_MINIKUBE;
+                        whoami;
+                        pwd;
+                        hostname -I;
+                        kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get nodes;
+                      '''
+                    } else if (env.BRANCH_NAME == 'qa') {
+                      sh '''
+                        echo "Déploiement sur l'environnement qa"
+                        // commandes de déploiement staging
+                      '''
+                    } else if (env.BRANCH_NAME == 'staging') {
+                      sh '''
+                        echo "Déploiement sur l'environnement STAGING"
+                        // commandes de déploiement staging
+                      '''
+                    } else if (env.BRANCH_NAME == 'main' || env.BRANCH_NAME == 'master') {
+                      sh '''
+                        echo "Déploiement sur l'environnement PROD"
+                        // commandes de déploiement production
+                      '''
+                    } else {
+                      sh '''
+                        echo $branch
+                        echo "Branche non configurée pour déploiement automatique"
+                      '''
+                    }
                 }
               }
       }
@@ -341,22 +291,6 @@ pipeline {
   }  
   post { // send email when the job has failed
   // ..
-    success {
-       // Instantly share code, notes, and snippets; merikan/Jenkinsfile ; Last active 3 weeks ago
-       // https://gist.github.com/merikan/228cdb1893fca91f0663bab7b095757c
-        // slackSend(
-                     // teamDomain: "${env.SLACK_TEAM_DOMAIN}",
-                    // token: "${env.SLACK_TOKEN}",
-                    // channel: "${env.SLACK_CHANNEL}",
-                    // color: "good",
-                    // message: "${env.STACK_PREFIX} production deploy: *${env.DEPLOY_VERSION}*. <${env.DEPLOY_URL}|Access service> - <${env.BUILD_URL}|Check build>"
-                    //)
-          echo "This will run if the job succeed"
-          mail to: "cristofe.pascale@gmail.com",
-          subject: "${env.JOB_NAME} - Build # ${env.BUILD_ID} has succed",
-          body: "For more info on the pipeline success, check out the console output at ${env.BUILD_URL}"
-                }
-
     failure {
       echo "This will run if the job failed"
       mail to: "cristofe.pascale@gmail.com",
