@@ -24,6 +24,7 @@ pipeline {
     URL_REP_HELM_FAT_CAST_SERVICE="$URL_REP_HELM_FAT/cast-service"        // Directory containned chart helm of cast_service
     URL_REP_HELM_FAT_MOVIE_SERVICE="$URL_REP_HELM_FAT/movie-service"      // Directory containned chart helm of fastapi-movie_service 
     URL_FILE_CONFIG_MINIKUBE="/home/jenkins/.minikube/config"              // Url file of config to enable connect on minikube cluster
+    BRANCH_NAME = "${env.CHANGE_BRANCH ? env.CHANGE_BRANCH : env.BRANCH_NAME}"  // https://stackoverflow.com/questions/42383273/get-git-branch-name-in-jenkins-pipeline-jenkinsfile/43786068#43786068
     // BRANCH_NAME = ${env.BRANCH_NAME}  Brave :jenkinsfile if branch develop : The environment block 
     // sets the BRANCH_NAME variable to the name of the current branch, and the when condition checks if this variable is equal 
     // to "develop". 
@@ -33,6 +34,7 @@ pipeline {
     stage('Docker Build'){
       steps {
           echo "Building branch: ${env.BRANCH_NAME}"
+          echo "Building branch: $BRANCH_NAME"
           sh '''
             pwd
             docker rm -f $DOCKER_ID/$DOCKER_IMAGE1
