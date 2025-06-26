@@ -245,168 +245,39 @@ pipeline {
           }
         }
       }
-    stage('Deploiement en dev'){
-      environment {
+     stage('Deploy') {
+            steps {
+                script {
+                    environment {
         KUBECONFIG = credentials("config") // we retrieve  kubeconfig from secret file called config saved on jenkins
-        CACRT= credentials("cacrt") // we retrieve  kubeconfig from secret file called config saved on jenkins
-        CLIENTCRT = credentials("clientcrt") // we retrieve  kubeconfig from secret file called config saved on jenkins
-        CLIENTKEY = credentials("clientkey") // we retrieve  kubeconfig from secret file called config saved on jenkins
-      }
-      steps {
-        script {
-          // withKubeConfig(caCertificate: '', clusterName: 'k3d-mycluster', contextName: 'k3d-mycluster', credentialsId: 'k8s-jenkins-secret', namespace: '', restrictKubeConfigAccess: false, serverUrl: 'https://0.0.0.0:41521') {
-    // some block
-                // helm upgrade --install app fastapi --values=values.yml --namespace dev
-                // cf B52 helm --kubeconfig : https://helm.sh/docs/helm/helm/
-                // kubectl --kubeconfig /usr/local/k3s.yaml apply -f fastapi-cast.yaml
-                //             sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
-
-            //helm upgrade --kubeconfig /usr/local/k3s.yaml --install fastapi-dev /charts --namespace dev --create-namespace
-            //             cp /fastapi/values-dev.yaml /fastapiapp/values.yaml
-            // cat /fastapiapp/values.yaml
-            // sudo sed -i 's+cpa+'jenkins'+g' /home/jenkins/.minikube/config
-            // 1) delete and restart minikube from pc developper on minikube server
-            // ssh -i $url_id_rsa_cpa cpa@$ip_minikube  'minikube delete --all'
-            // sleep 15
-            // ssh -i $url_id_rsa_cpa cpa@$ip_minikube  'minikube start --apiserver-ips=192.168.1.83 --listen-address=0.0.0.0 --cpus max --memory 5120mb'
-            // sleep 15
-            //
-            // 2) Create config file and copy variables and certificate files mentionned on the config filez of the cluster minikube  to enable access of jenkins server on minikube cluster saved on minikube server (5.1.2.3)
-            //   echo -e "\n####        5.1.2.5) Save number of access port of minikube server used to connect on minikube cluster 8443 with cmd : \n $: port=$(echo $(ssh -i $url_id_rsa_cpa cpa@$ip_minikube 'docker port minikube' | grep 8443) | tail -c-6); echo $port;"
-            //
-            // echo -e "\n####        5.1.2.6) Save ip of minikube server with cmd : \n $: ip_minikube2=$(ssh -i $url_id_rsa_cpa cpa@$ip_minikube 'minikube ip'); echo $ip_minikube;"
-            // ip_minikube2=$(ssh -i $url_id_rsa_cpa cpa@$ip_minikube 'minikube ip')
-            //
-            // echo -e "\n####        5.1.2.15) Copy config file of the minikub cluster with cmd : \n $: echo "$(ssh -i $url_id_rsa_cpa cpa@$ip_minikube 'kubectl config view --raw --flatten')" >  $url_pccpa_dir_kconfig/config"
-            //
-            // echo -e "\n####          5.1.3) Copy ./$filename_pccpa_kconfig  to ./$filename_pccpa_kconfig2 and update ./$filename_pccpa_kconfig2 replace ip_minikube_cluster by ip_minikube_server with cmd : \n $: cd $url_pccpa_dir_kconfig; \n pwd; \n ls -lha; \n cp $url_pccpa_dir_kconfig/config $url_pccpa_dir_kconfig/config2; \n cat $url_pccpa_dir_kconfig/config2; \nsed 's+'$ip_minikube2':8443+'$ip_minikube:$port'+g' -i $url_pccpa_dir_kconfig/config2; \n pwd; \n ls -lha; \n cat $url_pccpa_dir_kconfig/config2"
-
-          sh '''
-            echo "Create configuration files to enable jenkins server to connect to cluster of the minikube server  with kubectl cmd" 
-            mkdir -p /home/jenkins/.minikube/profiles/minikube/
-            ls -lha /home/jenkins/.minikube/profiles/minikube/
-            cat $KUBECONFIG > $URL_FILE_CONFIG_MINIKUBE
-            whoami
-            pwd
-            hostname -I
-            kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get nodes
-
-          '''
-
-          sh '''
-            echo "Deploy helm chart on DEV environment" 
-            cd $URL_REP_HELM_FAT_CAST_DB
-            # cp /fastapi/values-dev.yaml /fastapiapp/values.yaml
-            
-            echo "manifest k8s to deploy persistent volume with cmd : cat ./environments/dev/ns.k8s.cast.db.dev.yaml" 
-            cat ./environments/dev/ns.k8s.cast.db.dev.yaml
-            echo "manifest k8s to deploy persistent volume with cmd : cat ./environments/dev/pv.k8s.cast.db.dev.yaml" 
-            cat ./environments/dev/pv.k8s.cast.db.dev.yaml
-            echo "manifest k8s to deploy persistent volume with cmd : cat ./environments/dev/pvc.k8s.cast.db.dev.yaml" 
-            cat ./environments/dev/pvc.k8s.cast.db.dev.yaml
-            echo "manifest k8s to deploy persistent volume with cmd : cat ./environments/dev/secrets.k8s.cast.db.dev.yaml" 
-            cat ./environments/dev/secrets.k8s.cast.db.dev.yaml
-                    
-            echo -e "\n####             11.7.2.1) List namespaces of the cluster minikube with cmd : \n $: kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get ns -A -o wide" 
-            kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get ns -A -o wide
-
-            echo -e "\n####             11.7.7.1)  List helm charts deployed on namespace dev on minikube srvr from jenkins srvr with cmd : \n $: helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE  ls"
-            helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE  ls
-
-            echo -e "\n####             11.7.7.2)  Add the Helm repository  and Update the Helm repository: :$ \n helm repo add bitnami https://charts.bitnami.com/bitnami; helm repo update;"
-
-            echo -e "\n####             11.7.7.2.1) Add repo bitnami with cmd : \n $: helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE  repo add bitnami https://charts.bitnami.com/bitnami;"
-            helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE  repo add bitnami https://charts.bitnami.com/bitnami;
-
-            echo -e "\n####             11.7.7.2.2) Update repo bitnami with cmd : \n $: 'helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE  repo update;"
-            helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE  repo update;
-
-            echo -e "\n####             11.7.7.2.3) List repo bitnami present on the jenkins servr with cmd : \n $: 'helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE  repo ls;"
-            helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE  repo ls;
-
-            echo -e "\n####             11.7.8)  Deploy namespace dev on minikube srvr from jenkins servr with cmd : \n $: kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE  get ns -A -o wide"
-          
-            echo -e "\n####             11.7.7.8.1) List helm charts deployed from the jenkins server on minikube servr with cmd : \n $: 'helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE  ls -A;"
-            helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE  ls -A;
-            pwd
-
-            echo -e "\n####             11.7.8.2) Deploy on namespace dev from the jenkins server on minikube srvr the cast-db-charts(dev postgrersql database uised by fastapi-cast with the cmd ) : \n $: kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE  get ns -A -o wide"
-            helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls -A;
-            test_dep=$(helm --kubeconfig /home/jenkins/.minikube/config ls -A -q);
-            echo $test_dep;
-            [ -z "$test_dep" ] && echo "Empty" ||   helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE delete -n dev cast-db-charts-dev
-            helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls -A
-
-            # helm install --kubeconfig $URL_FILE_CONFIG_MINIKUBE  cast-db-charts-dev bitnami/postgresql --set persistence.existingClaim=postgresql-pv-claim --set volumePermissions.enabled=true --namespace dev --create-namespace -f $URL_REP_HELM_FAT_CAST_DB/environments/dev/values.charts.cast.db.dev.yaml
-            helm install --kubeconfig $URL_FILE_CONFIG_MINIKUBE  cast-db-charts-dev bitnami/postgresql --set persistence.existingClaim=postgresql-pv-claim --set volumePermissions.enabled=true --namespace dev --create-namespace --values=$URL_REP_HELM_FAT_CAST_DB/environments/dev/values.charts.cast.db.dev.yaml  -f $URL_REP_HELM_FAT_CAST_DB/environments/dev/secrets.k8s.cast.db.dev.yaml -f $URL_REP_HELM_FAT_CAST_DB/environments/dev/pv.k8s.cast.db.dev.yaml -f $URL_REP_HELM_FAT_CAST_DB/environments/dev/pvc.k8s.cast.db.dev.yaml
-
-
-            echo -e "\n####             11.7.8.3) List persistent volumes with cmd : \n $:  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get pv -A"
-            kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get pv -A 
-            
-            echo -e "\n####             11.7.8.4) List helm charts deployed from the jenkins server on minikube servr with cmd : \n $: 'helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE  ls -n dev;"
-            helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE  ls -n dev;
-
-            echo -e "\n####             11.7.8.5) List namespaces with cmd : \n $:  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get ns -n dev"
-            kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get ns dev
-
-
-
-            echo -e "\n####             11.7.8.6) List persistent volume claims with cmd : \n $:  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get pvc -n dev"
-            kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get pvc -n dev
-
-            echo -e "\n####             11.7.8.7) List secrets with cmd : \n $:  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get secrets -n dev"
-            kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get secrets -n dev
-
-            echo -e "\n####             11.7.8.8) List services with cmd : \n $:  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get svc -n dev"
-            kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get svc -n dev
-
-            echo -e "\n####             11.7.8.9) List pods with cmd : \n $:  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get pods -n dev"
-            kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get pods -n dev
-
-
-
-
-
-            echo -e "\n####             11.7.10.20) Delete every element from jenkins server deployed on minikube server with cmd : \n $: kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE delete ns dev; \nkubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get ns -n dev;  \nkubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get ns dev"
-
-            echo -e "\n####             11.7.10.20.1) Delete cast-db-charts-dev helm release with cmd : \n $: test_dep=$(helm --kubeconfig /home/jenkins/.minikube/config ls -A -q); \n echo $test_dep; [ -z \"$test_dep\" ] && echo \"Empty\" ||   helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE delete -n dev cast-db-charts-dev; \nhelm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls -A"
-
-            test_dep=$(helm --kubeconfig /home/jenkins/.minikube/config ls -A -q);
-            echo $test_dep;
-            [ -z "$test_dep" ] && echo "Empty" ||   helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE delete -n dev cast-db-charts-dev;
-            helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls -A;
-
-            echo -e "\n####             11.7.10.20.2) Delete ns dev with cmd : \n $:   test_dep=$(kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get ns dev --no-headers=true); \n [ -z \"$test_dep\" ] && echo \"Empty\" ||   kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE delete ns dev;"
-            test_dep=$(kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get ns dev --no-headers=true);
-            [ -z "$test_dep" ] && echo "Empty" ||   kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE delete ns dev;
-
-            echo -e "\n####             11.7.10.20.3) List namespaces with cmd : \n $:  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get ns -A -o wide "
-            kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get ns -A -o wide;
-
-            echo -e "\n####             11.7.10.20.3) List persistent volumes with cmd : \n $:  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get pv -A -o wide "
-            kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get pv -A -o wide;
-
-            echo -e "\n####             11.7.10.20.3) List persistent volume claims with cmd : \n $:  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get pvc -A -o wide "
-            kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get pvc -A -o wide;
-
-            echo -e "\n####             11.7.10.20.3) List secrets with cmd : \n $:  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get secrets -A -o wide "
-            kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get secrets -A -o wide;
-
-            echo -e "\n####             11.7.10.20.3) List services with cmd : \n $:  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get svc -A -o wide "
-            kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get svc -A -o wide;
-
-            echo -e "\n####             11.7.10.20.3) List pods with cmd : \n $:  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get pods -A -o wide "
-            kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get pods -A -o wide;
-          '''
-
-          // kubectl --kubeconfig /usr/local/k3s.yaml delete namespace dev
-        //}
+                    }
+                     if (env.BRANCH_NAME == 'develop') {
+                        echo "Déploiement sur l'environnement DEV"
+                        // commandes de déploiement dev
+                        mkdir -p /home/jenkins/.minikube/profiles/minikube/;
+                        ls -lha /home/jenkins/.minikube/profiles/minikube/;
+                        cat $KUBECONFIG > $URL_FILE_CONFIG_MINIKUBE;
+                        whoami;
+                        pwd;
+                        hostname -I;
+                        kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get nodes;
+                    } else if (env.BRANCH_NAME == 'qa') {
+                        echo "Déploiement sur l'environnement qa"
+                        // commandes de déploiement staging
+                    } else if (env.BRANCH_NAME == 'staging') {
+                        echo "Déploiement sur l'environnement STAGING"
+                        // commandes de déploiement staging
+                    } else if (env.BRANCH_NAME == 'main' || env.BRANCH_NAME == 'master') {
+                        echo "Déploiement sur l'environnement PROD"
+                        // commandes de déploiement production
+                    } else {
+                        echo "Branche non configurée pour déploiement automatique"
+                    }
+                }
+            }
         }
-      }
     }
-  }
-
+}  
   post { // send email when the job has failed
   // ..
     failure {

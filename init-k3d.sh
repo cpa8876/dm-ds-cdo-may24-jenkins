@@ -4513,6 +4513,16 @@ echo -e "###############################\n"
 
 ################################################################
 echo -e "\n################################################################"
+echo -e "###         20.0) Delete all ctnr dckr on jenkins server with cmd : \n $: docker ps -a; docker rm -f $(docker ps -aq); docker ps -a;"
+ssh -i $url_id_rsa_cpa cpa@$ip_jenkins 'bash -c "docker ps -a; docker rm -f $(docker ps -aq); docker ps -a;"'
+echo -e "###############"
+echo -e "###############################\n"
+###############
+###############################
+
+
+################################################################
+echo -e "\n################################################################"
 echo -e "###         20.1) Delete minikube cluster "
 ssh -i $url_id_rsa_cpa cpa@$ip_minikube "minikube delete --all"
 #### => cpa@pve$ ssh -i $url_id_rsa_cpa cpa@$ip_minikube "minikube delete --all"
