@@ -256,7 +256,7 @@ pipeline {
                 }
               }
               when {
-                    $BRANCH_NAME == 'develop'
+                    env.BRANCH_NAME == 'develop'
                    }
               steps { 
                 script {
@@ -274,7 +274,7 @@ pipeline {
                   }
                 }
               when {
-                    $BRANCH_NAME == 'staging'
+                    env.BRANCH_NAME == 'staging'
                   }
               steps { 
                 script {
@@ -292,7 +292,7 @@ pipeline {
                   }
                 }
               when {
-                   $BRANCH_NAME == 'qa'
+                   env.BRANCH_NAME == 'qa'
                   }
                 steps { 
                 // Create an Approval Button with a timeout of 15minutes.
@@ -315,7 +315,7 @@ pipeline {
                     } 
                   }
               when {
-                   $BRANCH_NAME == 'prod'
+                   env.BRANCH_NAME == 'prod'
                   }
               steps { 
                 // Create an Approval Button with a timeout of 15minutes.
