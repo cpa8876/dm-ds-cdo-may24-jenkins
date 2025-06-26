@@ -24,7 +24,7 @@ pipeline {
     URL_REP_HELM_FAT_CAST_SERVICE="$URL_REP_HELM_FAT/cast-service"        // Directory containned chart helm of cast_service
     URL_REP_HELM_FAT_MOVIE_SERVICE="$URL_REP_HELM_FAT/movie-service"      // Directory containned chart helm of fastapi-movie_service 
     URL_FILE_CONFIG_MINIKUBE="/home/jenkins/.minikube/config"              // Url file of config to enable connect on minikube cluster
-    BRANCH_NAME=${env.BRANCH_NAME}                                         // Brave :jenkinsfile if branch develop : The environment block 
+    BRANCH_NAME = ${env.BRANCH_NAME}                                         // Brave :jenkinsfile if branch develop : The environment block 
                                                                            // sets the BRANCH_NAME variable to the name of the current branch, and the when condition checks if this variable is equal to "develop". 
                                                                            // https://search.brave.com/search?q=jenkinsfile+if+branch+develop&summary=1&conversation=d6a05676c0b7fd0bb10afe
     }
