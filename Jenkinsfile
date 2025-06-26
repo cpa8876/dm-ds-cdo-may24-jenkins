@@ -246,17 +246,18 @@ pipeline {
         }
       }
     stage('Deploy') {
-            script {
+           steps {
+             script {
                 environment {
                 KUBECONFIG = credentials("config") // we retrieve  kubeconfig from secret file called config saved on jenkins
                 }
               }
-            when {
-                  branch 'develop'
-                 }
-            steps { 
-              script {
-                sh '''
+              when {
+                    branch 'develop'
+                   }
+              steps { 
+                script {
+                  sh '''
                   echo "Déploiement sur l'environnement DEV"
                   mkdir -p /home/jenkins/.minikube/profiles/minikube/;
                   ls -lha /home/jenkins/.minikube/profiles/minikube/;
@@ -267,13 +268,13 @@ pipeline {
                   kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get nodes;
                   kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get all -n dev
                  '''
+                  }
                 }
-              }
-            when {
+              when {
                   branch 'staging'
-                }
-            steps { 
-              script {
+                  }
+              steps { 
+                script {
                 sh '''
                   echo "Déploiement sur l'environnement STAGING"
                   mkdir -p /home/jenkins/.minikube/profiles/minikube/;
@@ -285,18 +286,18 @@ pipeline {
                   kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get nodes;
                   kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get all -n satging
                   '''
+                  }
                 }
-              }
-            when {
+              when {
                   branch 'qa'
-                }
-            steps { 
+                  }
+                steps { 
                 // Create an Approval Button with a timeout of 15minutes.
                 // this require a manuel validation in order to deploy on production environment
                     timeout(time: 15, unit: "MINUTES") {
                     input message: 'Do you want to deploy in production ?', ok: 'Yes'
-                }
-                script {
+                  }
+                  script {
                   sh '''
                     echo "Déploiement sur l'environnement QA
                     mkdir -p /home/jenkins/.minikube/profiles/minikube/;
@@ -308,19 +309,19 @@ pipeline {
                     kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get nodes;
                     kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get all -n qa
                   '''                    
-                  } 
-                }
-            when {
+                    } 
+                  }
+              when {
                   branch 'prod'
-                }
-            steps { 
+                  }
+              steps { 
                 // Create an Approval Button with a timeout of 15minutes.
                 // this require a manuel validation in order to deploy on production environment
                     timeout(time: 15, unit: "MINUTES") {
                     input message: 'Do you want to deploy in production ?', ok: 'Yes'
-                }
-                script {
-                  sh '''
+                  }
+                  script {
+                    sh '''
                     echo "Déploiement sur l'environnement PROD
                     mkdir -p /home/jenkins/.minikube/profiles/minikube/;
                     ls -lha /home/jenkins/.minikube/profiles/minikube/;
@@ -330,12 +331,13 @@ pipeline {
                     hostname -I;
                     kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get nodes;
                     kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get all -n prod
-                  '''                    
-                  } 
-                }
-              }
-      }
-  
+                    '''                    
+                    } 
+                  }
+             }
+
+          }
+      } 
   post { // send email when the job has failed
   // ..
     success {
