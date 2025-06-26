@@ -33,7 +33,6 @@ pipeline {
     stage('Docker Build'){
       steps {
           echo "Building branch: ${env.BRANCH_NAME}"
-          echo "Building branch: $BRANCH_NAME"
           sh '''
             pwd
             docker rm -f $DOCKER_ID/$DOCKER_IMAGE1
