@@ -280,6 +280,7 @@ pipeline {
                       '''
                     } else {
                       sh '''
+                        echo $BRANCH_NAME
                         echo "Branche non configurée pour déploiement automatique"
                       '''
                     }
