@@ -24,10 +24,13 @@ pipeline {
     URL_REP_HELM_FAT_CAST_SERVICE="$URL_REP_HELM_FAT/cast-service"        // Directory containned chart helm of cast_service
     URL_REP_HELM_FAT_MOVIE_SERVICE="$URL_REP_HELM_FAT/movie-service"      // Directory containned chart helm of fastapi-movie_service 
     URL_FILE_CONFIG_MINIKUBE="/home/jenkins/.minikube/config"              // Url file of config to enable connect on minikube cluster
+    BRANCH_NAME=${env.BRANCH_NAME}                                         // Brave :jenkinsfile if branch develop : The environment block sets the BRANCH_NAME variable to the name of the current branch, and the when condition checks if this variable is equal to "develop". https://search.brave.com/search?q=jenkinsfile+if+branch+develop&summary=1&conversation=d6a05676c0b7fd0bb10afe
     }
   stages {
     stage('Docker Build'){
       steps {
+          echo "Building branch: ${env.BRANCH_NAME}"
+          echo "Building branch: $BRANCH_NAME"
           sh '''
             pwd
             docker rm -f $DOCKER_ID/$DOCKER_IMAGE1
@@ -253,7 +256,7 @@ pipeline {
                 }
               }
               when {
-                    branch 'develop'
+                    $BRANCH_NAME == 'develop'
                    }
               steps { 
                 script {
@@ -271,7 +274,7 @@ pipeline {
                   }
                 }
               when {
-                  branch 'staging'
+                    $BRANCH_NAME == 'staging'
                   }
               steps { 
                 script {
@@ -289,7 +292,7 @@ pipeline {
                   }
                 }
               when {
-                  branch 'qa'
+                   $BRANCH_NAME == 'qa'
                   }
                 steps { 
                 // Create an Approval Button with a timeout of 15minutes.
@@ -312,7 +315,7 @@ pipeline {
                     } 
                   }
               when {
-                  branch 'prod'
+                   $BRANCH_NAME == 'prod'
                   }
               steps { 
                 // Create an Approval Button with a timeout of 15minutes.
