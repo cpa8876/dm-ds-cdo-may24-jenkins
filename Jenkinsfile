@@ -256,7 +256,6 @@ pipeline {
                      if (env.ref == 'refs/heads/develop') {
                       sh '''
                         echo "Déploiement sur l'environnement DEV"
-                        // commandes de déploiement dev
                         mkdir -p /home/jenkins/.minikube/profiles/minikube/;
                         ls -lha /home/jenkins/.minikube/profiles/minikube/;
                         cat $KUBECONFIG > $URL_FILE_CONFIG_MINIKUBE;
@@ -264,22 +263,44 @@ pipeline {
                         pwd;
                         hostname -I;
                         kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get nodes;
+                        kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get all -n dev
                       '''
                     } else if (env.ref == 'refs/heads/qa') {
                       sh '''
-                        echo "Déploiement sur l'environnement qa"
-                        // commandes de déploiement staging
-                      '''
+                        echo "Déploiement sur l'environnement QA"
+                        mkdir -p /home/jenkins/.minikube/profiles/minikube/;
+                        ls -lha /home/jenkins/.minikube/profiles/minikube/;
+                        cat $KUBECONFIG > $URL_FILE_CONFIG_MINIKUBE;
+                        whoami;
+                        pwd;
+                        hostname -I;
+                        kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get nodes;
+                        kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get all -n qa
+                        '''
                     } else if (env.ref == 'refs/heads/staging') {
                       sh '''
                         echo "Déploiement sur l'environnement STAGING"
-                        // commandes de déploiement staging
-                      '''
+                        mkdir -p /home/jenkins/.minikube/profiles/minikube/;
+                        ls -lha /home/jenkins/.minikube/profiles/minikube/;
+                        cat $KUBECONFIG > $URL_FILE_CONFIG_MINIKUBE;
+                        whoami;
+                        pwd;
+                        hostname -I;
+                        kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get nodes;
+                        kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get all -n staging
+                        '''
                     } else if (env.ref == 'refs/heads/main' || env.ref == 'refs/heads/master') {
                       sh '''
                         echo "Déploiement sur l'environnement PROD"
-                        // commandes de déploiement production
-                      '''
+                                                mkdir -p /home/jenkins/.minikube/profiles/minikube/;
+                        ls -lha /home/jenkins/.minikube/profiles/minikube/;
+                        cat $KUBECONFIG > $URL_FILE_CONFIG_MINIKUBE;
+                        whoami;
+                        pwd;
+                        hostname -I;
+                        kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get nodes;
+                        kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get all -n prod
+                        '''
                     } else {
                       sh '''
                         echo $branch
