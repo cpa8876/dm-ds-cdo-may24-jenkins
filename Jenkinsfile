@@ -254,7 +254,7 @@ pipeline {
                 environment {
                 KUBECONFIG = credentials("config") // we retrieve  kubeconfig from secret file called config saved on jenkins
                 }
-              }
+              
               when {
                     env.BRANCH_NAME == 'develop'
                    }
@@ -338,7 +338,7 @@ pipeline {
                     } 
                   }
              }
-
+           }
           }
       } 
   post { // send email when the job has failed
