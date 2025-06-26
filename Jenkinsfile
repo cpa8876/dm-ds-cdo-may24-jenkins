@@ -252,6 +252,7 @@ pipeline {
         KUBECONFIG = credentials("config") // we retrieve  kubeconfig from secret file called config saved on jenkins
                     }
                      if (env.BRANCH_NAME == 'develop') {
+                      sh '''
                         echo "Déploiement sur l'environnement DEV"
                         // commandes de déploiement dev
                         mkdir -p /home/jenkins/.minikube/profiles/minikube/;
@@ -261,17 +262,26 @@ pipeline {
                         pwd;
                         hostname -I;
                         kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get nodes;
+                      '''
                     } else if (env.BRANCH_NAME == 'qa') {
+                      sh '''
                         echo "Déploiement sur l'environnement qa"
                         // commandes de déploiement staging
+                      '''
                     } else if (env.BRANCH_NAME == 'staging') {
+                      sh '''
                         echo "Déploiement sur l'environnement STAGING"
                         // commandes de déploiement staging
+                      '''
                     } else if (env.BRANCH_NAME == 'main' || env.BRANCH_NAME == 'master') {
+                      sh '''
                         echo "Déploiement sur l'environnement PROD"
                         // commandes de déploiement production
+                      '''
                     } else {
+                      sh '''
                         echo "Branche non configurée pour déploiement automatique"
+                      '''
                     }
                 }
             }
