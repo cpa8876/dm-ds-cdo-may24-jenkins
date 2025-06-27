@@ -32,7 +32,7 @@ pipeline {
     
           sh '''
             echo "Building branch: ${env.ref}"
-            name_branch=$(echo  ${env.ref} | sed 's/refs\/heads\///g')
+            name_branch=$(echo ${env.ref} | sed 's/refs\/heads\///g')
             echo $name_branch 
             cd URL_REPO_GH_LOCAL
             pwd
