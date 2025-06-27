@@ -24,6 +24,7 @@ pipeline {
     URL_REP_HELM_FAT_CAST_SERVICE="$URL_REP_HELM_FAT/cast-service"        // Directory containned chart helm of cast_service
     URL_REP_HELM_FAT_MOVIE_SERVICE="$URL_REP_HELM_FAT/movie-service"      // Directory containned chart helm of fastapi-movie_service 
     URL_FILE_CONFIG_MINIKUBE="/home/jenkins/.minikube/config"              // Url file of config to enable connect on minikube cluster
+    name_branch0=env.ref
      }
   stages {
     stage('Docker Build'){
@@ -32,7 +33,7 @@ pipeline {
     
           sh '''
             echo "Building branch: ${env.ref}"
-            name_branch=$(echo ${env.ref} | sed 's/refs\/heads\///g')
+            name_branch=$(echo ${name_branch0} | sed 's/refs\/heads\///g')
             echo $name_branch 
             cd URL_REPO_GH_LOCAL
             pwd
@@ -260,7 +261,7 @@ pipeline {
             steps {
                 script {
                      sh '''
-                     name_branch=$(echo  ${env.ref} | sed 's/refs\/heads\///g')
+                     name_branch=$(echo ${name_branch0} | sed 's/refs\/heads\///g')
                      if ($name_branch == 'develop') {
                       
                         echo "Déploiement sur l'environnement DEV"
