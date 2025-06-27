@@ -253,6 +253,7 @@ pipeline {
              //docker push $DOCKER_ID/$DOCKER_IMAGE1:$DOCKER_TAG
           withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'dockerhub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
           sh '''
+                name_branch=$(echo ${name_branch0} | sed 's#refs/heads/##g')
                 docker login -u $USERNAME -p $PASSWORD
                 docker push $DOCKER_ID/$DOCKER_IMAGE1-$name_branch:$DOCKER_TAG
                 docker push $DOCKER_ID/$DOCKER_IMAGE2-$name_branch:$DOCKER_TAG
