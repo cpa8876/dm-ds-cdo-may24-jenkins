@@ -30,7 +30,7 @@ pipeline {
       steps {
           //echo "Building branch: ${env.BRANCH_NAME}"
           echo "Building branch: ${env.ref}"
-          name_branch=$(echo $ref | sed 's/refs\/heads\///g')
+          name_branch=$(echo env.ref | sed 's/refs\/heads\///g')
           echo $name_branch     
           sh '''
             cd URL_REPO_GH_LOCAL
