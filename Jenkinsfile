@@ -268,10 +268,12 @@ pipeline {
                     }
             steps {
                 script {//name_branch=$(echo ${name_branch0} | sed 's/refs\/heads\///g')
+                // https://www.digitalocean.com/community/tutorials/if-else-in-shell-scripts
                      sh '''
                            name_branch=$(echo ${name_branch0} | sed 's#refs/heads/##g')
                            echo "#### Building branch: $name_branch"
-                           if ($name_branch == 'develop') {
+                           if ($name_branch == 'develop') 
+                           then
                              echo "Déploiement sur l'environnement DEV";
                              mkdir -p /home/jenkins/.minikube/profiles/minikube/;
                              ls -lha /home/jenkins/.minikube/profiles/minikube/;
@@ -282,13 +284,13 @@ pipeline {
                              pwd;
                              hostname -I;
                              kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get nodes;
-                             kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get all -n dev
-                             cp fastapi/values.yaml values.yml
-                             cat values.yml
-                             sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
-                             helm --kubeconfig $URL_FILE_CONFIG_MINIKUB upgrade --install app fastapi --values=values.yml --namespace dev
-                          }
-                          else if ($name_branch == 'qa') {
+                             kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get all -n dev;
+                             cp fastapi/values.yaml values.yml;
+                             cat values.yml;
+                             sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml;
+                             helm --kubeconfig $URL_FILE_CONFIG_MINIKUB upgrade --install app fastapi --values=values.yml --namespace dev;
+                          elif ($name_branch == 'qa') 
+                          then
                             echo "Déploiement sur l'environnement QA";
                             mkdir -p /home/jenkins/.minikube/profiles/minikube/;
                             ls -lha /home/jenkins/.minikube/profiles/minikube/;
@@ -297,9 +299,9 @@ pipeline {
                             pwd;
                             hostname -I;
                             kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get nodes;
-                            kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get all -n qa
-                          } 
-                          else if ($name_branch == 'staging') {
+                            kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get all -n qa;
+                          elif ($name_branch == 'staging') 
+                          then
                             echo "Déploiement sur l'environnement STAGING";
                             mkdir -p /home/jenkins/.minikube/profiles/minikube/;
                             ls -lha /home/jenkins/.minikube/profiles/minikube/;
@@ -308,9 +310,9 @@ pipeline {
                             pwd;
                             hostname -I;
                             kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get nodes;
-                            kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get all -n staging
-                          } 
-                          else if ($name_branch == 'main' || $name_branch == 'master') {
+                            kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get all -n staging;
+                          elif ($name_branch == 'main' || $name_branch == 'master') 
+                          then
                             echo "Déploiement sur l'environnement PROD";
                             mkdir -p /home/jenkins/.minikube/profiles/minikube/;
                             ls -lha /home/jenkins/.minikube/profiles/minikube/;
@@ -319,12 +321,10 @@ pipeline {
                             pwd;
                             hostname -I;
                             kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get nodes;
-                            kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get all -n prod
-                          } 
-                          else {
-                            echo $name_branch
-                            echo "#### Branche non configurée pour déploiement automatique"
-                          }
+                            kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get all -n prod;
+                          else 
+                            echo "#### Branche : $name_branch non configurée pour déploiement automatique";
+                          fi
                      '''
                     }
                  }
