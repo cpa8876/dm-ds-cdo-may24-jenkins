@@ -322,8 +322,8 @@ pipeline {
                       
                         echo $branch
                         echo "Branche non configurée pour déploiement automatique"
-                      '''
                     }
+                     '''
                 }
               }
       }
