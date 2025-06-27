@@ -25,7 +25,9 @@ pipeline {
     URL_REP_HELM_FAT_MOVIE_SERVICE="$URL_REP_HELM_FAT/movie-service"      // Directory containned chart helm of fastapi-movie_service 
     URL_FILE_CONFIG_MINIKUBE="/home/jenkins/.minikube/config"              // Url file of config to enable connect on minikube cluster
     name_branch0="${env.ref}"
-    name_branch="${name_branch0.split("/").size() > 1 ? name_branch0.split("/")[1] : name_branch0}" // BRANCH_NAME = "${GIT_BRANCH.split("/").size() > 1 ? GIT_BRANCH.split("/")[1] : GIT_BRANCH}" : https://stackoverflow.com/questions/42383273/get-git-branch-name-in-jenkins-pipeline-jenkinsfile
+    //name_branch="${name_branch0.split("/").size() > 1 ? name_branch0.split("/")[1] : name_branch0}" 
+    // BRANCH_NAME = "${GIT_BRANCH.split("/").size() > 1 ? GIT_BRANCH.split("/")[1] : GIT_BRANCH}" :
+    //  https://stackoverflow.com/questions/42383273/get-git-branch-name-in-jenkins-pipeline-jenkinsfile
      }
   stages {
     stage('Docker Build'){
@@ -33,6 +35,7 @@ pipeline {
           //echo "Building branch: ${env.BRANCH_NAME}"
           echo "#### Building branch: $name_branch"
           //name_branch="${echo ${name_branch0##*/}}" 
+          name_branch="${name_branch0##*/}" 
           echo $name_branch 
           //checkout([$class: 'GitSCM', branches: [[name: 'develop']], extensions: [], userRemoteConfigs: [[url: 'https://your-repo-url.git']]])
           //name_branch=$(echo ${name_branch0} | sed 's/refs\/heads\///g')
