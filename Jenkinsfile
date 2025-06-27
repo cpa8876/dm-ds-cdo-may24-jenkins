@@ -33,7 +33,7 @@ pipeline {
     stage('Docker Build'){
       steps {
           //echo "Building branch: ${env.BRANCH_NAME}"
-          echo "#### Building branch: $name_branch"
+          echo "#### Building branch: $name_branch0"
           //name_branch="${echo ${name_branch0##*/}}" 
           //name_branch="${name_branch0##*/}" 
           //name_branch="${name_branch0.split("/").size() > 1 ? name_branch0.split("/")[1] : name_branch0}" 
@@ -42,7 +42,7 @@ pipeline {
           //name_branch=$(echo ${name_branch0} | sed 's/refs\/heads\///g')
           // https://search.brave.com/search?q=extract+filename+with+url+shell+sed&summary=1&conversation=8beb0e49c110e15f4495dc
           sh '''
-            name_branch=${name_branch0##*/}
+            name_branch=$(echo ${name_branch0} | sed 's#refs/heads/##g')
             echo $name_branch 
             cd $URL_REPO_GH_LOCAL
             pwd
@@ -269,7 +269,7 @@ pipeline {
                 script {//name_branch=$(echo ${name_branch0} | sed 's/refs\/heads\///g')
                      echo "#### Building branch: $name_branch"
                      sh '''
-                     name_branch=${name_branch0##*/}
+                     name_branch=$(echo ${name_branch0} | sed 's#refs/heads/##g')
                      echo $name_branch 
                      if ($name_branch == 'develop') {
                       
