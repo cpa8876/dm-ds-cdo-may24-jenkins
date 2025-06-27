@@ -35,7 +35,8 @@ pipeline {
           //echo "Building branch: ${env.BRANCH_NAME}"
           echo "#### Building branch: $name_branch"
           //name_branch="${echo ${name_branch0##*/}}" 
-          name_branch="${name_branch0##*/}" 
+          //name_branch="${name_branch0##*/}" 
+          name_branch="${name_branch0.split("/").size() > 1 ? name_branch0.split("/")[1] : name_branch0}" 
           echo $name_branch 
           //checkout([$class: 'GitSCM', branches: [[name: 'develop']], extensions: [], userRemoteConfigs: [[url: 'https://your-repo-url.git']]])
           //name_branch=$(echo ${name_branch0} | sed 's/refs\/heads\///g')
