@@ -29,10 +29,11 @@ pipeline {
     stage('Docker Build'){
       steps {
           //echo "Building branch: ${env.BRANCH_NAME}"
-          echo "Building branch: ${env.ref}"
-          name_branch=$(echo  ${env.ref} | sed 's/refs\/heads\///g')
-          echo $name_branch     
+    
           sh '''
+            echo "Building branch: ${env.ref}"
+            name_branch=$(echo  ${env.ref} | sed 's/refs\/heads\///g')
+            echo $name_branch 
             cd URL_REPO_GH_LOCAL
             pwd
             git branch $name_branch
@@ -258,6 +259,7 @@ pipeline {
                     }
             steps {
                 script {
+                     name_branch=$(echo  ${env.ref} | sed 's/refs\/heads\///g')
                      if ($name_branch == 'develop') {
                       sh '''
                         echo "Déploiement sur l'environnement DEV"
