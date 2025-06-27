@@ -31,15 +31,16 @@ pipeline {
       steps {
           //echo "Building branch: ${env.BRANCH_NAME}"
           echo "Building branch: $name_branch0}"
+          name_branch="${echo ${name_branch0##*/}}" 
+          echo $name_branch 
+          checkout([$class: 'GitSCM', branches: [[name: 'develop']], extensions: [], userRemoteConfigs: [[url: 'https://your-repo-url.git']]])
           //name_branch=$(echo ${name_branch0} | sed 's/refs\/heads\///g')
           // https://search.brave.com/search?q=extract+filename+with+url+shell+sed&summary=1&conversation=8beb0e49c110e15f4495dc
-          sh ''' 
-            name_branch=$(echo ${name_branch0##*/})           
-            echo $name_branch 
+          sh '''           
             cd $URL_REPO_GH_LOCAL
             pwd
-            git branch $name_branch
-            git
+            git branch 
+            if $name_branchgit
             docker rm -f $DOCKER_ID/$DOCKER_IMAGE1_$name_branch
             docker build -t $DOCKER_ID/$DOCKER_IMAGE1_$name_branch:$DOCKER_TAG $URL_REP_DCKR_FAT_MOVIE
             docker rm -f $DOCKER_ID/$DOCKER_IMAGE2
