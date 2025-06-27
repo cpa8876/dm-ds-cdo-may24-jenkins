@@ -249,7 +249,7 @@ pipeline {
             steps {
                 script {
                     environment {
-                      KUBECONFIG = credentials("KUBECONFIG") // we retrieve  kubeconfig from secret file called config saved on jenkins
+        KUBECONFIG = credentials("config") // we retrieve  kubeconfig from secret file called config saved on jenkins
                     }
                      if (env.BRANCH_NAME == 'develop') {
                       sh '''

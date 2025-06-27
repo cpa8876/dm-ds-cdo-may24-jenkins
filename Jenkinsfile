@@ -30,12 +30,17 @@ pipeline {
       steps {
           //echo "Building branch: ${env.BRANCH_NAME}"
           echo "Building branch: ${env.ref}"
+          name_branch=$(echo $ref | sed 's/refs\/heads\///g')
+          echo $name_branch     
           sh '''
+            cd URL_REPO_GH_LOCAL
             pwd
-            docker rm -f $DOCKER_ID/$DOCKER_IMAGE1
-            docker build -t $DOCKER_ID/$DOCKER_IMAGE1:$DOCKER_TAG $URL_REP_DCKR_FAT_MOVIE
+            git branch $name_branch
+            git
+            docker rm -f $DOCKER_ID/$DOCKER_IMAGE1_$name_branch
+            docker build -t $DOCKER_ID/$DOCKER_IMAGE1_$name_branch:$DOCKER_TAG $URL_REP_DCKR_FAT_MOVIE
             docker rm -f $DOCKER_ID/$DOCKER_IMAGE2
-            docker build -t $DOCKER_ID/$DOCKER_IMAGE2:$DOCKER_TAG $URL_REP_DCKR_FAT_CAST
+            docker build -t $DOCKER_ID/$DOCKER_IMAGE2_$name_branch:$DOCKER_TAG $URL_REP_DCKR_FAT_CAST
             docker image ls -a | grep fastapi
             sleep 6
           '''
@@ -253,7 +258,7 @@ pipeline {
                     }
             steps {
                 script {
-                     if (env.ref == 'refs/heads/develop') {
+                     if ($name_branch == 'develop') {
                       sh '''
                         echo "Déploiement sur l'environnement DEV"
                         mkdir -p /home/jenkins/.minikube/profiles/minikube/;
@@ -266,8 +271,12 @@ pipeline {
                         hostname -I;
                         kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get nodes;
                         kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get all -n dev
+                        cp fastapi/values.yaml values.yml
+                        cat values.yml
+                        sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
+                        helm --kubeconfig $URL_FILE_CONFIG_MINIKUB upgrade --install app fastapi --values=values.yml --namespace dev
                       '''
-                    } else if (env.ref == 'refs/heads/qa') {
+                    } else if ($name_branch == 'qa') {
                       sh '''
                         echo "Déploiement sur l'environnement QA"
                         mkdir -p /home/jenkins/.minikube/profiles/minikube/;
@@ -279,7 +288,7 @@ pipeline {
                         kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get nodes;
                         kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get all -n qa
                         '''
-                    } else if (env.ref == 'refs/heads/staging') {
+                    } else if ($name_branch == 'staging') {
                       sh '''
                         echo "Déploiement sur l'environnement STAGING"
                         mkdir -p /home/jenkins/.minikube/profiles/minikube/;
@@ -291,7 +300,7 @@ pipeline {
                         kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get nodes;
                         kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get all -n staging
                         '''
-                    } else if (env.ref == 'refs/heads/main' || env.ref == 'refs/heads/master') {
+                    } else if ($name_branch == 'main' || $name_branch == 'master') {
                       sh '''
                         echo "Déploiement sur l'environnement PROD"
                         mkdir -p /home/jenkins/.minikube/profiles/minikube/;

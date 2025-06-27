@@ -286,7 +286,7 @@ pipeline {
                   pwd;
                   hostname -I;
                   kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get nodes;
-                  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get all -n satging
+                  kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get all -n staging
                   '''
                   }
                 }
