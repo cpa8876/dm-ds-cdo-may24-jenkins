@@ -25,7 +25,10 @@ pipeline {
     URL_REP_HELM_FAT_MOVIE_SERVICE="$URL_REP_HELM_FAT/movie-service"      // Directory containned chart helm of fastapi-movie_service 
     URL_FILE_CONFIG_MINIKUBE="/home/jenkins/.minikube/config"              // Url file of config to enable connect on minikube cluster
     name_branch0="${env.ref}"
-    name_branch="${env.ref.split("/").size() > 1 ? env.ref.split("/")[1] : env.ref}" // BRANCH_NAME = "${GIT_BRANCH.split("/").size() > 1 ? GIT_BRANCH.split("/")[1] : GIT_BRANCH}" : https://stackoverflow.com/questions/42383273/get-git-branch-name-in-jenkins-pipeline-jenkinsfile
+    name_branch=${{ github.ref_name }}                                     // https://search.brave.com/search?q=BRANCH_NAME+%3D+%22%24%7Benv.CHANGE_BRANCH+%3F+env.CHANGE_BRANCH+%3A+env.BRANCH_NAME%7D%22&summary=1&conversation=b6cbc113d2cec3435fd908                                    
+    // "${env.ref.split("/").size() > 1 ? env.ref.split("/")[1] : env.ref}" 
+    // BRANCH_NAME = "${GIT_BRANCH.split("/").size() > 1 ? GIT_BRANCH.split("/")[1] : GIT_BRANCH}" :
+    //  https://stackoverflow.com/questions/42383273/get-git-branch-name-in-jenkins-pipeline-jenkinsfile
      }
   stages {
     stage('Docker Build'){
