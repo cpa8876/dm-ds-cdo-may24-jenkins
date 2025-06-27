@@ -36,7 +36,7 @@ pipeline {
           sh ''' 
             name_branch=$(echo ${name_branch0##*/})           
             echo $name_branch 
-            cd URL_REPO_GH_LOCAL
+            cd $URL_REPO_GH_LOCAL
             pwd
             git branch $name_branch
             git
