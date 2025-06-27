@@ -30,10 +30,12 @@ pipeline {
     stage('Docker Build'){
       steps {
           //echo "Building branch: ${env.BRANCH_NAME}"
-    
+          //name_branch=$(echo ${name_branch0} | sed 's/refs\/heads\///g')
+          // https://search.brave.com/search?q=extract+filename+with+url+shell+sed&summary=1&conversation=8beb0e49c110e15f4495dc
           sh '''
             echo "Building branch: ${env.ref}"
-            name_branch=$(echo ${name_branch0} | sed 's/refs\/heads\///g')
+            
+            name_branch=$(echo "${name_branch0##*/}")
             echo $name_branch 
             cd URL_REPO_GH_LOCAL
             pwd
@@ -259,9 +261,9 @@ pipeline {
                       KUBECONFIG = credentials("kubeconfig-dev") // we retrieve  kubeconfig from secret file called config saved on jenkins
                     }
             steps {
-                script {
+                script {//name_branch=$(echo ${name_branch0} | sed 's/refs\/heads\///g')
                      sh '''
-                     name_branch=$(echo ${name_branch0} | sed 's/refs\/heads\///g')
+                     name_branch=$(echo "${name_branch0##*/}")
                      if ($name_branch == 'develop') {
                       
                         echo "Déploiement sur l'environnement DEV"
