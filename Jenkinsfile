@@ -43,13 +43,13 @@ pipeline {
           // https://search.brave.com/search?q=extract+filename+with+url+shell+sed&summary=1&conversation=8beb0e49c110e15f4495dc
           sh '''
             name_branch=$(echo ${name_branch0} | sed 's#refs/heads/##g')
-            echo $name_branch 
+            echo "#### Building branch: $name_branch "
             cd $URL_REPO_GH_LOCAL
             pwd
-            docker rm -f $DOCKER_ID/$DOCKER_IMAGE1_$name_branch
-            docker build -t $DOCKER_ID/$DOCKER_IMAGE1_$name_branch:$DOCKER_TAG $URL_REP_DCKR_FAT_MOVIE
+            docker rm -f $DOCKER_ID/$DOCKER_IMAGE1-$name_branch
+            docker build -t $DOCKER_ID/$DOCKER_IMAGE1-$name_branch:$DOCKER_TAG $URL_REP_DCKR_FAT_MOVIE
             docker rm -f $DOCKER_ID/$DOCKER_IMAGE2
-            docker build -t $DOCKER_ID/$DOCKER_IMAGE2_$name_branch:$DOCKER_TAG $URL_REP_DCKR_FAT_CAST
+            docker build -t $DOCKER_ID/$DOCKER_IMAGE2-$name_branch:$DOCKER_TAG $URL_REP_DCKR_FAT_CAST
             docker image ls -a | grep fastapi
             sleep 6
           '''
@@ -254,8 +254,8 @@ pipeline {
           withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'dockerhub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
           sh '''
                 docker login -u $USERNAME -p $PASSWORD
-                docker push $DOCKER_ID/$DOCKER_IMAGE1:$DOCKER_TAG
-                docker push $DOCKER_ID/$DOCKER_IMAGE2:$DOCKER_TAG
+                docker push $DOCKER_ID/$DOCKER_IMAGE1-$name_branch:$DOCKER_TAG
+                docker push $DOCKER_ID/$DOCKER_IMAGE2-$name_branch:$DOCKER_TAG
              '''
              }
           }
