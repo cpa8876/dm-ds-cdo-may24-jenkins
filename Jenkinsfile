@@ -328,7 +328,7 @@ pipeline {
                         
                     } else {
                       
-                        echo $branch
+                        echo $name_branch
                         echo "Branche non configurée pour déploiement automatique"
                     }
                      '''
