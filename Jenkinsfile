@@ -36,12 +36,14 @@ pipeline {
           echo "#### Building branch: $name_branch"
           //name_branch="${echo ${name_branch0##*/}}" 
           //name_branch="${name_branch0##*/}" 
-          name_branch="${name_branch0.split("/").size() > 1 ? name_branch0.split("/")[1] : name_branch0}" 
-          echo $name_branch 
+          //name_branch="${name_branch0.split("/").size() > 1 ? name_branch0.split("/")[1] : name_branch0}" 
+          //echo $name_branch 
           //checkout([$class: 'GitSCM', branches: [[name: 'develop']], extensions: [], userRemoteConfigs: [[url: 'https://your-repo-url.git']]])
           //name_branch=$(echo ${name_branch0} | sed 's/refs\/heads\///g')
           // https://search.brave.com/search?q=extract+filename+with+url+shell+sed&summary=1&conversation=8beb0e49c110e15f4495dc
-          sh '''           
+          sh '''
+            name_branch=${name_branch0##*/}
+            echo $name_branch 
             cd $URL_REPO_GH_LOCAL
             pwd
             docker rm -f $DOCKER_ID/$DOCKER_IMAGE1_$name_branch
@@ -267,7 +269,8 @@ pipeline {
                 script {//name_branch=$(echo ${name_branch0} | sed 's/refs\/heads\///g')
                      echo "#### Building branch: $name_branch"
                      sh '''
-                     echo $name_branch
+                     name_branch=${name_branch0##*/}
+                     echo $name_branch 
                      if ($name_branch == 'develop') {
                       
                         echo "Déploiement sur l'environnement DEV"
