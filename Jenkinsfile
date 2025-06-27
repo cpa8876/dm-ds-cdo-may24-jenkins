@@ -273,7 +273,7 @@ pipeline {
                      sh '''
                            name_branch=$(echo ${name_branch0} | sed 's#refs/heads/##g')
                            echo "#### Building branch: $name_branch"
-                           if [ "$name_branch" == "develop" ];
+                           if ("$name_branch" == "develop");
                            then
                              echo "Déploiement sur l'environnement DEV";
                              mkdir -p /home/jenkins/.minikube/profiles/minikube/;
@@ -290,7 +290,7 @@ pipeline {
                              cat values.yml;
                              sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml;
                              helm --kubeconfig $URL_FILE_CONFIG_MINIKUB upgrade --install app fastapi --values=values.yml --namespace dev;
-                          elif [ "$name_branch" ==q "qa" ];
+                          elif ("$name_branch" ==q "qa");
                           then
                             echo "Déploiement sur l'environnement QA";
                             mkdir -p /home/jenkins/.minikube/profiles/minikube/;
@@ -301,7 +301,7 @@ pipeline {
                             hostname -I;
                             kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get nodes;
                             kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get all -n qa;
-                          elif [ "$name_branch" == "staging"];
+                          elif ("$name_branch" == "staging");
                           then
                             echo "Déploiement sur l'environnement STAGING";
                             mkdir -p /home/jenkins/.minikube/profiles/minikube/;
@@ -312,7 +312,7 @@ pipeline {
                             hostname -I;
                             kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get nodes;
                             kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get all -n staging;
-                          elif [ "$name_branch" -eq "main" || "$name_branch" == "master"];
+                          elif ("$name_branch" -eq "main" || "$name_branch" == "master");
                           then
                             echo "Déploiement sur l'environnement PROD";
                             mkdir -p /home/jenkins/.minikube/profiles/minikube/;
