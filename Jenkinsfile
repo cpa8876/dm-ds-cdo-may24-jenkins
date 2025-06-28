@@ -326,9 +326,7 @@ pipeline {
                     }
                 }
               }
-      }
-
-  }  
+      }  
   post { // send email when the job has failed
   // ..
     success {
