@@ -29,6 +29,7 @@ pipeline {
     URL_REP_HELM_FAT_CAST_SERVICE="$URL_REP_HELM_FAT/cast-service"        // Directory containned chart helm of cast_service
     URL_REP_HELM_FAT_MOVIE_SERVICE="$URL_REP_HELM_FAT/movie-service"      // Directory containned chart helm of fastapi-movie_service 
     URL_FILE_CONFIG_MINIKUBE="/home/jenkins/.minikube/config"              // Url file of config to enable connect on minikube cluster
+    name_branch0="{env.ref}"
      }
   stages {
     stage('Docker Build'){
@@ -37,8 +38,8 @@ pipeline {
           // https://search.brave.com/search?q=sed+caract%C3%A8re+sp%C3%A9ciaux+%2F&source=desktop&summary=1&conversation=bc5fb68b4e385ab86446da
           // /bin/sh -c "name_branch=$(echo ${name_branch0} | sed 's#refs/heads/##g'); echo \"#### Building branch: ${name_branch}\"; if [ \"$name_branch\" = \"develop\" ]; then  echo \"$name_branch\"; fi"
           sh '''
-            echo "Building branch: ${env.ref}"
-            name_branch=$(echo "${env.ref}" | sed "s#refs/heads/##g")
+            echo "Building branch: $name_branch0"
+            name_branch=$(echo $name_branch0 | sed "s#refs/heads/##g")
             echo $name_branch 
             cd URL_REPO_GH_LOCAL
             pwd
@@ -268,7 +269,7 @@ pipeline {
                   // B02-02_bin/sh -c 'name_branch=$(echo ${name_branch0} | sed "s#refs/heads/##g"); echo "#### Building branch: $name_branch"; if [ "$name_branch"=="develop" ]; then  echo "OK"; fi'; # Rep att : #### Building branch:  OK
                   // https://search.brave.com/search?q=error+bin%2Fsh%2520-c%2520%27name_branch%3D%24(echo%2520%24%257Bname_branch0%257D%2520%257C%2520sed%2520%22s%23refs%2Fheads%2F%23%23g%22)%3B%2520echo%2520%22%23%23%23%23%2520Building%2520branch%3A%2520%24name_branch%22%2520if%2520%5B%2520%22%24name_branch%22%2520%3D%3D%2520%22develop%22%2520%5D%2520then%2520%2520echo%2520%22OK%3B%2520fi%27%2520%2Fbin%2Fsh%3A%25201%3A%2520Syntax%2520error%3A%2520Unterminated%2520quoted%2520string&source=desktop
                   sh '''
-                     name_branch=$(echo "${env.ref}" | sed 's#refs/heads/##g')
+                     name_branch=$(echo $name_branch0 | sed 's#refs/heads/##g')
                      if | "$name_branch"=="develop" ]; 
                      then                      
                         echo "Déploiement sur l'environnement DEV"
