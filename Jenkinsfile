@@ -44,9 +44,9 @@ pipeline {
             cd $URL_REPO_GH_LOCAL
             pwd
             docker rm -f $DOCKER_ID/$DOCKER_IMAGE1_$name_branch
-            docker build -t $DOCKER_ID/$DOCKER_IMAGE1_$name_branch:$DOCKER_TAG $URL_REP_DCKR_FAT_MOVIE
+            docker build -t $DOCKER_ID/$DOCKER_IMAGE1-$name_branch:$DOCKER_TAG $URL_REP_DCKR_FAT_MOVIE
             docker rm -f $DOCKER_ID/$DOCKER_IMAGE2
-            docker build -t $DOCKER_ID/$DOCKER_IMAGE2_$name_branch:$DOCKER_TAG $URL_REP_DCKR_FAT_CAST
+            docker build -t $DOCKER_ID/$DOCKER_IMAGE2-$name_branch:$DOCKER_TAG $URL_REP_DCKR_FAT_CAST
             docker image ls -a | grep fastapi
             sleep 6
           '''
@@ -251,8 +251,8 @@ pipeline {
           withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'dockerhub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
           sh '''
                 docker login -u $USERNAME -p $PASSWORD
-                docker push $DOCKER_ID/$DOCKER_IMAGE1_$name_branch:$DOCKER_TAG
-                docker push $DOCKER_ID/$DOCKER_IMAGE2_$name_branch:$DOCKER_TAG
+                docker push $DOCKER_ID/$DOCKER_IMAGE1-$name_branch:$DOCKER_TAG
+                docker push $DOCKER_ID/$DOCKER_IMAGE2-$name_branch:$DOCKER_TAG
              '''
              }
           }
