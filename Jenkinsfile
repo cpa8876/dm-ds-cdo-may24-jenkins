@@ -38,8 +38,9 @@ pipeline {
           // https://search.brave.com/search?q=sed+caract%C3%A8re+sp%C3%A9ciaux+%2F&source=desktop&summary=1&conversation=bc5fb68b4e385ab86446da
           // /bin/sh -c "name_branch=$(echo ${name_branch0} | sed 's#refs/heads/##g'); echo \"#### Building branch: ${name_branch}\"; if [ \"$name_branch\" = \"develop\" ]; then  echo \"$name_branch\"; fi"
           sh '''
-            echo "Building branch: $name_branch0"
+            echo "### Building branch: $name_branch0"
             name_branch=$(echo $name_branch0 | sed "s#refs/heads/##g")
+            echo -e "\n\n ### Build images docker with dockerfile of the branch: $name_branch"
             echo $name_branch 
             cd $URL_REPO_GH_LOCAL
             pwd
@@ -68,6 +69,8 @@ pipeline {
       steps {
         script {//curl localhost or curl 127.0.0.1:8480 "curl -svo /dev/null http://localhost" or docker exec -it my-ctnr-ds-fastapi curl localhost
           sh '''
+            name_branch=$(echo $name_branch0 | sed "s#refs/heads/##g")
+            echo -e "\n\n ### Test acceptance on contenair docker crezated with image fastapi-cast and fastapi-movie applications built with dockerfile of the branch: $name_branch"
             echo -e "\n\n -------------------------------------------------------------------"
             echo -e "Tests acceptance access on contenaires  cast_db, movie_db, cast _service, movie_service and loadbalancer\n  "
             echo -e "\n\n ------------------------------------------"
@@ -250,6 +253,8 @@ pipeline {
              //docker push $DOCKER_ID/$DOCKER_IMAGE1:$DOCKER_TAG
           withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'dockerhub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
           sh '''
+                name_branch=$(echo $name_branch0 | sed "s#refs/heads/##g")
+                echo -e "\n\n ### Push docker images fastapi-cast and fastapi-movie with dockerfile of the branch: $name_branch"
                 docker login -u $USERNAME -p $PASSWORD
                 docker push $DOCKER_ID/$DOCKER_IMAGE1-$name_branch:$DOCKER_TAG
                 docker push $DOCKER_ID/$DOCKER_IMAGE2-$name_branch:$DOCKER_TAG
