@@ -33,10 +33,11 @@ pipeline {
     stage('Docker Build'){
       steps {
           //echo "Building branch: ${env.BRANCH_NAME}"
-    
+          // https://search.brave.com/search?q=sed+caract%C3%A8re+sp%C3%A9ciaux+%2F&source=desktop&summary=1&conversation=bc5fb68b4e385ab86446da
+          // /bin/sh -c "name_branch=$(echo ${name_branch0} | sed 's#refs/heads/##g'); echo \"#### Building branch: ${name_branch}\"; if [ \"$name_branch\" = \"develop\" ]; then  echo \"$name_branch\"; fi"
           sh '''
             echo "Building branch: ${env.ref}"
-            name_branch=$(echo  ${env.ref} | sed 's/refs\/heads\///g')
+            name_branch=$(echo  ${env.ref} | sed 's#refs/heads/##g')
             echo $name_branch 
             cd URL_REPO_GH_LOCAL
             pwd
