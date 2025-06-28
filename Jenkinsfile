@@ -7,8 +7,12 @@
 
 pipeline {
   agent any // Jenkins will be able to select all available agents
+  // How-to's and Support; Jenkins Multibranch Pipeline With Git Tutorial :
+  //   https://www.cloudbees.com/blog/jenkins-multibranch-pipeline-with-git-tutorial
+   options {
+    buildDiscarder logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '5', daysToKeepStr: '', numToKeepStr: '5')
   environment { // Declaration of environment variables
-    nom='datascientest'                                                    // nom="datascientest"
+    nom='dm-jenkins-cpa'                                                    // nom="dm-jenkins-cpa"
     DOCKER_ID="cpa8876"                                                    // replace this with your docker-id DOCKER_ID="cpa8876"
     DOCKER_IMAGE="ds-fastapi"                                              // DOCKER_IMAGE="ds-fastapi"
     DOCKER_IMAGE1="movie-ds-fastapi"                                       // DOCKER_IMAGE1="movie-ds-fastapi"
@@ -24,32 +28,24 @@ pipeline {
     URL_REP_HELM_FAT_CAST_SERVICE="$URL_REP_HELM_FAT/cast-service"        // Directory containned chart helm of cast_service
     URL_REP_HELM_FAT_MOVIE_SERVICE="$URL_REP_HELM_FAT/movie-service"      // Directory containned chart helm of fastapi-movie_service 
     URL_FILE_CONFIG_MINIKUBE="/home/jenkins/.minikube/config"              // Url file of config to enable connect on minikube cluster
-    name_branch0="${env.ref}"
-    //name_branch="${name_branch0.split("/").size() > 1 ? name_branch0.split("/")[1] : name_branch0}" 
-    // BRANCH_NAME = "${GIT_BRANCH.split("/").size() > 1 ? GIT_BRANCH.split("/")[1] : GIT_BRANCH}" :
-    //  https://stackoverflow.com/questions/42383273/get-git-branch-name-in-jenkins-pipeline-jenkinsfile
      }
   stages {
     stage('Docker Build'){
       steps {
           //echo "Building branch: ${env.BRANCH_NAME}"
-          echo "#### Building branch: $name_branch0"
-          //name_branch="${echo ${name_branch0##*/}}" 
-          //name_branch="${name_branch0##*/}" 
-          //name_branch="${name_branch0.split("/").size() > 1 ? name_branch0.split("/")[1] : name_branch0}" 
-          //echo $name_branch 
-          //checkout([$class: 'GitSCM', branches: [[name: 'develop']], extensions: [], userRemoteConfigs: [[url: 'https://your-repo-url.git']]])
-          //name_branch=$(echo ${name_branch0} | sed 's/refs\/heads\///g')
-          // https://search.brave.com/search?q=extract+filename+with+url+shell+sed&summary=1&conversation=8beb0e49c110e15f4495dc
+    
           sh '''
-            name_branch=$(echo ${name_branch0} | sed 's#refs/heads/##g')
-            echo "#### Building branch: $name_branch "
-            cd $URL_REPO_GH_LOCAL
+            echo "Building branch: ${env.ref}"
+            name_branch=$(echo  ${env.ref} | sed 's/refs\/heads\///g')
+            echo $name_branch 
+            cd URL_REPO_GH_LOCAL
             pwd
-            docker rm -f $DOCKER_ID/$DOCKER_IMAGE1-$name_branch
-            docker build -t $DOCKER_ID/$DOCKER_IMAGE1-$name_branch:$DOCKER_TAG $URL_REP_DCKR_FAT_MOVIE
+            git branch $name_branch
+            git
+            docker rm -f $DOCKER_ID/$DOCKER_IMAGE1_$name_branch
+            docker build -t $DOCKER_ID/$DOCKER_IMAGE1_$name_branch:$DOCKER_TAG $URL_REP_DCKR_FAT_MOVIE
             docker rm -f $DOCKER_ID/$DOCKER_IMAGE2
-            docker build -t $DOCKER_ID/$DOCKER_IMAGE2-$name_branch:$DOCKER_TAG $URL_REP_DCKR_FAT_CAST
+            docker build -t $DOCKER_ID/$DOCKER_IMAGE2_$name_branch:$DOCKER_TAG $URL_REP_DCKR_FAT_CAST
             docker image ls -a | grep fastapi
             sleep 6
           '''
@@ -253,10 +249,9 @@ pipeline {
              //docker push $DOCKER_ID/$DOCKER_IMAGE1:$DOCKER_TAG
           withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'dockerhub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
           sh '''
-                name_branch=$(echo ${name_branch0} | sed 's#refs/heads/##g')
                 docker login -u $USERNAME -p $PASSWORD
-                docker push $DOCKER_ID/$DOCKER_IMAGE1-$name_branch:$DOCKER_TAG
-                docker push $DOCKER_ID/$DOCKER_IMAGE2-$name_branch:$DOCKER_TAG
+                docker push $DOCKER_ID/$DOCKER_IMAGE1:$DOCKER_TAG
+                docker push $DOCKER_ID/$DOCKER_IMAGE2:$DOCKER_TAG
              '''
              }
           }
@@ -267,71 +262,73 @@ pipeline {
                       KUBECONFIG = credentials("kubeconfig-dev") // we retrieve  kubeconfig from secret file called config saved on jenkins
                     }
             steps {
-                script {//name_branch=$(echo ${name_branch0} | sed 's/refs\/heads\///g')
-                // Constructing nested if-else statements for complex scenarios:
-                // https://www.digitalocean.com/community/tutorials/if-else-in-shell-scripts
-                     sh '''
-                           name_branch=$(echo ${name_branch0} | sed 's#refs/heads/##g')
-                           echo "#### Building branch: $name_branch"
-                           if [ "$name_branch"=="develop" ];
-                           then
-                             echo "Déploiement sur l'environnement DEV";
-                             mkdir -p /home/jenkins/.minikube/profiles/minikube/;
-                             ls -lha /home/jenkins/.minikube/profiles/minikube/;
-                             cat $KUBECONFIG > $URL_FILE_CONFIG_MINIKUBE;
-                             echo $URL_FILE_CONFIG_MINIKUBE;
-                             cat $URL_FILE_CONFIG_MINIKUBE;
-                             whoami;
-                             pwd;
-                             hostname -I;
-                             kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get nodes;
-                             kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get all -n dev;
-                             cp fastapi/values.yaml values.yml;
-                             cat values.yml;
-                             sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml;
-                             helm --kubeconfig $URL_FILE_CONFIG_MINIKUB upgrade --install app fastapi --values=values.yml --namespace dev;
-                          elif [ "$name_branch"=="qa" ];
-                          then
-                            echo "Déploiement sur l'environnement QA";
-                            mkdir -p /home/jenkins/.minikube/profiles/minikube/;
-                            ls -lha /home/jenkins/.minikube/profiles/minikube/;
-                            cat $KUBECONFIG > $URL_FILE_CONFIG_MINIKUBE;
-                            whoami;
-                            pwd;
-                            hostname -I;
-                            kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get nodes;
-                            kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get all -n qa;
-                          elif [ "$name_branch"=="staging" ];
-                          then
-                            echo "Déploiement sur l'environnement STAGING";
-                            mkdir -p /home/jenkins/.minikube/profiles/minikube/;
-                            ls -lha /home/jenkins/.minikube/profiles/minikube/;
-                            cat $KUBECONFIG > $URL_FILE_CONFIG_MINIKUBE;
-                            whoami;
-                            pwd;
-                            hostname -I;
-                            kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get nodes;
-                            kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get all -n staging;
-                          elif [ "$name_branch"=="main" || "$name_branch" == "master" ];
-                          then
-                            echo "Déploiement sur l'environnement PROD";
-                            mkdir -p /home/jenkins/.minikube/profiles/minikube/;
-                            ls -lha /home/jenkins/.minikube/profiles/minikube/;
-                            cat $KUBECONFIG > $URL_FILE_CONFIG_MINIKUBE;
-                            whoami;
-                            pwd;
-                            hostname -I;
-                            kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get nodes;
-                            kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get all -n prod;
-                          else 
-                            echo "#### Branche : $name_branch non configurée pour déploiement automatique";
-                          fi
-                     '''
+                script {
+                     name_branch=$(echo  ${env.ref} | sed 's/refs\/heads\///g')
+                     if ($name_branch == 'develop') {
+                      sh '''
+                        echo "Déploiement sur l'environnement DEV"
+                        mkdir -p /home/jenkins/.minikube/profiles/minikube/;
+                        ls -lha /home/jenkins/.minikube/profiles/minikube/;
+                        cat $KUBECONFIG > $URL_FILE_CONFIG_MINIKUBE;
+                        echo $URL_FILE_CONFIG_MINIKUBE
+                        cat $URL_FILE_CONFIG_MINIKUBE;
+                        whoami;
+                        pwd;
+                        hostname -I;
+                        kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get nodes;
+                        kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get all -n dev
+                        cp fastapi/values.yaml values.yml
+                        cat values.yml
+                        sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
+                        helm --kubeconfig $URL_FILE_CONFIG_MINIKUB upgrade --install app fastapi --values=values.yml --namespace dev
+                      '''
+                    } else if ($name_branch == 'qa') {
+                      sh '''
+                        echo "Déploiement sur l'environnement QA"
+                        mkdir -p /home/jenkins/.minikube/profiles/minikube/;
+                        ls -lha /home/jenkins/.minikube/profiles/minikube/;
+                        cat $KUBECONFIG > $URL_FILE_CONFIG_MINIKUBE;
+                        whoami;
+                        pwd;
+                        hostname -I;
+                        kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get nodes;
+                        kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get all -n qa
+                        '''
+                    } else if ($name_branch == 'staging') {
+                      sh '''
+                        echo "Déploiement sur l'environnement STAGING"
+                        mkdir -p /home/jenkins/.minikube/profiles/minikube/;
+                        ls -lha /home/jenkins/.minikube/profiles/minikube/;
+                        cat $KUBECONFIG > $URL_FILE_CONFIG_MINIKUBE;
+                        whoami;
+                        pwd;
+                        hostname -I;
+                        kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get nodes;
+                        kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get all -n staging
+                        '''
+                    } else if ($name_branch == 'main' || $name_branch == 'master') {
+                      sh '''
+                        echo "Déploiement sur l'environnement PROD"
+                        mkdir -p /home/jenkins/.minikube/profiles/minikube/;
+                        ls -lha /home/jenkins/.minikube/profiles/minikube/;
+                        cat $KUBECONFIG > $URL_FILE_CONFIG_MINIKUBE;
+                        whoami;
+                        pwd;
+                        hostname -I;
+                        kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get nodes;
+                        kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get all -n prod
+                        '''
+                    } else {
+                      sh '''
+                        echo $branch
+                        echo "Branche non configurée pour déploiement automatique"
+                      '''
                     }
-                 }
-             }
+                }
+              }
+      }
 
-    }  
+  }  
   post { // send email when the job has failed
   // ..
     success {
