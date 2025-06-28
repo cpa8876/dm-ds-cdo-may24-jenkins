@@ -264,7 +264,7 @@ pipeline {
                     }
             steps {
                 script {
-                     name_branch=$(echo  ${env.ref} | sed 's/refs\/heads\///g')
+                     name_branch=$(echo  ${env.ref} | sed 's#refs/heads/##g')
                      if ($name_branch == 'develop') {
                       sh '''
                         echo "Déploiement sur l'environnement DEV"
