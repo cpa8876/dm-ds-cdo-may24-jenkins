@@ -43,8 +43,6 @@ pipeline {
             echo $name_branch 
             cd $URL_REPO_GH_LOCAL
             pwd
-            git branch $name_branch
-            git
             docker rm -f $DOCKER_ID/$DOCKER_IMAGE1_$name_branch
             docker build -t $DOCKER_ID/$DOCKER_IMAGE1_$name_branch:$DOCKER_TAG $URL_REP_DCKR_FAT_MOVIE
             docker rm -f $DOCKER_ID/$DOCKER_IMAGE2
