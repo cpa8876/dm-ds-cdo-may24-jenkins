@@ -251,8 +251,8 @@ pipeline {
           withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'dockerhub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
           sh '''
                 docker login -u $USERNAME -p $PASSWORD
-                docker push $DOCKER_ID/$DOCKER_IMAGE1:$DOCKER_TAG
-                docker push $DOCKER_ID/$DOCKER_IMAGE2:$DOCKER_TAG
+                docker push $DOCKER_ID/$DOCKER_IMAGE1_$name_branch:$DOCKER_TAG
+                docker push $DOCKER_ID/$DOCKER_IMAGE2_$name_branch:$DOCKER_TAG
              '''
              }
           }
