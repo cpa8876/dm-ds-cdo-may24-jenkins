@@ -11,6 +11,7 @@ pipeline {
   //   https://www.cloudbees.com/blog/jenkins-multibranch-pipeline-with-git-tutorial
    options {
     buildDiscarder logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '5', daysToKeepStr: '', numToKeepStr: '5')
+   }
   environment { // Declaration of environment variables
     nom='dm-jenkins-cpa'                                                    // nom="dm-jenkins-cpa"
     DOCKER_ID="cpa8876"                                                    // replace this with your docker-id DOCKER_ID="cpa8876"
