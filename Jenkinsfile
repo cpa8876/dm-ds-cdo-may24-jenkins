@@ -37,11 +37,11 @@ pipeline {
   stages {
     stage('Docker Build'){
       steps {
-          //echo "### Building branch: ${env.BRANCH_NAME}"
+          //echo -e "\n\n### Building branch: ${env.BRANCH_NAME}"
           // https://search.brave.com/search?q=sed+caract%C3%A8re+sp%C3%A9ciaux+%2F&source=desktop&summary=1&conversation=bc5fb68b4e385ab86446da
           // /bin/sh -c "name_branch=$(echo ${name_branch0} | sed 's#refs/heads/##g'); echo \"#### Building branch: ${name_branch}\"; if [ \"$name_branch\" = \"develop\" ]; then  echo \"$name_branch\"; fi"
           sh '''
-            echo "### Building branch: $name_branch0"
+            echo -e "\n\n### Building branch: $name_branch0"
             name_branch=$(echo $name_branch0 | sed "s#refs/heads/##g")
             echo -e "\n\n ### Build images docker with dockerfile of the branch: $name_branch"
             echo $name_branch 
@@ -275,7 +275,7 @@ pipeline {
                 // initialisation of kubeconfig file on jenkins server to enalble to access minikube cluster
                 // K8s/Kubectl/B12-01/Kode cloud; Kubectl / How to Use Kubectl Config Set-Context; https://kodekloud.com/blog/kubectl-change-context/
                   sh '''
-                      echo "### initialisation of kubeconfig file on jenkins server to enalble to access minikube cluster"
+                      echo -e "\n\n### initialisation of kubeconfig file on jenkins server to enalble to access minikube cluster"
                       mkdir -p /home/jenkins/.minikube/profiles/minikube/;
                       ls -lha /home/jenkins/.minikube/profiles/minikube/;
                       cat $KUBECONFIG > $URL_FILE_CONFIG_MINIKUBE;
@@ -287,7 +287,7 @@ pipeline {
                    '''
               }
               script {
-                  // B02-02_bin/sh -c 'name_branch=$(echo ${name_branch0} | sed "s#refs/heads/##g"); echo "#### Building branch: $name_branch"; if [ "$name_branch"=="develop" ]; then  echo "OK"; fi'; # Rep att : #### Building branch:  OK
+                  // B02-02_bin/sh -c 'name_branch=$(echo ${name_branch0} | sed "s#refs/heads/##g"); echo -e "\n\n#### Building branch: $name_branch"; if [ "$name_branch"=="develop" ]; then  echo "OK"; fi'; # Rep att : #### Building branch:  OK
                   // https://search.brave.com/search?q=error+bin%2Fsh%2520-c%2520%27name_branch%3D%24(echo%2520%24%257Bname_branch0%257D%2520%257C%2520sed%2520%22s%23refs%2Fheads%2F%23%23g%22)%3B%2520echo%2520%22%23%23%23%23%2520Building%2520branch%3A%2520%24name_branch%22%2520if%2520%5B%2520%22%24name_branch%22%2520%3D%3D%2520%22develop%22%2520%5D%2520then%2520%2520echo%2520%22OK%3B%2520fi%27%2520%2Fbin%2Fsh%3A%25201%3A%2520Syntax%2520error%3A%2520Unterminated%2520quoted%2520string&source=desktop
                   sh '''
                      name_branch=$(echo $name_branch0 | sed 's#refs/heads/##g')
@@ -303,7 +303,7 @@ pipeline {
                         pwd;
                      elif [ "$name_branch"=="qa" ]; 
                      then    
-                        echo "### Déploiement sur l'environnement QA"
+                        echo -e "\n\n### Déploiement sur l'environnement QA"
                         echo "\n### Choose context deops-develop defined on kubeconfig file of the cluster minikube with user minikube"
                         kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE config use-context devops-$name_branch;
                         kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE config get-contexts;
@@ -312,7 +312,7 @@ pipeline {
                         pwd;
                      elif [ "$name_branch"=="staging" ]; 
                      then  
-                        echo "### Déploiement sur l'environnement STAGING"
+                        echo -e "\n\n### Déploiement sur l'environnement STAGING"
                         echo "\n### Choose context deops-develop defined on kubeconfig file of the cluster minikube with user minikube"
                         kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE config use-context devops-$name_branch;
                         kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE config get-contexts;
@@ -321,7 +321,11 @@ pipeline {
                         pwd;
                      elif [ "$name_branch"=="main" ]; 
                      then  
-                        echo "### Déploiement sur l'environnement PROD"
+                        echo -e "\n\n### Déploiement sur l'environnement PROD";
+                        echo -e "\n\n###// Create an Approval Button with a timeout of 15minutes.";
+                        echo -e "\n\n###// this require a manuel validation in order to deploy on production environment";
+                        timeout(time: 15, unit: "MINUTES") {
+                        input message: 'Do you want to deploy in production ?', ok: 'Yes'
                         echo "\n### Choose context deops-develop defined on kubeconfig file of the cluster minikube with user minikube"
                         kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE config use-context devops-$name_branch;
                         kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE config get-contexts;
@@ -330,20 +334,20 @@ pipeline {
                         pwd;
                       else
                         echo $branch
-                        echo "### Branche non configurée pour déploiement automatique"
+                        echo -e "\n\n### Branche $name_branch non configurée pour le déploiement automatique"
                       fi
 
                       kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get nodes;
 
                       kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get all -n $name_branch;
 
-                      echo "### helm --kubeconfig $URL_FILE_CONFIG_MINIKUB upgrade --install cast-db-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml";
+                      echo -e "\n\n### helm --kubeconfig $URL_FILE_CONFIG_MINIKUB upgrade --install cast-db-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml";
 
-                      echo "### helm --kubeconfig $URL_FILE_CONFIG_MINIKUB upgrade --install cast-fastapi-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml";
+                      echo -e "\n\n### helm --kubeconfig $URL_FILE_CONFIG_MINIKUB upgrade --install cast-fastapi-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml";
 
-                        echo "### helm --kubeconfig $URL_FILE_CONFIG_MINIKUB upgrade --install cast-db-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml";
+                      echo -e "\n\n### helm --kubeconfig $URL_FILE_CONFIG_MINIKUB upgrade --install cast-db-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml";
 
-                        echo "### helm --kubeconfig $URL_FILE_CONFIG_MINIKUB upgrade --install cast-fastapi-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml"; 
+                      echo -e "\n\n### helm --kubeconfig $URL_FILE_CONFIG_MINIKUB upgrade --install cast-fastapi-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml"; 
                       '''
                     }
                 }
@@ -361,13 +365,13 @@ pipeline {
                     // color: "good",
                     // message: "${env.STACK_PREFIX} production deploy: *${env.DEPLOY_VERSION}*. <${env.DEPLOY_URL}|Access service> - <${env.BUILD_URL}|Check build>"
                     //)
-      echo "### This will run if the job succeed"
+      echo -e "\n\n### This will run if the job succeed"
       mail to: "cristofe.pascale@gmail.com",
         subject: "${env.JOB_NAME} - Build # ${env.BUILD_ID} has succed",
         body: "For more info on the pipeline success, check out the console output at ${env.BUILD_URL}"
                 }
     failure {
-      echo "### This will run if the job failed"
+      echo -e "\n\n### This will run if the job failed"
       mail to: "cristofe.pascale@gmail.com",
         subject: "${env.JOB_NAME} - Build # ${env.BUILD_ID} has failed",
         body: "For more info on the pipeline failure, check out the console output at ${env.BUILD_URL}"
