@@ -352,7 +352,7 @@ pipeline {
                       pwd;
 
                       echo -e "\n\n### deploy movie-fastapi with cmd : \n$:  --kubeconfig $URL_FILE_CONFIG_MINIKUB upgrade --install cast-fastapi-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml"; 
-                      cd "$URL_REPO_GH_LOCAL/dm-jenkins-cpa/movie-service/helm/movie-fastapidb";
+                      cd "$URL_REPO_GH_LOCAL/dm-jenkins-cpa/movie-service/helm/movie-fastapi";
                       pwd;
 
                       echo -e "\n\n### deploy web-nginx with cmd : \n$:  helm --kubeconfig $URL_FILE_CONFIG_MINIKUB upgrade --install web-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml"; 
