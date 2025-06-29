@@ -282,8 +282,6 @@ pipeline {
                       echo $URL_FILE_CONFIG_MINIKUBE;
                       cat $URL_FILE_CONFIG_MINIKUBE;
                       pwd;
-                      cd ./dm-jenkins-cpa/cast-service/helm/cast-db/;
-                      pwd;
                    '''
               }
               script {
@@ -294,8 +292,8 @@ pipeline {
                      echo -e "\n\n ### Deploy on the cluster minikube fastapi-cast and fastapi-movie application with chart helms of the branch: $name_branch"
                      if [ "$name_branch"=="develop" ]; 
                      then                      
-                        echo "\n### Déploiement sur l'environnement DEV"
-                        echo "\n### Choose context deops-develop defined on kubeconfig file of the cluster minikube with user minikube"
+                        echo -e "\n### Déploiement sur l'environnement DEV"
+                        echo -e "\n\n### Choose context deops-develop defined on kubeconfig file of the cluster minikube with user minikube"
                         kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE config use-context devops-$name_branch;
                         kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE config get-contexts;
                         whoami;
@@ -304,7 +302,7 @@ pipeline {
                      elif [ "$name_branch"=="qa" ]; 
                      then    
                         echo -e "\n\n### Déploiement sur l'environnement QA"
-                        echo "\n### Choose context deops-develop defined on kubeconfig file of the cluster minikube with user minikube"
+                        echo -e "\n\n### Choose context deops-develop defined on kubeconfig file of the cluster minikube with user minikube"
                         kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE config use-context devops-$name_branch;
                         kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE config get-contexts;
                         whoami;
@@ -313,7 +311,7 @@ pipeline {
                      elif [ "$name_branch"=="staging" ]; 
                      then  
                         echo -e "\n\n### Déploiement sur l'environnement STAGING"
-                        echo "\n### Choose context deops-develop defined on kubeconfig file of the cluster minikube with user minikube"
+                        echo -e "\n\n### Choose context deops-develop defined on kubeconfig file of the cluster minikube with user minikube"
                         kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE config use-context devops-$name_branch;
                         kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE config get-contexts;
                         whoami;
@@ -326,7 +324,7 @@ pipeline {
                         echo -e "\n\n###// this require a manuel validation in order to deploy on production environment";
                         timeout(time: 15, unit: "MINUTES") {
                         input message: 'Do you want to deploy in production ?', ok: 'Yes'
-                        echo "\n### Choose context deops-develop defined on kubeconfig file of the cluster minikube with user minikube"
+                        echo -e "\n\n### Choose context deops-develop defined on kubeconfig file of the cluster minikube with user minikube"
                         kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE config use-context devops-$name_branch;
                         kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE config get-contexts;
                         whoami;
@@ -340,13 +338,25 @@ pipeline {
 
                       kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get all -n $name_branch;
 
-                      echo -e "\n\n### helm --kubeconfig $URL_FILE_CONFIG_MINIKUB upgrade --install cast-db-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml";
+                      echo -e "\n\n### deploy cast-db with cmd : \n$: helm --kubeconfig $URL_FILE_CONFIG_MINIKUB upgrade --install cast-db-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml";
+                      cd ./dm-jenkins-cpa/cast-service/helm/cast-db/;
+                      pwd;
 
-                      echo -e "\n\n### helm --kubeconfig $URL_FILE_CONFIG_MINIKUB upgrade --install cast-fastapi-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml";
+                      echo -e "\n\n### deploy cast-fastapi with cmd : \n$: helm --kubeconfig $URL_FILE_CONFIG_MINIKUB upgrade --install cast-fastapi-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml";
+                      cd ./dm-jenkins-cpa/cast-service/helm/cast-fastapi/;
+                      pwd;
 
-                      echo -e "\n\n### helm --kubeconfig $URL_FILE_CONFIG_MINIKUB upgrade --install cast-db-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml";
+                      echo -e "\n\n### deploy movie-db with cmd : \n$:  helm --kubeconfig $URL_FILE_CONFIG_MINIKUB upgrade --install cast-db-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml";
+                      cd ./dm-jenkins-cpa/movie-service/helm/movie-db/;
+                      pwd;
 
-                      echo -e "\n\n### helm --kubeconfig $URL_FILE_CONFIG_MINIKUB upgrade --install cast-fastapi-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml"; 
+                      echo -e "\n\n### deploy movie-fastapi with cmd : \n$:  --kubeconfig $URL_FILE_CONFIG_MINIKUB upgrade --install cast-fastapi-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml"; 
+                      cd ./dm-jenkins-cpa/movie-service/helm/movie-fastapidb/;
+                      pwd;
+
+                      echo -e "\n\n### deploy web-nginx with cmd : \n$:  helm --kubeconfig $URL_FILE_CONFIG_MINIKUB upgrade --install web-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml"; 
+                      cd ./dm-jenkins-cpa/web/helm/nginx;
+                      pwd;
                       '''
                     }
                 }
