@@ -275,7 +275,7 @@ pipeline {
                 // initialisation of kubeconfig file on jenkins server to enalble to access minikube cluster
                 // K8s/Kubectl/B12-01/Kode cloud; Kubectl / How to Use Kubectl Config Set-Context; https://kodekloud.com/blog/kubectl-change-context/
                   sh '''
-                      echo -e "\n\n### initialisation of kubeconfig file on jenkins server to enalble to access minikube cluster"
+                      echo "\n\n### initialisation of kubeconfig file on jenkins server to enalble to access minikube cluster"
                       mkdir -p /home/jenkins/.minikube/profiles/minikube/;
                       ls -lha /home/jenkins/.minikube/profiles/minikube/;
                       cat $KUBECONFIG > $URL_FILE_CONFIG_MINIKUBE;
@@ -340,23 +340,23 @@ pipeline {
                       kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get all -n $name_branch;
 
                       echo -e "\n\n### deploy cast-db with cmd : \n$: helm --kubeconfig $URL_FILE_CONFIG_MINIKUB upgrade --install cast-db-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml";
-                      cd "dm-jenkins-cpa/cast-service/helm/cast-db/";
+                      cd "$URL_REPO_GH_LOCAL/dm-jenkins-cpa/cast-service/helm/cast-db";
                       pwd;
 
                       echo -e "\n\n### deploy cast-fastapi with cmd : \n$: helm --kubeconfig $URL_FILE_CONFIG_MINIKUB upgrade --install cast-fastapi-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml";
-                      cd "dm-jenkins-cpa/cast-service/helm/cast-fastapi/";
+                      cd "$URL_REPO_GH_LOCAL/dm-jenkins-cpa/cast-service/helm/cast-fastapi";
                       pwd;
 
                       echo -e "\n\n### deploy movie-db with cmd : \n$:  helm --kubeconfig $URL_FILE_CONFIG_MINIKUB upgrade --install cast-db-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml";
-                      cd "dm-jenkins-cpa/movie-service/helm/movie-db/";
+                      cd "$URL_REPO_GH_LOCAL/dm-jenkins-cpa/movie-service/helm/movie-db";
                       pwd;
 
                       echo -e "\n\n### deploy movie-fastapi with cmd : \n$:  --kubeconfig $URL_FILE_CONFIG_MINIKUB upgrade --install cast-fastapi-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml"; 
-                      cd "dm-jenkins-cpa/movie-service/helm/movie-fastapidb/";
+                      cd "$URL_REPO_GH_LOCAL/dm-jenkins-cpa/movie-service/helm/movie-fastapidb";
                       pwd;
 
                       echo -e "\n\n### deploy web-nginx with cmd : \n$:  helm --kubeconfig $URL_FILE_CONFIG_MINIKUB upgrade --install web-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml"; 
-                      cd ./dm-jenkins-cpa/web/helm/nginx;
+                      cd  "$URL_REPO_GH_LOCAL/dm-jenkins-cpa/web/helm/nginx";
                       pwd;
                       '''
                     }
