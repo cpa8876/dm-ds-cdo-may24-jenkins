@@ -265,25 +265,22 @@ pipeline {
       }
      stage('Deploy') {
             environment {
-                      KUBECONFIG = credentials("kubeconfig-dev") // we retrieve  kubeconfig from secret file called config saved on jenkins
+                      KUBECONFIG = credentials("config") // we retrieve  kubeconfig from secret file called config saved on jenkins
                     }
             steps{
               script {
                 // initialisation of kubeconfig file on jenkins server to enalble to access minikube cluster
                 // K8s/Kubectl/B12-01/Kode cloud; Kubectl / How to Use Kubectl Config Set-Context; https://kodekloud.com/blog/kubectl-change-context/
-                sh '''
+                  sh '''
                       echo "### initialisation of kubeconfig file on jenkins server to enalble to access minikube cluster"
                       mkdir -p /home/jenkins/.minikube/profiles/minikube/;
                       ls -lha /home/jenkins/.minikube/profiles/minikube/;
                       cat $KUBECONFIG > $URL_FILE_CONFIG_MINIKUBE;
                       echo $URL_FILE_CONFIG_MINIKUBE;
                       cat $URL_FILE_CONFIG_MINIKUBE;
-                '''
+                   '''
               }
-
-            }
-            steps {
-                script {
+              script {
                   // B02-02_bin/sh -c 'name_branch=$(echo ${name_branch0} | sed "s#refs/heads/##g"); echo "#### Building branch: $name_branch"; if [ "$name_branch"=="develop" ]; then  echo "OK"; fi'; # Rep att : #### Building branch:  OK
                   // https://search.brave.com/search?q=error+bin%2Fsh%2520-c%2520%27name_branch%3D%24(echo%2520%24%257Bname_branch0%257D%2520%257C%2520sed%2520%22s%23refs%2Fheads%2F%23%23g%22)%3B%2520echo%2520%22%23%23%23%23%2520Building%2520branch%3A%2520%24name_branch%22%2520if%2520%5B%2520%22%24name_branch%22%2520%3D%3D%2520%22develop%22%2520%5D%2520then%2520%2520echo%2520%22OK%3B%2520fi%27%2520%2Fbin%2Fsh%3A%25201%3A%2520Syntax%2520error%3A%2520Unterminated%2520quoted%2520string&source=desktop
                   sh '''
