@@ -298,12 +298,11 @@ pipeline {
                         whoami;
                         pwd;
                         hostname -I;
+                        cd ./dm-jenkins-cpa/cast-service/helm/cast-db/;
+                        pwd;
                         kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get nodes;
                         kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get all -n dev
-                        cd 
-                        cat values.yml
-                        sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
-                        helm --kubeconfig $URL_FILE_CONFIG_MINIKUB upgrade --install app fastapi --values=values.yml --namespace dev
+                        echo "helm --kubeconfig $URL_FILE_CONFIG_MINIKUB upgrade --install cast-db-$name_branch --namespace develop --create-namespace --values=values-$name_branch.yml" 
                      elif [ "$name_branch"=="qa" ]; 
                      then    
                         echo "### Déploiement sur l'environnement QA"
