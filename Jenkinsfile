@@ -292,8 +292,8 @@ pipeline {
                      echo -e "\n\n ### Deploy on the cluster minikube fastapi-cast and fastapi-movie application with chart helms of the branch: $name_branch"
                      if [ "$name_branch"=="develop" ]; 
                      then                      
-                        echo -e "\n### Déploiement sur l'environnement DEV"
-                        echo -e "\n\n### Choose context deops-develop defined on kubeconfig file of the cluster minikube with user minikube"
+                        echo -e "\n### Déploiement sur l'environnement DEV";
+                        echo -e "\n\n### Choose context deops-develop defined on kubeconfig file of the cluster minikube with user minikube";
                         kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE config use-context devops-$name_branch;
                         kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE config get-contexts;
                         whoami;
@@ -301,8 +301,8 @@ pipeline {
                         pwd;
                      elif [ "$name_branch"=="qa" ]; 
                      then    
-                        echo -e "\n\n### Déploiement sur l'environnement QA"
-                        echo -e "\n\n### Choose context deops-develop defined on kubeconfig file of the cluster minikube with user minikube"
+                        echo -e "\n\n### Déploiement sur l'environnement QA";
+                        echo -e "\n\n### Choose context deops-develop defined on kubeconfig file of the cluster minikube with user minikube";
                         kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE config use-context devops-$name_branch;
                         kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE config get-contexts;
                         whoami;
@@ -310,8 +310,8 @@ pipeline {
                         pwd;
                      elif [ "$name_branch"=="staging" ]; 
                      then  
-                        echo -e "\n\n### Déploiement sur l'environnement STAGING"
-                        echo -e "\n\n### Choose context deops-develop defined on kubeconfig file of the cluster minikube with user minikube"
+                        echo -e "\n\n### Déploiement sur l'environnement STAGING";
+                        echo -e "\n\n### Choose context deops-develop defined on kubeconfig file of the cluster minikube with user minikube";
                         kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE config use-context devops-$name_branch;
                         kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE config get-contexts;
                         whoami;
@@ -323,8 +323,9 @@ pipeline {
                         echo -e "\n\n###// Create an Approval Button with a timeout of 15minutes.";
                         echo -e "\n\n###// this require a manuel validation in order to deploy on production environment";
                         timeout(time: 15, unit: "MINUTES") {
-                        input message: 'Do you want to deploy in production ?', ok: 'Yes'
-                        echo -e "\n\n### Choose context deops-develop defined on kubeconfig file of the cluster minikube with user minikube"
+                             input message: 'Do you want to deploy in production ?', ok: 'Yes'
+                             }
+                        echo -e "\n\n### Choose context deops-develop defined on kubeconfig file of the cluster minikube with user minikube";
                         kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE config use-context devops-$name_branch;
                         kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE config get-contexts;
                         whoami;
