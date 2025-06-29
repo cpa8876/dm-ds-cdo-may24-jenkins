@@ -267,7 +267,7 @@ pipeline {
             environment {
                       KUBECONFIG = credentials("kubeconfig-dev") // we retrieve  kubeconfig from secret file called config saved on jenkins
                     }
-            step {
+            steps{
               script {
                 // initialisation of kubeconfig file on jenkins server to enalble to access minikube cluster
                 // K8s/Kubectl/B12-01/Kode cloud; Kubectl / How to Use Kubectl Config Set-Context; https://kodekloud.com/blog/kubectl-change-context/
@@ -294,7 +294,7 @@ pipeline {
                         echo "\n### Déploiement sur l'environnement DEV"
                         echo "\n### Choose context deops-develop defined on kubeconfig file of the cluster minikube with user minikube"
                         kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE config use-context devops-develop;
-                        kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE config get-context;
+                        kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE config get-contexts;
                         whoami;
                         pwd;
                         hostname -I;
