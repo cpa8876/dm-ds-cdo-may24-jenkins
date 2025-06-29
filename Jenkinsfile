@@ -370,7 +370,7 @@ pipeline {
         body: "For more info on the pipeline success, check out the console output at ${env.BUILD_URL}"
                 }
     failure {
-      echo -e "\n\n### This will run if the job failed"
+      echo "### This will run if the job failed"
       mail to: "cristofe.pascale@gmail.com",
         subject: "${env.JOB_NAME} - Build # ${env.BUILD_ID} has failed",
         body: "For more info on the pipeline failure, check out the console output at ${env.BUILD_URL}"
