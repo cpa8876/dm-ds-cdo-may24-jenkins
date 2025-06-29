@@ -182,7 +182,7 @@ ip_jenkins="192.168.1.82";
 ip_minikube="192.168.1.83";
 url_rep_project_n0="/home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024"
 url_rep_project="$url_rep_project_n0/dm-ds-cdo-may24-jenkins";
-url_rep_ci_cd="$url_rep_project/dm01-jenkins-cdo-sep24-cpa";
+url_rep_ci_cd="$url_rep_project/dm-jenkins-cpa";
 url_rep_k8s="$url_rep_ci_cd/k8s";
 url_rep_charts="$url_rep_ci_cd/charts";
 url_rep_backup="/home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins/datas/backups";
@@ -709,7 +709,7 @@ echo -e "###############################\n"
 echo -e "\n################################################################"
 echo -e "\n####          5.1.1) Delete and recreate directory [./datas/data-k3d] to restart without existant file [./datas/data-k3d/$filename_pccpa_kconfig]"
 # url_rep_project="/home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins/"
-# url_rep_ci_cd="$url_rep_project/dm01-jenkins-cdo-sep24-cpa"
+# url_rep_ci_cd="$url_rep_project/dm-jenkins-cpa"
 # url_repk8s="$url_rep_ci_cd/k8s"
 cd $url_rep_project
 pwd
@@ -1512,7 +1512,7 @@ pwd
 
 
 cat <<EOF > ${manifest_name}
-# /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins/dm01-jenkins-cdo-sep24-cpa/cast-service/k8s/cast-deployment.yaml
+# /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins/dm-jenkins-cpa/cast-service/k8s/cast-deployment.yaml
 ### BIBLIO
 #### DM-JENKIN§S-B623 -  DevOps Project — Part 4 / Dergham Lahcene /Dergham Lahcene; 8 min read; Feb 25, 2023
 #####  https://medium.com/@l.dergham/devops-project-part-4-92d6641ed752
@@ -1828,7 +1828,7 @@ echo -e "###         9.2.2) Create yaml manifest ./$name_dir_manifest/fastapi-ca
 $name_dir_manifest="fastapi-cast"
 manifest_name="fastapi-cast-deployment.yml"
 cat <<EOF > ${manifest_name}
-# # /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins/dm01-jenkins-cdo-sep24-cpa/cast-service/k8s/fastapi-cast-deployment.yaml
+# # /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins/dm-jenkins-cpa/cast-service/k8s/fastapi-cast-deployment.yaml
 ##################
 ### BIBLIO
 #### DM-JENKINS-B62-3 -  DevOps Project — Part 4 / Dergham Lahcene /Dergham Lahcene; 8 min read; Feb 25, 2023
@@ -2587,7 +2587,7 @@ pwd
 
 
 cat <<EOF > ${manifest_name}
-# /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins/dm01-jenkins-cdo-sep24-cpa/movie-service/k8s/movie-deployment.yaml
+# /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins/dm-jenkins-cpa/movie-service/k8s/movie-deployment.yaml
 ### BIBLIO
 #### DM-JENKINS-B62-3 -  DevOps Project — Part 4 / Dergham Lahcene /Dergham Lahcene; 8 min read; Feb 25, 2023
 #####  https://medium.com/@l.dergham/devops-project-part-4-92d6641ed752
@@ -2896,7 +2896,7 @@ echo -e "###         10.2.2) Create yaml manifest ./$name_dir_manifest/fastapi-m
 $name_dir_manifest="fastapi-movie"
 manifest_name="fastapi-movie-deployment.yml"
 cat <<EOF > ${manifest_name}
-# # /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins/dm01-jenkins-cdo-sep24-cpa/movie-service/k8s/fastapi-movie-deployment.yaml
+# # /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins/dm-jenkins-cpa/movie-service/k8s/fastapi-movie-deployment.yaml
 ##################
 ### BIBLIO
 #### DM-JENKINS-B62-3 -  DevOps Project — Part 4 / Dergham Lahcene /Dergham Lahcene; 8 min read; Feb 25, 2023
@@ -3900,7 +3900,7 @@ echo "####     11.4) Go to ./fastapi-cast and create script deployment"
 echo -e "*************************\n"
 
 echo -e "\n\n###         11.4.1) Go to directory  and create directory to deploy 5 elements : /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins/charts"
-cd "/home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins/dm01-jenkins-cdo-sep24-cpa/charts/charts_cast_db"
+cd "/home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins/dm-jenkins-cpa/charts/charts_cast_db"
 pwd
 ls -lha
 echo -e "*************************\n"
@@ -4060,7 +4060,7 @@ echo -e "*************************\n"
 echo -e "\n\n###         11.5.8) Create k8s file ns.yaml to personalize deployment of cast-db with cmd : cat $url_rep_charts/charts_cast_db/namespace.yaml"
 manifest_name="namespace-dev.yaml"
 cat <<EOF > ${manifest_name}
-# /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins/dm01-jenkins-cdo-sep24-cpa/cast-service/k8s/cast-deployment.yaml
+# /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins/dm-jenkins-cpa/cast-service/k8s/cast-deployment.yaml
 ### BIBLIO
 #### DM-JENKIN§S-B623 -  DevOps Project — Part 4 / Dergham Lahcene /Dergham Lahcene; 8 min read; Feb 25, 2023
 #####  https://medium.com/@l.dergham/devops-project-part-4-92d6641ed752
