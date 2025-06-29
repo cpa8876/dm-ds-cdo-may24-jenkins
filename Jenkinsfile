@@ -300,7 +300,7 @@ pipeline {
                         hostname -I;
                         kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get nodes;
                         kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get all -n dev
-                        cp fastapi/values.yaml values.yml
+                        cd 
                         cat values.yml
                         sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
                         helm --kubeconfig $URL_FILE_CONFIG_MINIKUB upgrade --install app fastapi --values=values.yml --namespace dev
