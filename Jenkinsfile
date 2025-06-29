@@ -281,6 +281,9 @@ pipeline {
                       cat $KUBECONFIG > $URL_FILE_CONFIG_MINIKUBE;
                       echo $URL_FILE_CONFIG_MINIKUBE;
                       cat $URL_FILE_CONFIG_MINIKUBE;
+                      pwd;
+                      cd ./dm-jenkins-cpa/cast-service/helm/cast-db/;
+                      pwd;
                    '''
               }
               script {
@@ -293,44 +296,54 @@ pipeline {
                      then                      
                         echo "\n### Déploiement sur l'environnement DEV"
                         echo "\n### Choose context deops-develop defined on kubeconfig file of the cluster minikube with user minikube"
-                        kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE config use-context devops-develop;
+                        kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE config use-context devops-$name_branch;
                         kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE config get-contexts;
                         whoami;
-                        pwd;
                         hostname -I;
-                        cd ./dm-jenkins-cpa/cast-service/helm/cast-db/;
                         pwd;
-                        kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get nodes;
-                        kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get all -n dev
-                        echo "helm --kubeconfig $URL_FILE_CONFIG_MINIKUB upgrade --install cast-db-$name_branch --namespace develop --create-namespace --values=values-$name_branch.yml" 
                      elif [ "$name_branch"=="qa" ]; 
                      then    
                         echo "### Déploiement sur l'environnement QA"
+                        echo "\n### Choose context deops-develop defined on kubeconfig file of the cluster minikube with user minikube"
+                        kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE config use-context devops-$name_branch;
+                        kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE config get-contexts;
                         whoami;
-                        pwd;
                         hostname -I;
-                        kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get nodes;
-                        kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get all -n qa
+                        pwd;
                      elif [ "$name_branch"=="staging" ]; 
                      then  
                         echo "### Déploiement sur l'environnement STAGING"
+                        echo "\n### Choose context deops-develop defined on kubeconfig file of the cluster minikube with user minikube"
+                        kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE config use-context devops-$name_branch;
+                        kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE config get-contexts;
                         whoami;
-                        pwd;
                         hostname -I;
-                        kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get nodes;
-                        kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get all -n staging
+                        pwd;
                      elif [ "$name_branch"=="main" ]; 
                      then  
                         echo "### Déploiement sur l'environnement PROD"
+                        echo "\n### Choose context deops-develop defined on kubeconfig file of the cluster minikube with user minikube"
+                        kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE config use-context devops-$name_branch;
+                        kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE config get-contexts;
                         whoami;
-                        pwd;
                         hostname -I;
-                        kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get nodes;
-                        kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get all -n prod
+                        pwd;
                       else
                         echo $branch
                         echo "### Branche non configurée pour déploiement automatique"
                       fi
+
+                      kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get nodes;
+
+                      kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get all -n $name_branch;
+
+                      echo "### helm --kubeconfig $URL_FILE_CONFIG_MINIKUB upgrade --install cast-db-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml";
+
+                      echo "### helm --kubeconfig $URL_FILE_CONFIG_MINIKUB upgrade --install cast-fastapi-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml";
+
+                        echo "### helm --kubeconfig $URL_FILE_CONFIG_MINIKUB upgrade --install cast-db-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml";
+
+                        echo "### helm --kubeconfig $URL_FILE_CONFIG_MINIKUB upgrade --install cast-fastapi-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml"; 
                       '''
                     }
                 }
