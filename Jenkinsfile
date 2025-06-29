@@ -333,8 +333,7 @@ pipeline {
                         hostname -I;
                         pwd;
                       else
-                        echo $branch
-                        echo -e "\n\n### Branche $name_branch non configurée pour le déploiement automatique"
+                        echo -e "\n\n### Branche $name_branch non configurée pour ce pipeline de déploiement"
                       fi
 
                       kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get nodes;
@@ -365,7 +364,7 @@ pipeline {
                     // color: "good",
                     // message: "${env.STACK_PREFIX} production deploy: *${env.DEPLOY_VERSION}*. <${env.DEPLOY_URL}|Access service> - <${env.BUILD_URL}|Check build>"
                     //)
-      echo -e "\n\n### This will run if the job succeed"
+      echo "### This will run if the job succeed"
       mail to: "cristofe.pascale@gmail.com",
         subject: "${env.JOB_NAME} - Build # ${env.BUILD_ID} has succed",
         body: "For more info on the pipeline success, check out the console output at ${env.BUILD_URL}"
