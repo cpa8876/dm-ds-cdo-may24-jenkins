@@ -34,7 +34,7 @@ pipeline {
   stages {
     stage('Docker Build'){
       steps {
-          //echo "Building branch: ${env.BRANCH_NAME}"
+          //echo "### Building branch: ${env.BRANCH_NAME}"
           // https://search.brave.com/search?q=sed+caract%C3%A8re+sp%C3%A9ciaux+%2F&source=desktop&summary=1&conversation=bc5fb68b4e385ab86446da
           // /bin/sh -c "name_branch=$(echo ${name_branch0} | sed 's#refs/heads/##g'); echo \"#### Building branch: ${name_branch}\"; if [ \"$name_branch\" = \"develop\" ]; then  echo \"$name_branch\"; fi"
           sh '''
@@ -267,6 +267,21 @@ pipeline {
             environment {
                       KUBECONFIG = credentials("kubeconfig-dev") // we retrieve  kubeconfig from secret file called config saved on jenkins
                     }
+            step {
+              script {
+                // initialisation of kubeconfig file on jenkins server to enalble to access minikube cluster
+                // K8s/Kubectl/B12-01/Kode cloud; Kubectl / How to Use Kubectl Config Set-Context; https://kodekloud.com/blog/kubectl-change-context/
+                sh '''
+                      echo "### initialisation of kubeconfig file on jenkins server to enalble to access minikube cluster"
+                      mkdir -p /home/jenkins/.minikube/profiles/minikube/;
+                      ls -lha /home/jenkins/.minikube/profiles/minikube/;
+                      cat $KUBECONFIG > $URL_FILE_CONFIG_MINIKUBE;
+                      echo $URL_FILE_CONFIG_MINIKUBE;
+                      cat $URL_FILE_CONFIG_MINIKUBE;
+                '''
+              }
+
+            }
             steps {
                 script {
                   // B02-02_bin/sh -c 'name_branch=$(echo ${name_branch0} | sed "s#refs/heads/##g"); echo "#### Building branch: $name_branch"; if [ "$name_branch"=="develop" ]; then  echo "OK"; fi'; # Rep att : #### Building branch:  OK
@@ -276,12 +291,10 @@ pipeline {
                      echo -e "\n\n ### Deploy on the cluster minikube fastapi-cast and fastapi-movie application with chart helms of the branch: $name_branch"
                      if [ "$name_branch"=="develop" ]; 
                      then                      
-                        echo "Déploiement sur l'environnement DEV"
-                        mkdir -p /home/jenkins/.minikube/profiles/minikube/;
-                        ls -lha /home/jenkins/.minikube/profiles/minikube/;
-                        cat $KUBECONFIG > $URL_FILE_CONFIG_MINIKUBE;
-                        echo $URL_FILE_CONFIG_MINIKUBE
-                        cat $URL_FILE_CONFIG_MINIKUBE;
+                        echo "\n### Déploiement sur l'environnement DEV"
+                        echo "\n### Choose context deops-develop defined on kubeconfig file of the cluster minikube with user minikube"
+                        kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE config use-context devops-develop;
+                        kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE config get-context;
                         whoami;
                         pwd;
                         hostname -I;
@@ -293,10 +306,7 @@ pipeline {
                         helm --kubeconfig $URL_FILE_CONFIG_MINIKUB upgrade --install app fastapi --values=values.yml --namespace dev
                      elif [ "$name_branch"=="qa" ]; 
                      then    
-                        echo "Déploiement sur l'environnement QA"
-                        mkdir -p /home/jenkins/.minikube/profiles/minikube/;
-                        ls -lha /home/jenkins/.minikube/profiles/minikube/;
-                        cat $KUBECONFIG > $URL_FILE_CONFIG_MINIKUBE;
+                        echo "### Déploiement sur l'environnement QA"
                         whoami;
                         pwd;
                         hostname -I;
@@ -304,10 +314,7 @@ pipeline {
                         kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get all -n qa
                      elif [ "$name_branch"=="staging" ]; 
                      then  
-                        echo "Déploiement sur l'environnement STAGING"
-                        mkdir -p /home/jenkins/.minikube/profiles/minikube/;
-                        ls -lha /home/jenkins/.minikube/profiles/minikube/;
-                        cat $KUBECONFIG > $URL_FILE_CONFIG_MINIKUBE;
+                        echo "### Déploiement sur l'environnement STAGING"
                         whoami;
                         pwd;
                         hostname -I;
@@ -315,10 +322,7 @@ pipeline {
                         kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get all -n staging
                      elif [ "$name_branch"=="main" ]; 
                      then  
-                        echo "Déploiement sur l'environnement PROD"
-                        mkdir -p /home/jenkins/.minikube/profiles/minikube/;
-                        ls -lha /home/jenkins/.minikube/profiles/minikube/;
-                        cat $KUBECONFIG > $URL_FILE_CONFIG_MINIKUBE;
+                        echo "### Déploiement sur l'environnement PROD"
                         whoami;
                         pwd;
                         hostname -I;
@@ -326,7 +330,7 @@ pipeline {
                         kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get all -n prod
                       else
                         echo $branch
-                        echo "Branche non configurée pour déploiement automatique"
+                        echo "### Branche non configurée pour déploiement automatique"
                       fi
                       '''
                     }
@@ -345,13 +349,13 @@ pipeline {
                     // color: "good",
                     // message: "${env.STACK_PREFIX} production deploy: *${env.DEPLOY_VERSION}*. <${env.DEPLOY_URL}|Access service> - <${env.BUILD_URL}|Check build>"
                     //)
-      echo "This will run if the job succeed"
+      echo "### This will run if the job succeed"
       mail to: "cristofe.pascale@gmail.com",
         subject: "${env.JOB_NAME} - Build # ${env.BUILD_ID} has succed",
         body: "For more info on the pipeline success, check out the console output at ${env.BUILD_URL}"
                 }
     failure {
-      echo "This will run if the job failed"
+      echo "### This will run if the job failed"
       mail to: "cristofe.pascale@gmail.com",
         subject: "${env.JOB_NAME} - Build # ${env.BUILD_ID} has failed",
         body: "For more info on the pipeline failure, check out the console output at ${env.BUILD_URL}"

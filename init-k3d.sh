@@ -898,6 +898,41 @@ scp -r -i $url_id_rsa_cpa $url_rep_project_n0/.minikube/ca.crt cpa@$ip_jenkins:/
 ssh -i $url_id_rsa_cpa cpa@$ip_jenkins "bash -c ' cat /home/cpa/.minikube/ca.crt'"
 echo "*************************"
 
+echo "*************************"
+echo -e "\n####        5.1.2.13) Create context devops-[develop, qa, staging, prod] from PC developper to jenkins server to test with the user cpa on jenkins server with cmd : \n $: scp -r -i $url_id_rsa_cpa ./profiles/minikube/client.crt cpa@$ip_jenkins:/home/cpa/.minikube/profiles/minikube/; \nssh -i $url_id_rsa_cpa cpa@$ip_jenkins \"bash -c ' cat /home/cpa/.minikube/profiles/minikube/client.crt;'\""
+
+echo -e "\n####  View contexts and the clusters : kubectl config get-contexts"
+ssh -i $url_id_rsa_cpa cpa@$ip_minikube "bash -c 'kubectl config get-contexts'"
+
+echo -e "\n####  Delete context devops-develop on the kubeconfig file with cmd: \n$: kubectl config delete-context [devops-develop devops-qa devops-staging devops-prod]"
+ssh -i $url_id_rsa_cpa cpa@$ip_minikube "bash -c 'kubectl config delete-context devops-develop'"
+ssh -i $url_id_rsa_cpa cpa@$ip_minikube "bash -c 'kubectl config delete-context devops-qa'"
+ssh -i $url_id_rsa_cpa cpa@$ip_minikube "bash -c 'kubectl config delete-context devops-staging'"
+ssh -i $url_id_rsa_cpa cpa@$ip_minikube "bash -c 'kubectl config delete-context devops-prod'"
+
+echo -e "\n####  View contexts and the clusters : kubectl config get-contexts"
+ssh -i $url_id_rsa_cpa cpa@$ip_minikube "bash -c 'kubectl config get-contexts'"
+
+echo -e "\n####  Create context devops-develop on the kubeconfig file with cmd : \n$: bash -c \'kubectl config set-context devops-develop --user=minikube --cluster=minikube --namespace=develop\'"
+ssh -i $url_id_rsa_cpa cpa@$ip_minikube "bash -c 'kubectl config set-context devops-develop --user=minikube --cluster=minikube --namespace=develop'"
+
+echo -e "\n####  Create context devops-qa on the kubeconfig file with cmd : \n$: bash -c \'kubectl config set-context devops-qa --user=minikube --cluster=minikube --namespace=qa\'"
+ssh -i $url_id_rsa_cpa cpa@$ip_minikube "bash -c 'kubectl config set-context devops-qa --user=minikube --cluster=minikube --namespace=qa'"
+
+echo -e "\n####  Create context devops-staging on the kubeconfig file with cmd : \n$: bash -c \'kubectl config set-context devops-staging --user=minikube --cluster=minikube --namespace=staging\'"
+ssh -i $url_id_rsa_cpa cpa@$ip_minikube "bash -c 'kubectl config set-context devops-staging --user=minikube --cluster=minikube --namespace=staging'"
+
+echo -e "\n####  Create context devops-prod on the kubeconfig file with cmd : \n$: bash -c \'kubectl config set-context devops-prod --user=minikube --cluster=minikube --namespace=prod\'"
+ssh -i $url_id_rsa_cpa cpa@$ip_minikube "bash -c 'kubectl config set-context devops-prod --user=minikube --cluster=minikube --namespace=prod'"
+
+echo -e "\n####  View contexts and the clusters : kubectl config get-contexts"
+ssh -i $url_id_rsa_cpa cpa@$ip_minikube "bash -c 'kubectl config get-contexts'"
+
+echo -e "\n####  Opening the kubeconfig file using the command: kubectl config view"
+ssh -i $url_id_rsa_cpa cpa@$ip_minikube "bash -c 'kubectl config view'"
+
+echo "*************************"
+
  
 echo -e "\n####        5.1.2.15) Copy config file of the minikub cluster with cmd : \n $: echo \"$(ssh -i $url_id_rsa_cpa cpa@$ip_minikube 'kubectl config view --raw')\" >  $url_pccpa_dir_kconfig/$filename_pccpa_kconfig; \ncat $url_pccpa_dir_kconfig/$filename_pccpa_kconfig"
 # url_pccpa_dir_kconfig="$url_rep_project_n0/.minikube";
