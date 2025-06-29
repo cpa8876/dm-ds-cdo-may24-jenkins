@@ -322,9 +322,9 @@ pipeline {
                         echo -e "\n\n### Déploiement sur l'environnement PROD";
                         echo -e "\n\n###// Create an Approval Button with a timeout of 15minutes.";
                         echo -e "\n\n###// this require a manuel validation in order to deploy on production environment";
-                        timeout(time: 15, unit: "MINUTES") {
-                             input message: 'Do you want to deploy in production ?', ok: 'Yes'
-                             }
+                        echo -e "\n timeout(time: 15, unit: "MINUTES") \{
+                             input message: \'Do you want to deploy in production ?\', ok: \'Yes\'
+                             \}"
                         echo -e "\n\n### Choose context deops-develop defined on kubeconfig file of the cluster minikube with user minikube";
                         kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE config use-context devops-$name_branch;
                         kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE config get-contexts;
@@ -340,19 +340,19 @@ pipeline {
                       kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get all -n $name_branch;
 
                       echo -e "\n\n### deploy cast-db with cmd : \n$: helm --kubeconfig $URL_FILE_CONFIG_MINIKUB upgrade --install cast-db-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml";
-                      cd ./dm-jenkins-cpa/cast-service/helm/cast-db/;
+                      cd "dm-jenkins-cpa/cast-service/helm/cast-db/";
                       pwd;
 
                       echo -e "\n\n### deploy cast-fastapi with cmd : \n$: helm --kubeconfig $URL_FILE_CONFIG_MINIKUB upgrade --install cast-fastapi-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml";
-                      cd ./dm-jenkins-cpa/cast-service/helm/cast-fastapi/;
+                      cd "dm-jenkins-cpa/cast-service/helm/cast-fastapi/";
                       pwd;
 
                       echo -e "\n\n### deploy movie-db with cmd : \n$:  helm --kubeconfig $URL_FILE_CONFIG_MINIKUB upgrade --install cast-db-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml";
-                      cd ./dm-jenkins-cpa/movie-service/helm/movie-db/;
+                      cd "dm-jenkins-cpa/movie-service/helm/movie-db/";
                       pwd;
 
                       echo -e "\n\n### deploy movie-fastapi with cmd : \n$:  --kubeconfig $URL_FILE_CONFIG_MINIKUB upgrade --install cast-fastapi-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml"; 
-                      cd ./dm-jenkins-cpa/movie-service/helm/movie-fastapidb/;
+                      cd "dm-jenkins-cpa/movie-service/helm/movie-fastapidb/";
                       pwd;
 
                       echo -e "\n\n### deploy web-nginx with cmd : \n$:  helm --kubeconfig $URL_FILE_CONFIG_MINIKUB upgrade --install web-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml"; 
