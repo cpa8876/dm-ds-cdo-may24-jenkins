@@ -17,9 +17,9 @@ services:
     port: 5432
 
 cast-db-secret:
-  cast-db-username: ZmFzdGFwaV91c2Vy       # echo fastapi_user  :=> fastapi_user
-  cast-db-password: ZmFzdGFwaV9wYXNzd2Q=   # echo fastapi_passwd  :=> fastapi_passwd
-  cast-db-database: ZmFzdGFwaV9kYg==       # echo fastapi_db  :=> fastapi_db
+  cast_db_username: ZmFzdGFwaV91c2Vy       # echo fastapi_user  :=> fastapi_user
+  cast_db_password: ZmFzdGFwaV9wYXNzd2Q=   # echo fastapi_passwd  :=> fastapi_passwd
+  cast_db_database: ZmFzdGFwaV9kYg==       # echo fastapi_db  :=> fastapi_db
 
 
 
