@@ -8,15 +8,15 @@ environment: test
 image:
 #  secretpullimage: gitlab-registry-secret
 #  web: "registry.gitlab.com/datascientest_project/fastapi_traefik/fastapi_web_test:latest"
-  cast-db: "postgres:15-alpine"
+  cast_db: "postgres:15-alpine"
   cast_fastapi: cpa8876/casts-ds-fastapi-develop:latest
 #  traefik: "registry.gitlab.com/datascientest_project/fastapi_traefik/traefik:latest"
 
 services:
-  cast-db:
+  cast_db:
     port: 5432
 
-cast-db-secret:
+cast_db_secret:
   cast_db_username: ZmFzdGFwaV91c2Vy       # echo fastapi_user  :=> fastapi_user
   cast_db_password: ZmFzdGFwaV9wYXNzd2Q=   # echo fastapi_passwd  :=> fastapi_passwd
   cast_db_database: ZmFzdGFwaV9kYg==       # echo fastapi_db  :=> fastapi_db
