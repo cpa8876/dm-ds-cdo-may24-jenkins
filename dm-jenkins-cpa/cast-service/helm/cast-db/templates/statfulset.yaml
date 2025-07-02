@@ -24,15 +24,15 @@ spec:
             - name: POSTGRES_USER
               valueFrom:
                 secretKeyRef:
-                  name: "{{ .Values.cast_db_secret}}"
-                  key: "{{ .Values.cast_db_secret.cast_db_username }}"
+                  name: cast-db-secret
+                  key: cast-db-username
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: "{{ .Values.cast_db_secret}}"
-                  key: "{{ .Values.cast_db_secret.cast_db_password }}"
+                  name: cast-db-secret
+                  key: cast-db-password
             - name: POSTGRES_DB
               valueFrom:
                 secretKeyRef:
-                  name: "{{ .Values.cast_db_secret}}"
-                  key: "{{ .Values.cast_db_secret.cast_db_database }}"
+                  name: cast-db-secret
+                  key: cast-db-database
