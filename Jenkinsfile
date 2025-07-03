@@ -342,16 +342,17 @@ pipeline {
                       cd "$URL_REPO_GH_LOCAL/dm-jenkins-cpa/cast-service/helm/cast-db";
                       pwd;
                       
-                      echo  "\n\n### Deploy cast-db with cmd : \n$: helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE upgrade --install cast-db-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml";
+                      echo  "\n\n### Deploy cast-db with cmd : \n$: helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE upgrade --install cast-db-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml; sleep 10;";
                       helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE upgrade --install cast-db-develop --namespace develop --create-namespace --values=values-develop.yml .;
-                      sleep 10
+                      sleep 10;
 
                       echo  "\n\n### Test after to have deployed cast-db with cmd : \n$: kubectl exec -t cast-db-postgres-0 -n develop -- /bin/bash -c \"psql -h localhost -p 5432 -U fastapi_user -d fastapi_db -c \'select * from pg_database\'\"";
                       kubectl exec -t cast-db-postgres-0 -n develop -- /bin/bash -c "psql -h localhost -p 5432 -U fastapi_user -d fastapi_db -c 'select * from pg_database'"
 
 
-                      echo  "\n\n### Delete the helm chart cast-db-develop deployment  after have tested it with cmd : \n$:helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE uninstall cast-db-develop --namespace develop;";
+                      echo  "\n\n### Delete the helm chart cast-db-develop deployment  after have tested it with cmd : \n$:helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE uninstall cast-db-develop --namespace develop;sleep 10; ";
                       helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE uninstall cast-db-develop --namespace develop;
+                      sleep 10;
                       
                       echo  "\n\n### Verify deleting the helm chart cast-db-develop with cmd : \n$: helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls;";
                       helm --kubeconfig ls;
