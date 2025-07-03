@@ -3,7 +3,7 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: {{ include "mychart.fullname" . }}-cast-db-sts
+  name: cast-db-sts
 #  namespace: dev
 spec:
   replicas:  {{ .Values.postgresql.replicas }}
@@ -25,17 +25,17 @@ spec:
             - name: POSTGRES_USER
               valueFrom:
                 secretKeyRef:
-                  name:  {{ include "mychart.fullname" . }}-postgres-secret
+                  name:  postgres-secret
                   key: postgresql-user
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name:  {{ include "mychart.fullname" . }}-postgres-secret
+                  name:  postgres-secret
                   key: postgresql-password
             - name: POSTGRES_DB
               valueFrom:
                 secretKeyRef:
-                  name:  {{ include "mychart.fullname" . }}-postgres-secret
+                  name:  postgres-secret
                   key: postgresql-database
           volumeMounts:
             - name: pgdata
