@@ -1,3 +1,5 @@
+# /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins/dm-jenkins-cpa/cast-service/helm/cast-db/templates/service.yaml
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -7,4 +9,4 @@ spec:
     - port: 5432
   selector:
     app: cast-db-service-{{ .Release.Name }}
-  
+---
