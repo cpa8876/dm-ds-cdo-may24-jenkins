@@ -6,12 +6,6 @@
 
 
 pipeline {
-  agent any // Jenkins will be able to select all available agents
-  // How-to's and Support; Jenkins Multibranch Pipeline With Git Tutorial :
-  //   https://www.cloudbees.com/blog/jenkins-multibranch-pipeline-with-git-tutorial
-   options {
-    buildDiscarder logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '5', daysToKeepStr: '', numToKeepStr: '5')
-   }
   environment { // Declaration of environment variables
     nom='dm-jenkins-cpa'                                                    // nom="dm-jenkins-cpa"
     DOCKER_ID="cpa8876"                                                    // replace this with your docker-id DOCKER_ID="cpa8876"
@@ -34,6 +28,12 @@ pipeline {
     HELM_VALUES_FILE="value-develop.yaml"
     name_branch0="${env.ref}"
      }
+  agent any // Jenkins will be able to select all available agents
+  // How-to's and Support; Jenkins Multibranch Pipeline With Git Tutorial :
+  //   https://www.cloudbees.com/blog/jenkins-multibranch-pipeline-with-git-tutorial
+   options {
+    buildDiscarder logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '5', daysToKeepStr: '', numToKeepStr: '5')
+   }
   stages {
     stage('Docker Build'){
       steps {
@@ -339,26 +339,26 @@ pipeline {
 
                       kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get all -n $name_branch;
 
-                      echo  "\n\n### deploy cast-db with cmd : \n$: helm --kubeconfig $URL_FILE_CONFIG_MINIKUB upgrade --install cast-db-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml";
+                      echo  "\n\n### deploy cast-db with cmd : \n$: helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE upgrade --install cast-db-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml";
                       cd "$URL_REPO_GH_LOCAL/dm-jenkins-cpa/cast-service/helm/cast-db";
-                      helm --kubeconfig $URL_FILE_CONFIG_MINIKUB upgrade --install cast-db-develop --namespace develop --create-namespace --values=values-develop.yml .;
+                      helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE upgrade --install cast-db-develop --namespace develop --create-namespace --values=values-develop.yml .;
                       
                       echo $(kubectl exec -t cast-db-postgres-0 -n develop -- /bin/bash -c "psql -h localhost -p 5432 -U fastapi_user -d fastapi_db -c 'select * from pg_database'")
                       pwd;
 
-                      echo  "\n\n### deploy cast-fastapi with cmd : \n$: helm --kubeconfig $URL_FILE_CONFIG_MINIKUB upgrade --install cast-fastapi-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml";
+                      echo  "\n\n### deploy cast-fastapi with cmd : \n$: helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE upgrade --install cast-fastapi-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml";
                       cd "$URL_REPO_GH_LOCAL/dm-jenkins-cpa/cast-service/helm/cast-fastapi";
                       pwd;
 
-                      echo  "\n\n### deploy movie-db with cmd : \n$:  helm --kubeconfig $URL_FILE_CONFIG_MINIKUB upgrade --install cast-db-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml";
+                      echo  "\n\n### deploy movie-db with cmd : \n$:  helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE upgrade --install cast-db-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml";
                       cd "$URL_REPO_GH_LOCAL/dm-jenkins-cpa/movie-service/helm/movie-db";
                       pwd;
 
-                      echo  "\n\n### deploy movie-fastapi with cmd : \n$:  --kubeconfig $URL_FILE_CONFIG_MINIKUB upgrade --install cast-fastapi-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml"; 
+                      echo  "\n\n### deploy movie-fastapi with cmd : \n$:  --kubeconfig $URL_FILE_CONFIG_MINIKUBE upgrade --install cast-fastapi-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml"; 
                       cd "$URL_REPO_GH_LOCAL/dm-jenkins-cpa/movie-service/helm/movie-fastapi";
                       pwd;
 
-                      echo  "\n\n### deploy web-nginx with cmd : \n$:  helm --kubeconfig $URL_FILE_CONFIG_MINIKUB upgrade --install web-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml"; 
+                      echo  "\n\n### deploy web-nginx with cmd : \n$:  helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE upgrade --install web-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml"; 
                       cd  "$URL_REPO_GH_LOCAL/dm-jenkins-cpa/web/helm/nginx";
                       pwd;
                       '''
