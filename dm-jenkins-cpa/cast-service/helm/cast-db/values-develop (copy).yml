@@ -9,8 +9,8 @@ environment: test
 image:
 #  secretpullimage: gitlab-registry-secret
 #  web: "registry.gitlab.com/datascientest_project/fastapi_traefik/fastapi_web_test:latest"
-#  cast_db: "postgres:15-alpine"
-#  cast_fastapi: cpa8876/casts-ds-fastapi-develop:latest
+  cast_db: "postgres:15-alpine"
+  cast_fastapi: cpa8876/casts-ds-fastapi-develop:latest
 #  traefik: "registry.gitlab.com/datascientest_project/fastapi_traefik/traefik:latest"
 
 
