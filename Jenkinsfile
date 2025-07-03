@@ -355,7 +355,7 @@ pipeline {
                       sleep 10;
                       
                       echo  "\n\n### Verify deleting the helm chart cast-db-develop with cmd : \n$: helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls;";
-                      helm --kubeconfig ls;
+                      helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls;
                      
                       echo  "\n\n### deploy cast-fastapi with cmd : \n$: helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE upgrade --install cast-fastapi-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml";
                       cd "$URL_REPO_GH_LOCAL/dm-jenkins-cpa/cast-service/helm/cast-fastapi";
