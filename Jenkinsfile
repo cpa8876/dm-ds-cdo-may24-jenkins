@@ -371,7 +371,7 @@ pipeline {
                       helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls;
 
                       echo  "\n\n### Test with a cmd curl after to have deployed cast-fastapi-web on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: curl $(docker exec dm-jenkins-cpa-cast_service-1 hostname -i):5000/api/v1/casts/docs";
-                      echo -e "/n/n ******* kubectl exec -t cast-fastapi-web-0 -n develop -- /bin/bash -c \"psql -h localhost -p 5432 -U fastapi_user -d fastapi_db -c \'select * from pg_database\'\;"";
+                      echo -e "/n/n ******* kubectl exec -t cast-fastapi-web-0 -n develop -- /bin/bash -c \"psql -h localhost -p 5432 -U fastapi_user -d fastapi_db -c \'select * from pg_database\';\"";
                       echo -e "\n\n###         9.4.4.8) curl --resolve 'dm-jenkins.cpa:80:$( minikube ip )' -i http://dm-jenkins.cpa/ from minikube server";
                       echo "***** ssh -i $url_id_rsa_cpa  cpa@$ip_minikube curl --resolve \"dm-jenkins.cpa:80:$( ssh -i $url_id_rsa_cpa cpa@$ip_minikube minikube ip )\" -i http://dm-jenkins.cpa/api/v1/casts/docs";
                       echo "***** # curl --resolve 'dm-jenkins.cpa:80:192.168.49.2' -i http://dm-jenkins.cpa/api/v1/casts/docs;";
