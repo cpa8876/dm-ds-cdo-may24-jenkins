@@ -335,6 +335,8 @@ pipeline {
                         echo  "\n\n### Branche $name_branch non configurée pour ce pipeline de déploiement"
                       fi
 
+                      echo  "\n\n################### DEPLOY ALL CHARTS HELM ON ENVIRONMENT IN FUNCTION BRANCH ##############################"
+                      echo  "\n\n######################## DEPLOY CAST-DB " 
                       echo  "\n\n### Before to deploy the branch: $name_branch on environement:  $name_branch, list nodes and all elements existant on the minikube cluster  with cmd : \n$: kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get nodes; kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get all -n $name_branch;";
                       kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get nodes;
                       kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get all -n $name_branch;
@@ -352,20 +354,12 @@ pipeline {
 
                       echo  "\n\n### Test with a sql query after to have deployed cast-db the branch: $name_branch on environement:  $name_branch, with cmd : \n$: kubectl exec -t cast-db-postgres-0 -n develop -- /bin/bash -c \"psql -h localhost -p 5432 -U fastapi_user -d fastapi_db -c \'select * from pg_database\'\"";
                       kubectl exec -t cast-db-postgres-0 -n develop -- /bin/bash -c "psql -h localhost -p 5432 -U fastapi_user -d fastapi_db -c 'select * from pg_database'"
-
-                      echo  "\n\n### Delete the helm chart cast-db-develop deployment the branch: $name_branch on environement:  $name_branch, with cmd : \n$:helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE uninstall cast-db-develop --namespace develop;sleep 10; ";
-                      helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE uninstall cast-db-develop --namespace develop;
-                      sleep 10;
-                      
-                      echo  "\n\n### Verify deleting the helm chart cast-db-develop the branch: $name_branch on environement:  $name_branch, with cmd : \n$: helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls;";
-                      helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls;
-
-
                      
                       echo  "\n\n### deploy cast-fastapi with cmd : \n$: helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE upgrade --install cast-fastapi-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml";
                       cd "$URL_REPO_GH_LOCAL/dm-jenkins-cpa/cast-service/helm/cast-fastapi";
                       pwd;
 
+                      echo  "\n\n######################## DEPLOY MOVIE-DB "
                       echo  "\n\n### Place at the correct directory Before to deploy movie-db the branch: $name_branch on environement:  $name_branch, with cmd : \n$: cd \"$URL_REPO_GH_LOCAL/dm-jenkins-cpa/movie-service/helm/movie-db\"; pwd;";
                       cd "$URL_REPO_GH_LOCAL/dm-jenkins-cpa/movie-service/helm/movie-db";
                       pwd;
@@ -380,6 +374,20 @@ pipeline {
                       echo  "\n\n### Test with a sql query after to have deployed movie-db the branch: $name_branch on environement:  $name_branch, with cmd : \n$: kubectl exec -t movie-db-postgres-0 -n develop -- /bin/bash -c \"psql -h localhost -p 5432 -U fastapi_user -d fastapi_db -c \'select * from pg_database\'\"";
                       kubectl exec -t movie-db-postgres-0 -n develop -- /bin/bash -c "psql -h localhost -p 5432 -U fastapi_user -d fastapi_db -c 'select * from pg_database'"
 
+                      echo  "\n\n### deploy movie-fastapi with cmd : \n$:  --kubeconfig $URL_FILE_CONFIG_MINIKUBE upgrade --install movie-fastapi-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml"; 
+                      cd "$URL_REPO_GH_LOCAL/dm-jenkins-cpa/movie-service/helm/movie-fastapi";
+                      pwd;
+
+                      echo  "\n\n### deploy web-nginx with cmd : \n$:  helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE upgrade --install web-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml"; 
+
+
+                      echo  "\n\n######################## DELETE ALL HELM DEPLOYMENT #####################################"
+                      echo  "\n\n######################## DELETE CAST-DB " 
+
+                      echo  "\n\n### Place at the correct directory Before to deploy cast-db the branch: $name_branch on environement:  $name_branch, with cmd : \n$: cd \"$URL_REPO_GH_LOCAL/dm-jenkins-cpa/cast-service/helm/cast-db\"; pwd;";
+                      cd "$URL_REPO_GH_LOCAL/dm-jenkins-cpa/cast-service/helm/cast-db";
+                      pwd;
+
                       echo  "\n\n### Delete the helm chart movie-db-develop deployment the branch: $name_branch on environement:  $name_branch, with cmd : \n$:helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE uninstall movie-db-develop --namespace develop;sleep 10; ";
                       helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE uninstall movie-db-develop --namespace develop;
                       sleep 10;
@@ -387,11 +395,23 @@ pipeline {
                       echo  "\n\n### Verify deleting the helm chart movie-db-develop the branch: $name_branch on environement:  $name_branch, with cmd : \n$: helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls;";
                       helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls;
 
-                      echo  "\n\n### deploy movie-fastapi with cmd : \n$:  --kubeconfig $URL_FILE_CONFIG_MINIKUBE upgrade --install movie-fastapi-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml"; 
-                      cd "$URL_REPO_GH_LOCAL/dm-jenkins-cpa/movie-service/helm/movie-fastapi";
-                      pwd;
 
-                      echo  "\n\n### deploy web-nginx with cmd : \n$:  helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE upgrade --install web-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml"; 
+                      echo  "\n\n######################## DELETE MOVIE-DB " 
+                      echo  "\n\n### Delete the helm chart cast-db-develop deployment the branch: $name_branch on environement:  $name_branch, with cmd : \n$:helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE uninstall cast-db-develop --namespace develop;sleep 10; ";
+                      helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE uninstall cast-db-develop --namespace develop;
+                      sleep 10;
+                      
+                      echo  "\n\n### Verify deleting the helm chart cast-db-develop the branch: $name_branch on environement:  $name_branch, with cmd : \n$: helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls;";
+                      helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls;
+
+                      echo  "\n\n### Delete the helm chart cast-db-develop deployment the branch: $name_branch on environement:  $name_branch, with cmd : \n$:helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE uninstall cast-db-develop --namespace develop;sleep 10; ";
+                      helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE uninstall cast-db-develop --namespace develop;
+                      sleep 10;
+                      
+                      echo  "\n\n### Verify deleting the helm chart cast-db-develop the branch: $name_branch on environement:  $name_branch, with cmd : \n$: helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls;";
+                      helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls;
+
+
                       cd  "$URL_REPO_GH_LOCAL/dm-jenkins-cpa/web/helm/nginx";
                       pwd;
                       '''
