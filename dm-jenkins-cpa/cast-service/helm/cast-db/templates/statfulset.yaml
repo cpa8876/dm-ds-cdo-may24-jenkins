@@ -14,6 +14,7 @@ spec:
     metadata:
       labels:
         app: cast-db-{{ .Release.Name }}
+        environment: {{ .Values.environment | quote }}
     spec:
       containers:
         - name: cast-db

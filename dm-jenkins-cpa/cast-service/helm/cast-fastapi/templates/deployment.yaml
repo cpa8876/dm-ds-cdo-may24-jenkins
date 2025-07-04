@@ -1,78 +1,38 @@
+# /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins/dm-jenkins-cpa/cast-service/helm/cast-fastapi/templates/deployment.yaml
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "fastapi.fullname" . }}
+  name: cast-fastapi-web-{{ .Release.Name }}
   labels:
-    {{- include "fastapi.labels" . | nindent 4 }}
+    app: cast-fastapi-web-{{ .Release.Name }}
+    environment: {{ .Values.environment | quote }}
 spec:
-  {{- if not .Values.autoscaling.enabled }}
-  replicas: {{ .Values.replicaCount }}
-  {{- end }}
+  replicas: {{ .Values.cast_fastapi_web.replicas }}
   selector:
     matchLabels:
-      {{- include "fastapi.selectorLabels" . | nindent 6 }}
+      app: cast-fastapi-web-{{ .Release.Name }}
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
-      annotations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
       labels:
-        {{- include "fastapi.labels" . | nindent 8 }}
-        {{- with .Values.podLabels }}
-        {{- toYaml . | nindent 8 }}
-        {{- end }}
+        app: cast-fastapi-web-{{ .Release.Name }}
+        environment: {{ .Values.environment | quote }}
     spec:
-      {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      serviceAccountName: {{ include "fastapi.serviceAccountName" . }}
-      {{- with .Values.podSecurityContext }}
-      securityContext:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+        - name: {{ .Values.image.cast_fastapi_web }}
       containers:
-        - name: {{ .Chart.Name }}
-          {{- with .Values.securityContext }}
-          securityContext:
-            {{- toYaml . | nindent 12 }}
-          {{- end }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+        - name: cast-fastapi-web
+          image: "{{ .Values.image.cast_fastapi_web }}"
+          command: ["/bin/sh"]     # https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/
+          args: ["-c", "while true; do cd /app; uvicorn app.main:app --reload --host 0.0.0.0 --port 5000;done"]
           ports:
-            - name: http
-              containerPort: {{ .Values.service.port }}
-              protocol: TCP
-          {{- with .Values.livenessProbe }}
-          livenessProbe:
-            {{- toYaml . | nindent 12 }}
-          {{- end }}
-          {{- with .Values.readinessProbe }}
-          readinessProbe:
-            {{- toYaml . | nindent 12 }}
-          {{- end }}
-          {{- with .Values.resources }}
-          resources:
-            {{- toYaml . | nindent 12 }}
-          {{- end }}
-          {{- with .Values.volumeMounts }}
-          volumeMounts:
-            {{- toYaml . | nindent 12 }}
-          {{- end }}
-      {{- with .Values.volumes }}
-      volumes:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.nodeSelector }}
-      nodeSelector:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.affinity }}
-      affinity:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.tolerations }}
-      tolerations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+            - containerPort: 5000
+          env:
+            - name: DATABASE_URI
+              valueFrom:
+                secretKeyRef:
+                  name: cast-fastapi-web-secret
+                  key: cast-db-postgres-url
+            - name: ENVIRONMENT
+              value: {{ .Values.environment | quote }}
+---

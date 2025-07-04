@@ -4,13 +4,13 @@
 # Declare variables to be passed into your templates.
 
 # This will set the replicaset count more information can be found here: https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/
-replicaCount: 1
-environment: test
+# replicaCount: 1
+environment: develop
 image:
 #  secretpullimage: gitlab-registry-secret
 #  web: "registry.gitlab.com/datascientest_project/fastapi_traefik/fastapi_web_test:latest"
 #  cast_db: "postgres:15-alpine"
-  cast_fastapi: cpa8876/casts-ds-fastapi-develop:latest
+  cast_fastapi_web: cpa8876/casts-ds-fastapi-develop:latest
 #  traefik: "registry.gitlab.com/datascientest_project/fastapi_traefik/traefik:latest"
 
 
@@ -19,6 +19,10 @@ cast_db_postgresql:
   password: ZmFzdGFwaV9wYXNzd2Q=   # echo fastapi_passwd  :=> fastapi_passwd
   database: ZmFzdGFwaV9kYg==       # echo fastapi_db  :=> fastapi_db
   image: postgres:15
+  replicas: 1
+
+cast_fastapi_web:
+  cast_db_postgres_url: cG9zdGdyZXNxbDovL2Zhc3RhcGlfdXNlcjpmYXN0YXBpX3Bhc3N3ZEBjYXN0LWRiLXNlcnZpY2UvZmFzdGFwaV9kYg==   #echo $(echo -n "postgresql://fastapi_user:fastapi_passwd@cast-db-service/fastapi_db" | base64)
   replicas: 1
 
 services:
