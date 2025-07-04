@@ -1,0 +1,45 @@
+# /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins/dm-jenkins-cpa/movie-service/helm/movie-db/templates/statfulset.yaml
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: movie-db-postgres
+#  namespace: dev
+spec:
+  replicas:  {{ .Values.movie_db_postgresql.replicas }}
+  selector:
+    matchLabels:
+      app: movie-db-{{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: movie-db-{{ .Release.Name }}
+    spec:
+      containers:
+        - name: movie-db
+          image: {{ .Values.movie_db_postgresql.image }}
+          ports:
+            - containerPort: 5432
+              name: movie-db
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name:  movie-db-postgres-secret
+                  key: postgresql-user
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name:  movie-db-postgres-secret
+                  key: postgresql-password
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name:  movie-db-postgres-secret
+                  key: postgresql-database
+          volumeMounts:
+            - name: pgdata
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: pgdata
+          emptyDir: {}

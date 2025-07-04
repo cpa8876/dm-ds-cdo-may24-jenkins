@@ -1,15 +1,12 @@
+# /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins/dm-jenkins-cpa/cast-service/helm/cast-db/templates/service.yaml
+---
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "postgres.fullname" . }}
-  labels:
-    {{- include "postgres.labels" . | nindent 4 }}
+  name: cast-db-service-{{ .Release.Name }}
 spec:
-  type: {{ .Values.service.type }}
   ports:
-    - port: {{ .Values.service.port }}
-      targetPort: http
-      protocol: TCP
-      name: http
+    - port: 5432
   selector:
-    {{- include "postgres.selectorLabels" . | nindent 4 }}
+    app: cast-db-service-{{ .Release.Name }}
+---
