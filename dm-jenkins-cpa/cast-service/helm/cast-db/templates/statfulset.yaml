@@ -25,17 +25,17 @@ spec:
             - name: POSTGRES_USER
               valueFrom:
                 secretKeyRef:
-                  name:  postgres-secret
+                  name:  cast-db-postgres-secret
                   key: postgresql-user
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name:  postgres-secret
+                  name:  cast-db-postgres-secret
                   key: postgresql-password
             - name: POSTGRES_DB
               valueFrom:
                 secretKeyRef:
-                  name:  postgres-secret
+                  name:  cast-db-postgres-secret
                   key: postgresql-database
           volumeMounts:
             - name: pgdata

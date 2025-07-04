@@ -19,7 +19,7 @@ image:
 #  cast-db-password: ZmFzdGFwaV9wYXNzd2Q=   # echo fastapi_passwd  :=> fastapi_passwd
 #  cast-db-database: ZmFzdGFwaV9kYg==       # echo fastapi_db  :=> fastapi_db
 
-postgresql:
+cast_db_postgresql:
   user: ZmFzdGFwaV91c2Vy       # echo fastapi_user  :=> fastapi_user
   password: ZmFzdGFwaV9wYXNzd2Q=   # echo fastapi_passwd  :=> fastapi_passwd
   database: ZmFzdGFwaV9kYg==       # echo fastapi_db  :=> fastapi_db
