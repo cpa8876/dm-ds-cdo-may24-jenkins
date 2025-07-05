@@ -15,7 +15,7 @@ spec:
   template:
     metadata:
       labels:
-        app: { .Release.Name }}
+        app: {{ .Release.Name }}
         environment: {{ .Values.environment | quote }}
     spec:
       imagePullSecrets:
