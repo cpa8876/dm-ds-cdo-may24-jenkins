@@ -352,7 +352,7 @@ pipeline {
                       sleep 10;
 
                       echo  "\n\n###  List all deployments on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls;";
-                      helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls;
+                      helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls -A;
 
                       echo  "\n\n### Test with a sql query after to have deployed cast-db on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: kubectl exec -t cast-db-postgres-0 -n develop -- /bin/bash -c \"psql -h localhost -p 5432 -U fastapi_user -d fastapi_db -c \'select * from pg_database\'\"";
                       kubectl exec -t cast-db-postgres-0 -n develop -- /bin/bash -c "psql -h localhost -p 5432 -U fastapi_user -d fastapi_db -c 'select * from pg_database'"
