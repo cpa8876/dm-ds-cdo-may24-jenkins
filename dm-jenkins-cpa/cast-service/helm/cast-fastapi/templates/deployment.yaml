@@ -3,25 +3,25 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cast-fastapi-web-{{ .Release.Name }}
+  name: {{ .Release.Name }}
   labels:
-    app: cast-fastapi-web-{{ .Release.Name }}
+    app: {{ .Release.Name }}
     environment: {{ .Values.environment | quote }}
 spec:
   replicas: {{ .Values.cast_fastapi_web.replicas }}
   selector:
     matchLabels:
-      app: cast-fastapi-web-{{ .Release.Name }}
+      app: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app: cast-fastapi-web-{{ .Release.Name }}
+        app: { .Release.Name }}
         environment: {{ .Values.environment | quote }}
     spec:
       imagePullSecrets:
         - name: {{ .Values.image.cast_fastapi_web }}
       containers:
-        - name: cast-fastapi-web
+        - name: {{ .Release.Name }}
           image: {{ .Values.image.cast_fastapi_web }}
           command: ["/bin/sh"]     # https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/
           args: ["-c", "while true; do cd /app; uvicorn app.main:app --reload --host 0.0.0.0 --port 5000;done"]
