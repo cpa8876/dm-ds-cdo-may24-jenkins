@@ -9,7 +9,7 @@ metadata:
     app: {{ .Release.Name }}
     environment: {{ .Values.environment | quote }}
 spec:
-  replicas: {{ .Values.cast_fastapi_web.replicas }}
+  replicas: {{ .Values.cast_fastapi.replicas }}
   selector:
     matchLabels:
       app: {{ .Release.Name }}
@@ -20,7 +20,7 @@ spec:
         environment: {{ .Values.environment | quote }}
     spec:
       #imagePullSecrets:
-      #  - name: {{ .Values.image.cast_fastapi_web }}
+      #  - name: {{ .Values.image.cast_fastapi }}
       containers:
         - name: {{ .Release.Name }}
           image: "{{ .Values.cast_fastapi.repository }}:{{ .Values.cast_fastapi.tag }}"
@@ -33,7 +33,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ .Release.Name }}
-                  key: cast-db-postgres-url
+                  key: url
             - name: ENVIRONMENT
               value: {{ .Values.environment | quote }}
 ---
