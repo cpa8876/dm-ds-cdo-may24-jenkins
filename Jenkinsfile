@@ -23,10 +23,11 @@ pipeline {
     URL_REP_HELM_FAT_CAST_SERVICE="$URL_REP_HELM_FAT/cast-service/helm/cast-fastapi"        // Directory containned chart helm of cast_service
     URL_REP_HELM_FAT_MOVIE_SERVICE="$URL_REP_HELM_FAT/movie-service/helm/movie-fastapi"      // Directory containned chart helm of fastapi-movie_service 
     URL_FILE_CONFIG_MINIKUBE="/home/jenkins/.minikube/config"              // Url file of config to enable connect on minikube cluster
-    KUBE_CONTEXT="devops-develop"
-    KUBE_NAMESPACE="develop"
-    HELM_VALUES_FILE="value-develop.yaml"
     name_branch0="${env.ref}"
+    // KUBE_CONTEXT="devops-$name_branch"
+    // KUBE_NAMESPACE="$name_branch"
+    // HELM_VALUES_FILE="value-$name_branch.yaml"
+
      }
   agent any // Jenkins will be able to select all available agents
   // How-to's and Support; Jenkins Multibranch Pipeline With Git Tutorial :
@@ -296,7 +297,7 @@ pipeline {
                      if [ "$name_branch"=="develop" ]; 
                      then                      
                         echo  "\n### Déploiement sur l'environnement DEV";
-                        echo  "\n\n### Choose context deops-develop defined on kubeconfig file of the cluster minikube with user minikube";
+                        echo  "\n\n### Choose context deops-$name_branch defined on kubeconfig file of the cluster minikube with user minikube";
                         kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE config use-context devops-$name_branch;
                         kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE config get-contexts;
                         whoami;
@@ -305,7 +306,7 @@ pipeline {
                      elif [ "$name_branch"=="qa" ]; 
                      then    
                         echo  "\n\n### Déploiement sur l'environnement QA";
-                        echo  "\n\n### Choose context deops-develop defined on kubeconfig file of the cluster minikube with user minikube";
+                        echo  "\n\n### Choose context deops-$name_branch defined on kubeconfig file of the cluster minikube with user minikube";
                         kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE config use-context devops-$name_branch;
                         kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE config get-contexts;
                         whoami;
@@ -314,7 +315,7 @@ pipeline {
                      elif [ "$name_branch"=="staging" ]; 
                      then  
                         echo  "\n\n### Déploiement sur l'environnement STAGING";
-                        echo  "\n\n### Choose context deops-develop defined on kubeconfig file of the cluster minikube with user minikube";
+                        echo  "\n\n### Choose context deops-$name_branch defined on kubeconfig file of the cluster minikube with user minikube";
                         kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE config use-context devops-$name_branch;
                         kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE config get-contexts;
                         whoami;
@@ -325,7 +326,7 @@ pipeline {
                         echo  "\n\n### Déploiement sur l'environnement PROD";
                         echo  "\n\n###// Create an Approval Button with a timeout of 15minutes.";
                         echo  "\n\n###// this require a manuel validation in order to deploy on production environment";
-                        echo  "\n\n### Choose context deops-develop defined on kubeconfig file of the cluster minikube with user minikube";
+                        echo  "\n\n### Choose context deops-$name_branch defined on kubeconfig file of the cluster minikube with user minikube";
                         kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE config use-context devops-$name_branch;
                         kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE config get-contexts;
                         whoami;
@@ -348,14 +349,14 @@ pipeline {
                       pwd;
                       
                       echo  "\n\n### Deploy cast-db on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE upgrade --install cast-db-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml; sleep 10;";
-                      helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE upgrade --install cast-db-develop --namespace develop --create-namespace --values=values-develop.yml .;
+                      helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE upgrade --install cast-db-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml .;
                       sleep 10;
 
                       echo  "\n\n###  List all deployments on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls;";
                       helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls -A;
 
-                      echo  "\n\n### Test with a sql query after to have deployed cast-db on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: kubectl exec -t cast-db-postgres-0 -n develop -- /bin/bash -c \"psql -h localhost -p 5432 -U fastapi_user -d fastapi_db -c \'select * from pg_database\'\"";
-                      kubectl exec -t cast-db-postgres-0 -n develop -- /bin/bash -c "psql -h localhost -p 5432 -U fastapi_user -d fastapi_db -c 'select * from pg_database'"
+                      echo  "\n\n### Test with a sql query after to have deployed cast-db on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: kubectl exec -t cast-db-postgres-0 -n $name_branch -- /bin/bash -c \"psql -h localhost -p 5432 -U fastapi_user -d fastapi_db -c \'select * from pg_database\'\"";
+                      kubectl exec -t cast-db-postgres-0 -n $name_branch -- /bin/bash -c "psql -h localhost -p 5432 -U fastapi_user -d fastapi_db -c 'select * from pg_database'"
                      
 
                       echo  "\n\n######################## DEPLOY CAST-FASTAPI-WEB"
@@ -364,17 +365,14 @@ pipeline {
                       pwd;
                       
                       echo  "\n\n### Deploy cast-fastapi on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE upgrade --install cast-fastapi-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yaml; sleep 10;";
-                      helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE upgrade --install cast-fastapi-develop --namespace develop --create-namespace --values=values-develop.yaml .;
+                      helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE upgrade --install cast-fastapi-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yaml .;
                       sleep 10;
 
                       echo  "\n\n###  List all deployments on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls;";
                       helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls;
 
                       echo  "\n\n### Test with a cmd curl after to have deployed cast-fastapi-web on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: curl $(docker exec dm-jenkins-cpa-cast_service-1 hostname -i):5000/api/v1/casts/docs";
-                      echo -e "/n/n ******* kubectl exec -t cast-fastapi-web-0 -n develop -- /bin/bash -c \"psql -h localhost -p 5432 -U fastapi_user -d fastapi_db -c \'select * from pg_database\';\"";
-                      echo -e "\n\n###         9.4.4.8) curl --resolve 'dm-jenkins.cpa:80:$( minikube ip )' -i http://dm-jenkins.cpa/ from minikube server";
-                      echo "***** ssh -i $url_id_rsa_cpa  cpa@$ip_minikube curl --resolve \"dm-jenkins.cpa:80:$( ssh -i $url_id_rsa_cpa cpa@$ip_minikube minikube ip )\" -i http://dm-jenkins.cpa/api/v1/casts/docs";
-                      echo "***** # curl --resolve 'dm-jenkins.cpa:80:192.168.49.2' -i http://dm-jenkins.cpa/api/v1/casts/docs;";
+                      curl $(docker exec dm-jenkins-cpa-cast_service-1 hostname -i):5000/api/v1/casts/docs";
                       
                       
                       echo  "\n\n######################## DEPLOY MOVIE-DB "
@@ -383,14 +381,14 @@ pipeline {
                       pwd;
                       
                       echo  "\n\n### Deploy movie-db on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE upgrade --install movie-db-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml; sleep 10;";
-                      helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE upgrade --install movie-db-develop --namespace develop --create-namespace --values=values-develop.yml .;
+                      helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE upgrade --install movie-db-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml .;
                       sleep 10;
 
                       echo  "\n\n###  List all deployments on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls;";
                       helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls;
 
-                      echo  "\n\n### Test with a sql query after to have deployed movie-db on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: kubectl exec -t movie-db-postgres-0 -n develop -- /bin/bash -c \"psql -h localhost -p 5432 -U fastapi_user -d fastapi_db -c \'select * from pg_database\'\"";
-                      kubectl exec -t movie-db-postgres-0 -n develop -- /bin/bash -c "psql -h localhost -p 5432 -U fastapi_user -d fastapi_db -c 'select * from pg_database'"
+                      echo  "\n\n### Test with a sql query after to have deployed movie-db on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: kubectl exec -t movie-db-postgres-0 -n $name_branch -- /bin/bash -c \"psql -h localhost -p 5432 -U fastapi_user -d fastapi_db -c \'select * from pg_database\'\"";
+                      kubectl exec -t movie-db-postgres-0 -n $name_branch -- /bin/bash -c "psql -h localhost -p 5432 -U fastapi_user -d fastapi_db -c 'select * from pg_database'"
 
 
                       echo  "\n\n######################## DEPLOY MOVIE-FASTAPI-WEB"
@@ -413,11 +411,11 @@ pipeline {
                       cd "$URL_REPO_GH_LOCAL/dm-jenkins-cpa/cast-service/helm/cast-db";
                       pwd;
 
-                      echo  "\n\n### Delete the helm chart cast-db-develop deployment on the branch: $name_branch on the environement:  $name_branch, with cmd : \n$:helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE uninstall cast-db-develop --namespace develop;sleep 10; ";
-                      echo "helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE uninstall cast-db-develop --namespace develop;"
+                      echo  "\n\n### Delete the helm chart cast-db-$name_branch deployment on the branch: $name_branch on the environement:  $name_branch, with cmd : \n$:helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE uninstall cast-db-$name_branch --namespace $name_branch;sleep 10; ";
+                      echo "helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE uninstall cast-db-$name_branch --namespace $name_branch;"
                       echo "sleep 10;"
                       
-                      echo  "\n\n### Verify deleting the helm chart cast-db-develop on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls;";
+                      echo  "\n\n### Verify deleting the helm chart cast-db-$name_branch on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls;";
                       helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls;
 
 
@@ -430,11 +428,11 @@ pipeline {
                       cd "$URL_REPO_GH_LOCAL/dm-jenkins-cpa/movie-service/helm/movie-db";
                       pwd;
 
-                      echo  "\n\n### Delete the helm chart movie-db-develop deployment on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$:helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE uninstall movie-db-develop --namespace develop;sleep 10; ";
-                      echo "helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE uninstall movie-db-develop --namespace develop;"
+                      echo  "\n\n### Delete the helm chart movie-db-$name_branch deployment on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$:helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE uninstall movie-db-$name_branch --namespace $name_branch;sleep 10; ";
+                      echo "helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE uninstall movie-db-$name_branch --namespace $name_branch;"
                       echo "sleep 10;"
                       
-                      echo  "\n\n### Verify deleting the helm chart movie-db-develop on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls;";
+                      echo  "\n\n### Verify deleting the helm chart movie-db-$name_branch on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls;";
                       helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls;
                       
                       

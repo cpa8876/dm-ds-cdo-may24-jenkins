@@ -6,7 +6,7 @@
 # This will set the replicaset count more information can be found here: https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/
 # replicaCount: 1
 environment: develop
-cast_fastapi:
+	cast_fastapi:
   repository: "cpa8876/casts-ds-fastapi-develop"
   tag: "latest"
 #  secretpullimage: gitlab-registry-secret
