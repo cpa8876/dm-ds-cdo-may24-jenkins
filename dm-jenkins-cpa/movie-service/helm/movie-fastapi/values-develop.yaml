@@ -1,4 +1,4 @@
-# /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins/dm-jenkins-cpa/cast-service/helm/cast-fastapi/values-develop.yaml
+# /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins/dm-jenkins-cpa/movie-service/helm/movie-fastapi/values-develop.yaml
 # Default values for postgres.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
@@ -6,8 +6,8 @@
 # This will set the replicaset count more information can be found here: https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/
 # replicaCount: 1
 environment: develop
-cast_fastapi:
-  repository: "cpa8876/casts-ds-fastapi-develop"
+movie_fastapi:
+  repository: "cpa8876/movies-ds-fastapi-develop"
   tag: "latest"
 #  secretpullimage: gitlab-registry-secret
 #  web: "registry.gitlab.com/datascientest_project/fastapi_traefik/fastapi_web_test:latest"
@@ -21,9 +21,9 @@ movie_fastapi_web_develop:
 
 
 services:
-  fastapi-cast-service:
+  fastapi-movie-service:
     port: 5000
-  cast_db:
+  movie_db:
     port: 5432
   traefik: 
     ports:
