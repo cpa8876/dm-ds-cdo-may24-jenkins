@@ -11,7 +11,7 @@ spec:
     matchLabels:
       app: {{ .Release.Name }}
   ports:
-    - port: 5000
+    - port: {{ .Values.services.cast_fastapi.port }}
   selector:
     app: {{ .Release.Name }}
 ---
