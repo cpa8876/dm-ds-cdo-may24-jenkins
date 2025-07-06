@@ -21,7 +21,7 @@ image:
   # image: postgres:15
   # replicas: 1
 
-movie_db_postgresql:
+movie_db:
   user: bW92aWVfZmFzdGFwaV91c2VyX2RldmVsb3A=          # echo $(echo -n "movie_fastapi_user_develop" | base64) -  bW92aWVfZmFzdGFwaV91c2VyX2RldmVsb3A=
   password: bW92aWVfZmFzdGFwaV9wYXNzd29yZF9kZXZlbG9w  # echo $(echo -n "movie_fastapi_password_develop" | base64) - bW92aWVfZmFzdGFwaV9wYXNzd29yZF9kZXZlbG9w
   database: ZmFzdGFwaV9kYg==                          # echo $(echo -n "movie_fastapi_db_develop" | base64) - bW92aWVfZmFzdGFwaV9kYl9kZXZlbG9w

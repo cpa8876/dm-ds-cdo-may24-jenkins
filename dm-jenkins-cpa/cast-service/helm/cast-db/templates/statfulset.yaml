@@ -26,17 +26,17 @@ spec:
             - name: POSTGRES_USER
               valueFrom:
                 secretKeyRef:
-                  name:  cast-db-secret
+                  name:  {{ .Release.Name }}
                   key: user
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name:  cast-db-secret
+                  name:  {{ .Release.Name }}
                   key: password
             - name: POSTGRES_DB
               valueFrom:
                 secretKeyRef:
-                  name:  cast-db-secret
+                  name:  {{ .Release.Name }}
                   key: database
           volumeMounts:
             - name: pgdata

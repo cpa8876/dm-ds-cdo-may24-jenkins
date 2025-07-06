@@ -3,10 +3,10 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: movie-db-postgres
+  name: {{ .Release.Name }}
 #  namespace: dev
 spec:
-  replicas:  {{ .Values.movie_db_postgresql.replicas }}
+  replicas:  {{ .Values.movie_db.replicas }}
   selector:
     matchLabels:
       app: movie-db-{{ .Release.Name }}
@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: movie-db
-          image: {{ .Values.movie_db_postgresql.image }}
+          image: {{ .Values.movie_db.image }}
           ports:
             - containerPort: 5432
               name: movie-db
@@ -25,17 +25,17 @@ spec:
             - name: POSTGRES_USER
               valueFrom:
                 secretKeyRef:
-                  name:  movie-db-postgres-secret
+                  name:  {{ .Release.Name }}
                   key: postgresql-user
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name:  movie-db-postgres-secret
+                  name:  {{ .Release.Name }}
                   key: postgresql-password
             - name: POSTGRES_DB
               valueFrom:
                 secretKeyRef:
-                  name:  movie-db-postgres-secret
+                  name: {{ .Release.Name }}
                   key: postgresql-database
           volumeMounts:
             - name: pgdata
