@@ -372,7 +372,7 @@ pipeline {
                       helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls;
 
                       echo  "\n\n### Test with a cmd curl after to have deployed cast-fastapi-web on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: curl $(docker exec dm-jenkins-cpa-cast_service-1 hostname -i):5000/api/v1/casts/docs";
-                      curl $(docker exec dm-jenkins-cpa-cast_service-1 hostname -i):5000/api/v1/casts/docs";
+                      curl $(docker exec dm-jenkins-cpa-cast_service-1 hostname -i):5000/api/v1/casts/docs;
                       
                       
                       echo  "\n\n######################## DEPLOY MOVIE-DB "
