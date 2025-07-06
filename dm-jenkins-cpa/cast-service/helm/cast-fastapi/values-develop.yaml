@@ -16,7 +16,7 @@ cast_fastapi:
 #  traefik: "registry.gitlab.com/datascientest_project/fastapi_traefik/traefik:latest"
 
 movie_fastapi_web_develop:
-  movie_db_postgres_url_develop: cG9zdGdyZXNxbDovL2Zhc3RhcGlfdXNlcjpmYXN0YXBpX3Bhc3N3ZEBjYXN0LWRiLXNlcnZpY2UvZmFzdGFwaV9kYg==   #echo $(echo -n "postgresql://movie_fastapi_user_develop:movie_fastapi_password_develop@cast-db-service/movie_fastapi_db_develop" | base64) - cG9zdGdyZXNxbDovL21vdmllX2Zhc3RhcGlfdXNlcl9kZXZlbG9wOm1vdmllX2Zhc3RhcGlfcGFz c3dvcmRfZGV2ZWxvcEBjYXN0LWRiLXNlcnZpY2UvbW92aWVfZmFzdGFwaV9kYl9kZXZlbG9w
+  movie_db_postgres_url_develop: cG9zdGdyZXNxbDovL2Nhc3RfZmFzdGFwaV91c2VyX2RldmVsb3A6Y2FzdF9mYXN0YXBpX3Bhc3N3 b3JkX2RldmVsb3BAY2FzdC1kYi1zZXJ2aWNlL2Nhc3RfZmFzdGFwaV9kYl9kZXZlbG9w   #echo $(echo -n "postgresql://cast_fastapi_user_develop:cast_fastapi_password_develop@cast-db-service/cast_fastapi_db_develop" | base64) - cG9zdGdyZXNxbDovL2Nhc3RfZmFzdGFwaV91c2VyX2RldmVsb3A6Y2FzdF9mYXN0YXBpX3Bhc3N3 b3JkX2RldmVsb3BAY2FzdC1kYi1zZXJ2aWNlL2Nhc3RfZmFzdGFwaV9kYl9kZXZlbG9w
   replicas: 1
 
 
