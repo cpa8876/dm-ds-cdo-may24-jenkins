@@ -48,7 +48,9 @@ pipeline {
             echo $name_branch 
             cd $URL_REPO_GH_LOCAL
             pwd
-            docker rm -f $DOCKER_ID/$DOCKER_IMAGE1_$name_branch:latest
+            test_docker_image="$(docker images $DOCKER_ID/$DOCKER_IMAGE1"-"$name_branch -q)"
+            echo $test_docker_image
+            if [[ -n "$test_docker_image" ]]; then docker rm -f docker rm -f $DOCKER_ID/$DOCKER_IMAGE1"-"$name_branch:latest; else echo "pas d'image docker : $DOCKER_ID/$DOCKER_IMAGE1"-"$name_branch:latest à supprimer"; fi;
             echo "docker rm -f $DOCKER_ID/$DOCKER_IMAGE1_$name_branch:\"v.${${BUILD_ID}-5}\""
             docker build -t $DOCKER_ID/$DOCKER_IMAGE1-$name_branch:$DOCKER_TAG $URL_REP_DCKR_FAT_MOVIE
             docker build -t $DOCKER_ID/$DOCKER_IMAGE1-$name_branch:latest $URL_REP_DCKR_FAT_MOVIE
