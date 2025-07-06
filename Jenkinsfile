@@ -50,13 +50,14 @@ pipeline {
             echo $name_branch 
             cd $URL_REPO_GH_LOCAL
             pwd
-            test_docker_image="$(docker images $DOCKER_ID/$DOCKER_IMAGE1"-"$name_branch -q)"
-            echo $test_docker_image
-            if \"%$test_docker_image%\"==\"\"; then docker rm -f docker rm -f $DOCKER_ID/$DOCKER_IMAGE1\"-\"$name_branch:latest; else echo \"pas d'image docker : $DOCKER_ID/$DOCKER_IMAGE1\"-\"$name_branch:latest à supprimer\"; fi;
+            test_docker_image1="$(docker images $DOCKER_ID/$DOCKER_IMAGE1"-"$name_branch -q)"
+            echo $test_docker_image1
+            if \"%$test_docker_image1%\"==\"\"; then docker rm -f docker rm -f $DOCKER_ID/$DOCKER_IMAGE1\"-\"$name_branch:latest; else echo \"pas d'image docker : $DOCKER_ID/$DOCKER_IMAGE1\"-\"$name_branch:latest à supprimer\"; fi;
             docker build -t $DOCKER_ID/$DOCKER_IMAGE1-$name_branch:$DOCKER_TAG $URL_REP_DCKR_FAT_MOVIE
             docker build -t $DOCKER_ID/$DOCKER_IMAGE1-$name_branch:latest $URL_REP_DCKR_FAT_MOVIE
-            docker rm -f $DOCKER_ID/$DOCKER_IMAGE2:latest
-            echo "docker rm -f $DOCKER_ID/$DOCKER_IMAGE2:\"v.${${BUILD_ID}-5}\""
+            test_docker_image2="$(docker images $DOCKER_ID/$DOCKER_IMAGE2"-"$name_branch -q)"
+            echo $test_docker_image2
+            if \"%$test_docker_image2%\"==\"\"; then docker rm -f docker rm -f $DOCKER_ID/$DOCKER_IMAGE2\"-\"$name_branch:latest; else echo \"pas d'image docker : $DOCKER_ID/$DOCKER_IMAGE2\"-\"$name_branch:latest à supprimer\"; fi;
             docker build -t $DOCKER_ID/$DOCKER_IMAGE2-$name_branch:$DOCKER_TAG $URL_REP_DCKR_FAT_CAST
             docker build -t $DOCKER_ID/$DOCKER_IMAGE2-$name_branch:latest $URL_REP_DCKR_FAT_CAST
             docker image ls -a | grep fastapi
