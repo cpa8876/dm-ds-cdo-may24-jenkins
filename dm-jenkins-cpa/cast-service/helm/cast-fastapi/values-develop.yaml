@@ -1,4 +1,4 @@
-# /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins/dm-jenkins-cpa/cast-service/helm/cast-fastapi/values.yaml
+# /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins/dm-jenkins-cpa/cast-service/helm/cast-fastapi/values-develop.yaml
 # Default values for postgres.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.

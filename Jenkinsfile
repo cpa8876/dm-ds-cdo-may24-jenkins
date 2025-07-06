@@ -423,7 +423,7 @@ pipeline {
 
                       echo  "\n\n######################## DELETE CAST-FASTAPI-WEB"
                       
-                      
+                      	
                       
                       echo  "\n\n######################## DELETE MOVIE-DB" 
                       echo  "\n\n### Place on the right directory before to deploy movie-db on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: cd \"$URL_REPO_GH_LOCAL/dm-jenkins-cpa/movie-service/helm/movie-db\"; pwd;";
