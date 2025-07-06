@@ -14,7 +14,7 @@ image:
 #  traefik: "registry.gitlab.com/datascientest_project/fastapi_traefik/traefik:latest"
 
 
-cast_db_postgresql:
+cast_db:
   user: Y2FzdF9mYXN0YXBpX3VzZXJfZGV2ZWxvcA==           # echo $(echo -n "cast_fastapi_user_develop" | base64) - Y2FzdF9mYXN0YXBpX3VzZXJfZGV2ZWxvcA==
   password: Y2FzdF9mYXN0YXBpX3Bhc3N3b3JkX2RldmVsb3A=   # echo $(echo -n "cast_fastapi_password_develop" | base64) - Y2FzdF9mYXN0YXBpX3Bhc3N3b3JkX2RldmVsb3A=
   database: Y2FzdF9mYXN0YXBpX2RiX2RldmVsb3A=           # echo $(echo -n "cast_fastapi_db_develop" | base64) - Y2FzdF9mYXN0YXBpX3VzZXJfZGV2ZWxvcA==
