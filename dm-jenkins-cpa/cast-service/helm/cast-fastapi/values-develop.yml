@@ -21,7 +21,7 @@ cast_fastapi:
 
 
 services:
-  fastapi-cast-service:
+  cast_fastapi:
     port: 5000
   cast_db:
     port: 5432
