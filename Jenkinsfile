@@ -41,6 +41,8 @@ pipeline {
           //echo  "\n\n### Building branch: ${env.BRANCH_NAME}"
           // https://search.brave.com/search?q=sed+caract%C3%A8re+sp%C3%A9ciaux+%2F&source=desktop&summary=1&conversation=bc5fb68b4e385ab86446da
           // /bin/sh -c "name_branch=$(echo ${name_branch0} | sed 's#refs/heads/##g'); echo \"#### Building branch: ${name_branch}\"; if [ \"$name_branch\" = \"develop\" ]; then  echo \"$name_branch\"; fi"
+          //            build_id_cpa=${BUILD_ID}-5;
+            //echo "$build_id_cpa;
           sh '''
             echo  "\n\n### Building branch: $name_branch0"
             name_branch=$(echo $name_branch0 | sed "s#refs/heads/##g")
@@ -51,7 +53,6 @@ pipeline {
             test_docker_image="$(docker images $DOCKER_ID/$DOCKER_IMAGE1"-"$name_branch -q)"
             echo $test_docker_image
             if \"%$test_docker_image%\"==\"\"; then docker rm -f docker rm -f $DOCKER_ID/$DOCKER_IMAGE1\"-\"$name_branch:latest; else echo \"pas d'image docker : $DOCKER_ID/$DOCKER_IMAGE1\"-\"$name_branch:latest à supprimer\"; fi;
-            echo "docker rm -f $DOCKER_ID/$DOCKER_IMAGE1_$name_branch:\"v.${${BUILD_ID}-5}\""
             docker build -t $DOCKER_ID/$DOCKER_IMAGE1-$name_branch:$DOCKER_TAG $URL_REP_DCKR_FAT_MOVIE
             docker build -t $DOCKER_ID/$DOCKER_IMAGE1-$name_branch:latest $URL_REP_DCKR_FAT_MOVIE
             docker rm -f $DOCKER_ID/$DOCKER_IMAGE2:latest
