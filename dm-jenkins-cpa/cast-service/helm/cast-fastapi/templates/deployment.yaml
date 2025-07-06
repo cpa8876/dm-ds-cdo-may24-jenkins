@@ -23,7 +23,7 @@ spec:
       #  - name: {{ .Values.image.cast_fastapi }}
       containers:
         - name: {{ .Release.Name }}
-          image: "{{ .Values.castFastapi.repository }}:{{ .Values.castFastapi.tag | default .Chart.AppVersion }}"
+          image: "{{ .Values.cast_image.repository }}:{{ .Values.cast_image.tag | default .Chart.AppVersion }}"
           command: ["/bin/sh"]     # https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/
           args: ["-c", "while true; do cd /app; uvicorn app.main:app --reload --host 0.0.0.0 --port 5000;done"]
           ports:
