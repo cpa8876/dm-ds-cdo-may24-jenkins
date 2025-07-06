@@ -356,7 +356,7 @@ pipeline {
                       helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls -A;
 
                       echo  "\n\n### Test with a sql query after to have deployed cast-db on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: kubectl exec -t cast-db-postgres-0 -n $name_branch -- /bin/bash -c \"psql -h localhost -p 5432 -U fastapi_user -d fastapi_db -c \'select * from pg_database\'\"";
-                      kubectl exec -t cast-db-postgres-0 -n $name_branch -- /bin/bash -c "psql -h localhost -p 5432 -U fastapi_user -d fastapi_db -c 'select * from pg_database'"
+                      kubectl exec -t cast-db-postgres-0 -n $name_branch -- /bin/bash -c "psql -h localhost -p 5432 -U cast_fastapi_user_$name_branch -d fastapi_db_$name_branch -c 'select * from pg_database'"
                      
 
                       echo  "\n\n######################## DEPLOY CAST-FASTAPI-WEB"
