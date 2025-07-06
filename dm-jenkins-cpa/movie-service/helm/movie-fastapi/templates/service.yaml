@@ -1,15 +1,17 @@
+# /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins/dm-jenkins-cpa/movie-service/helm/movie-fastapi/templates/service.yaml
+---
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "fastapi.fullname" . }}
-  labels:
-    {{- include "fastapi.labels" . | nindent 4 }}
+  name: movie-fastapi-service
+  namespace: {{ .Values.environment | quote }}
 spec:
-  type: {{ .Values.service.type }}
-  ports:
-    - port: {{ .Values.service.port }}
-      targetPort: http
-      protocol: TCP
-      name: http
+  type: ClusterIP
   selector:
-    {{- include "fastapi.selectorLabels" . | nindent 4 }}
+    matchLabels:
+      app: {{ .Release.Name }}
+  ports:
+    - port: {{ .Values.services.movie_fastapi.port }}
+  selector:
+    app: {{ .Release.Name }}
+---
