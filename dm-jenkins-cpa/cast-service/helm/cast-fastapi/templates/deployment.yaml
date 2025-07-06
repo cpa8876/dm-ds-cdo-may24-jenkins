@@ -4,6 +4,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .Release.Name }}
+  namespace: {{ .Values.environment | quote }}
   labels:
     app: {{ .Release.Name }}
     environment: {{ .Values.environment | quote }}
@@ -18,8 +19,8 @@ spec:
         app: {{ .Release.Name }}
         environment: {{ .Values.environment | quote }}
     spec:
-      imagePullSecrets:
-        - name: {{ .Values.image.cast_fastapi_web }}
+      #imagePullSecrets:
+      #  - name: {{ .Values.image.cast_fastapi_web }}
       containers:
         - name: {{ .Release.Name }}
           image: {{ .Values.image.cast_fastapi_web }}
@@ -31,7 +32,7 @@ spec:
             - name: DATABASE_URI
               valueFrom:
                 secretKeyRef:
-                  name: cast-fastapi-web-secret
+                  name: {{ .Release.Name }}
                   key: cast-db-postgres-url
             - name: ENVIRONMENT
               value: {{ .Values.environment | quote }}

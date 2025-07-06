@@ -1,5 +1,5 @@
   //# /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins/Jenkinsfile
-  //
+  // Format : groovy
   // ## VERSIONS
   // ### 21/06/2025 16:27 : Remplacement des cmd docker file par le docker compose dans le satge Docker run
   // ### /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/ARCHIVES/Jenkinsfile_V5_Dckr_cmd_20250621.1330 : version av ec cmd docker
