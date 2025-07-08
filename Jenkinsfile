@@ -381,8 +381,8 @@ pipeline {
                       echo  "\n\n###  List all deployments on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls;";
                       helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls;
 
-                      echo  "\n\n### Test with a cmd curl after to have deployed cast-fastapi-web on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$:kubectl run -it pingkungcurl1 --image=curlimages/curl --namespace develop -- sh -c \"curl -Lk cast-fastapi-service:5001/api/v1/casts/docs\"";
-                      kubectl run -it pingkungcurl1 --image=curlimages/curl --namespace develop -- sh -c "curl -Lk cast-fastapi-service:5001/api/v1/casts/docs"
+                      echo  "\n\n### Test with a cmd curl after to have deployed cast-fastapi-web on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: kubectl run --rm -it  --tty pingkungcurl1 --image=curlimages/curl --namespace develop --restart=Never -- cast-fastapi-service:5001/api/v1/casts/docs";
+                      kubectl run --rm -it  --tty pingkungcurl1 --image=curlimages/curl --namespace develop --restart=Never -- cast-fastapi-service:5001/api/v1/casts/docs
                       
                       
                       echo  "\n\n######################## DEPLOY MOVIE-DB "
