@@ -9,7 +9,7 @@ spec:
   type: ClusterIP
   selector:
     matchLabels:
-      app: {{ .Release.Name }}
+      app: {{ .Release.Name }}-app
   ports:
     - port: {{ .Values.services.cast_fastapi.port }}
   selector:
