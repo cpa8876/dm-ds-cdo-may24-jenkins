@@ -13,5 +13,5 @@ spec:
   ports:
     - port: {{ .Values.services.cast_fastapi.port }}
   selector:
-    app: {{ .Release.Name }}
+    app: {{ .Release.Name }}-app
 ---
