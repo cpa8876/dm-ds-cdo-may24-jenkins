@@ -6,7 +6,7 @@
 # This will set the replicaset count more information can be found here: https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/
 # replicaCount: 1
 environment: develop
-movie_fastapi_image:
+movie_image:
   repository: "cpa8876/movies-ds-fastapi-develop"
   tag: "latest"
 #  secretpullimage: gitlab-registry-secret
@@ -16,12 +16,12 @@ movie_fastapi_image:
 #  traefik: "registry.gitlab.com/datascientest_project/fastapi_traefik/traefik:latest"
 
 movie_fastapi:
-  url: cG9zdGdyZXNxbDovL21vdmllX2Zhc3RhcGlfdXNlcl9kZXZlbG9wOm1vdmllX2Zhc3RhcGlfcGFz c3dvcmRfZGV2ZWxvcEBtb3ZpZS1kYi1zZXJ2aWNlL21vdmllX2Zhc3RhcGlfZGJfZGV2ZWxvcA==   #echo $(echo -n "postgresql://movie_fastapi_user_develop:movie_fastapi_password_develop@movie-db-service/movie_fastapi_db_develop" | base64) - cG9zdGdyZXNxbDovL21vdmllX2Zhc3RhcGlfdXNlcl9kZXZlbG9wOm1vdmllX2Zhc3RhcGlfcGFz c3dvcmRfZGV2ZWxvcEBtb3ZpZS1kYi1zZXJ2aWNlL21vdmllX2Zhc3RhcGlfZGJfZGV2ZWxvcA==
+  url: cG9zdGdyZXNxbDovL21vdmllX2Zhc3RhcGlfdXNlcl9kZXZlbG9wOm1vdmllX2Zhc3RhcGlfcGFzc3dvcmRfZGV2ZWxvcEBtb3ZpZS1kYi1zZXJ2aWNlL21vdmllX2Zhc3RhcGlfZGJfZGV2ZWxvcA==  #echo $(echo -n "postgresql://movie_fastapi_user_develop:movie_fastapi_password_develop@movie-db-service/movie_fastapi_db_develop" | base64) - cG9zdGdyZXNxbDovL21vdmllX2Zhc3RhcGlfdXNlcl9kZXZlbG9wOm1vdmllX2Zhc3RhcGlfcGFz c3dvcmRfZGV2ZWxvcEBtb3ZpZS1kYi1zZXJ2aWNlL21vdmllX2Zhc3RhcGlfZGJfZGV2ZWxvcA==
   replicas: 1
 
 
 services:
-  fastapi-movie-service:
+  movie_fastapi:
     port: 5000
   movie_db:
     port: 5432

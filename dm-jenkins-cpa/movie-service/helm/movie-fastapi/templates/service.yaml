@@ -9,9 +9,9 @@ spec:
   type: ClusterIP
   selector:
     matchLabels:
-      app: {{ .Release.Name }}
+      app: {{ .Release.Name }}-app
   ports:
     - port: {{ .Values.services.movie_fastapi.port }}
   selector:
-    app: {{ .Release.Name }}
+    app: {{ .Release.Name }}-app
 ---

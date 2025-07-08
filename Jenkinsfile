@@ -369,7 +369,7 @@ pipeline {
                       kubectl exec -t cast-db-$name_branch-0 -n $name_branch -- /bin/bash -c "psql -h localhost -p 5432 -U cast_fastapi_user_$name_branch -d cast_fastapi_db_$name_branch -c 'select * from pg_database'"
                      
 
-                      echo  "\n\n######################## DEPLOY CAST-FASTAPI-WEB"
+                      echo  "\n\n######################## DEPLOY CAST-FASTAPI"
                       echo  "\n\n### Place on the right directory before to deploy cast-fastapi on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: cd \"$URL_REPO_GH_LOCAL/dm-jenkins-cpa/cast-service/helm/cast-fastapi\"; pwd;";
                       cd "$URL_REPO_GH_LOCAL/dm-jenkins-cpa/cast-service/helm/cast-fastapi";
                       pwd;
@@ -381,7 +381,7 @@ pipeline {
                       echo  "\n\n###  List all deployments on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls;";
                       helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls;
 
-                      echo  "\n\n### Test with a cmd curl after to have deployed cast-fastapi-web on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: kubectl run --rm -it  --tty pingkungcurl1 --image=curlimages/curl --namespace develop --restart=Never -- cast-fastapi-service:5001/api/v1/casts/docs";
+                      echo  "\n\n### Test with a cmd curl after to have deployed cast-FASTAPI on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: kubectl run --rm -it  --tty pingkungcurl1 --image=curlimages/curl --namespace develop --restart=Never -- cast-fastapi-service:5001/api/v1/casts/docs";
                       kubectl run --rm -it  --tty pingkungcurl1 --image=curlimages/curl --namespace develop --restart=Never -- cast-fastapi-service:5001/api/v1/casts/docs
                       
                       
@@ -401,12 +401,20 @@ pipeline {
                       kubectl exec -t movie-db-$name_branch-0 -n $name_branch -- /bin/bash -c "psql -h localhost -p 5432 -U movie_fastapi_user_$name_branch -d movie_fastapi_db_$name_branch -c 'select * from pg_database'"
 
 
-                      echo  "\n\n######################## DEPLOY MOVIE-FASTAPI-WEB"
-                      echo  "\n\n### Place on the right directory before to deploy movie-fastapi-web on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: cd \"$URL_REPO_GH_LOCAL/dm-jenkins-cpa/movie-service/helm/movie-fastapi\"; pwd;";
+                      echo  "\n\n######################## DEPLOY MOVIE-FASTAPI"
+                      echo  "\n\n### Place on the right directory before to deploy movie-fastapi on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: cd \"$URL_REPO_GH_LOCAL/dm-jenkins-cpa/movie-service/helm/movie-fastapi\"; pwd;";
                       cd "$URL_REPO_GH_LOCAL/dm-jenkins-cpa/movie-service/helm/movie-fastapi";
                       pwd;
-                      echo  "\n\n### Test with a cmd curl after to have deployed movie-fastapi-web on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: curl $(docker exec dm-jenkins-cpa-movie_service-1 hostname -i):5000/api/v1/casts/docs";
-                      curl $(docker exec dm-jenkins-cpa-movie_service-1 hostname -i):5000/api/v1/movies/docs;
+                      
+                      echo  "\n\n### Deploy movie-fastapi on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE upgrade --install movie-fastapi-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yaml; sleep 10;";
+                      helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE upgrade --install movie-fastapi-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml .;
+                      sleep 10;
+
+                      echo  "\n\n###  List all deployments on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls;";
+                      helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls;
+
+                      echo  "\n\n### Test with a cmd curl after to have deployed movie-FASTAPI on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: kubectl run --rm -it  --tty pingkungcurl1 --image=curlimages/curl --namespace develop --restart=Never -- movie-fastapi-service:5001/api/v1/movies/docs";
+                      kubectl run --rm -it  --tty pingkungcurl1 --image=curlimages/curl --namespace develop --restart=Never -- movie-fastapi-service:5001/api/v1/movies/docs
                       
 
 
@@ -431,7 +439,7 @@ pipeline {
                       helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls;
 
 
-                      echo  "\n\n######################## DELETE CAST-FASTAPI-WEB"
+                      echo  "\n\n######################## DELETE CAST-FASTAPI"
                       
                       	
                       
@@ -449,7 +457,7 @@ pipeline {
                       
                       
                       
-                      echo  "\n\n######################## DELETE MOVIE-FASTAPI-WEB"
+                      echo  "\n\n######################## DELETE MOVIE-FASTAPI"
                       
                       
                       

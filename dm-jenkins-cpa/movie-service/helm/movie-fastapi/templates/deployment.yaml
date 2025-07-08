@@ -12,17 +12,17 @@ spec:
   replicas: {{ .Values.movie_fastapi.replicas }}
   selector:
     matchLabels:
-      app: {{ .Release.Name }}
+      app: {{ .Release.Name }}-app
   template:
     metadata:
       labels:
-        app: {{ .Release.Name }}
+        app: {{ .Release.Name }}-app
         environment: {{ .Values.environment | quote }}
     spec:
       #imagePullSecrets:
       #  - name: {{ .Values.image.movie_fastapi }}
       containers:
-        - name: {{ .Release.Name }}
+        - name: {{ .Release.Name }}-app
           image: "{{ .Values.movie_fastapi_image.repository }}:{{ .Values.movie_fastapi_image.tag | default .Chart.AppVersion }}"
           command: ["/bin/sh"]     # https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/
           args: ["-c", "while true; do cd /app; uvicorn app.main:app --reload --host 0.0.0.0 --port 5000;done"]
