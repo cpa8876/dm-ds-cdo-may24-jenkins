@@ -265,6 +265,9 @@ pipeline {
              //docker push $DOCKER_ID/$DOCKER_IMAGE1:$DOCKER_TAG
           withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'dockerhub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
           sh '''
+                docker ps -a
+                docker rm -f $(docker ps -aq)
+                docker ps -a
                 name_branch=$(echo $name_branch0 | sed "s#refs/heads/##g")
                 echo  "\n\n ### Push docker images fastapi-cast and fastapi-movie with dockerfile of the branch: $name_branch"
                 docker login -u $USERNAME -p $PASSWORD
@@ -350,9 +353,9 @@ pipeline {
 
 
                       echo  "\n\n######################## DEPLOY CAST-DB" 
-                      echo  "\n\n### Before to deploy on the branch: $name_branch on the environment:  $name_branch, list nodes and all elements existant on the minikube cluster  with cmd : \n$: kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get nodes; kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get all -n $name_branch;";
+                      echo  "\n\n### Before to deploy on the branch: $name_branch on the environment:  $name_branch, list nodes and all elements existant on the minikube cluster  with cmd : \n$: kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get nodes; kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get all -n $name_branch -o wide;";
                       kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get nodes;
-                      kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get all -n $name_branch;
+                      kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get all -n $name_branch -o wide;
 
                       echo  "\n\n### Place on the right directory before to deploy cast-db on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: cd \"$URL_REPO_GH_LOCAL/dm-jenkins-cpa/cast-service/helm/cast-db\"; pwd;";
                       cd "$URL_REPO_GH_LOCAL/dm-jenkins-cpa/cast-service/helm/cast-db";
