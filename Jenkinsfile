@@ -10,7 +10,7 @@ pipeline {
     nom='dm-jenkins-cpa'                                                    // nom="dm-jenkins-cpa"
     DOCKER_ID="cpa8876"                                                    // replace this with your docker-id DOCKER_ID="cpa8876"
     DOCKER_IMAGE="ds-fastapi"                                              // DOCKER_IMAGE="ds-fastapi"
-    DOCKER_IMAGE1="movie-ds-fastapi"                                       // DOCKER_IMAGE1="movie-ds-fastapi"
+    DOCKER_IMAGE1="movies-ds-fastapi"                                       // DOCKER_IMAGE1="movie-ds-fastapi"
     DOCKER_IMAGE2="casts-ds-fastapi"                                       // DOCKER_IMAGE2="casts-ds-fastapi"
     DOCKER_TAG="v.${BUILD_ID}"                                           // we will tag our images with the current build in order to increment the value by 1 with each new build DOCKER_TAG="v.75.0"
     URL_REPO_GH_LOCAL="/var/lib/jenkins/workspace/dm-jenkins"                //Repo local github synchronized with https://github.com/cpa8876/dm-ds-cdo-may24-jenkins.git
