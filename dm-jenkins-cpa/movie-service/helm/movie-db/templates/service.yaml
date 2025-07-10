@@ -8,5 +8,5 @@ spec:
   ports:
     - port: 5432
   selector:
-    app: {{ .Release.Name }}
+    app: {{ .Release.Name }}-app
 ---
