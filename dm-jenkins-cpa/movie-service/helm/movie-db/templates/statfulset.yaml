@@ -4,7 +4,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: {{ .Release.Name }}
-#  namespace: dev
+  namespace: {{ .Values.environment }}
 spec:
   replicas:  {{ .Values.movie_db.replicas }}
   selector:
@@ -14,29 +14,29 @@ spec:
     metadata:
       labels:
         app: {{ .Release.Name }}-app
+        environment: {{ .Values.environment | quote }}
     spec:
       containers:
         - name: {{ .Release.Name }}-app
           image: {{ .Values.movie_db.image }}
           ports:
             - containerPort: 5432
-              name: movie-db
           env:
             - name: POSTGRES_USER
               valueFrom:
                 secretKeyRef:
                   name:  {{ .Release.Name }}
-                  key: postgresql-user
+                  key: user
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name:  {{ .Release.Name }}
-                  key: postgresql-password
+                  key: password
             - name: POSTGRES_DB
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Release.Name }}
-                  key: postgresql-database
+                  name:  {{ .Release.Name }}
+                  key: database
           volumeMounts:
             - name: pgdata
               mountPath: /var/lib/postgresql/data
