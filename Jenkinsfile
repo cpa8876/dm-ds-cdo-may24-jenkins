@@ -418,8 +418,6 @@ pipeline {
 
                       echo  "\n\n### Test with a cmd curl after to have deployed movie-FASTAPI on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: kubectl run --rm -it  --tty pingkungcurl2 --image=curlimages/curl --namespace develop --restart=Never -- movie-fastapi-service:5000/api/v1/movies/docs";
                       kubectl run --rm -it  --tty pingkungcurl2 --image=curlimages/curl --namespace develop --restart=Never -- movie-fastapi-service:5000/api/v1/movies/docs
-                      curl -L
-kubectl run -it  --tty pingkungcurl2 --image=curlimages/curl --namespace develop -- ssh
 
                       echo  "\n\n######################## DEPLOY PROXY-NGINX-WEB"
                       echo  "\n\n### Place on the right directory before to deploy proxy-nginx-web on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: cd \"$URL_REPO_GH_LOCAL/dm-jenkins-cpa/movie-service/helm/movie-fastapi\"; pwd;";
