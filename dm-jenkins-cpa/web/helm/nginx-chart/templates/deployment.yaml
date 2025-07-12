@@ -33,15 +33,15 @@ spec:
             - name: http
               containerPort: {{ .Values.service.port }}
               protocol: TCP
-              env:
-                - name: PROXY_URL
-                  value: {{ .Values.proxyUrl | quote }}
-                volumeMounts:
-                - name: nginx-config-volume
-                  mountPath: /etc/nginx/nginx.conf
-                  subPath: nginx.conf
-                volumes:
-                - name: nginx-config-volume
-                  configMap:
-                  name: nginx-config
+          env:
+            - name: PROXY_URL
+              value: {{ .Values.proxyUrl | quote }}
+          volumeMounts:
+            - name: nginx-config-volume
+              mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf
+      volumes:
+        - name: nginx-config-volume
+          configMap:
+            name: nginx-config
 ---
