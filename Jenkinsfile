@@ -82,7 +82,7 @@ pipeline {
         script {//curl localhost or curl 127.0.0.1:8480 "curl -svo /dev/null http://localhost" or docker exec -it my-ctnr-ds-fastapi curl localhost
           sh '''
             name_branch=$(echo $name_branch0 | sed "s#refs/heads/##g")
-            echo  "\n\n ### Test acceptance on contenair docker crezated with image fastapi-cast and fastapi-movie applications built with dockerfile of the branch: $name_branch"
+            echo  "\n\n ### Test acceptance on contenair docker created with image fastapi-cast and fastapi-movie applications built with dockerfile of the branch: $name_branch"
             echo  "\n\n -------------------------------------------------------------------"
             echo  "30_00) Tests acceptance access on contenaires  cast_db, movie_db, cast _service, movie_service and loadbalancer\n  "
             echo  "\n\n ------------------------------------------"
@@ -90,7 +90,7 @@ pipeline {
             docker exec dm-jenkins-cpa-cast_db-1 psql -h localhost -p 5432 -U cast_db_username -d cast_db_dev -c "select * from pg_database"
             echo  "\n\n 30_02) Test-02 : curl on dm-jenkins-cpa-cast_service-1:5000/api/v1/casts/docs"
             curl $(docker exec dm-jenkins-cpa-cast_service-1 hostname -i):5000/api/v1/casts/docs
-            echo  "\n 30_0") Test-03 : Sql query on dm-jenkins-cpa-movie_db-1 : select * from pg_database :"
+            echo  "\n 30_03) Test-03 : Sql query on dm-jenkins-cpa-movie_db-1 : select * from pg_database :"
             docker exec dm-jenkins-cpa-movie_db-1 psql -h localhost -p 5432 -U movie_db_username -d movie_db_dev -c "select * from pg_database"
             echo  "\n\n 30_04) Test-04 : curl on dm-jenkins-cpa-movie_service-1:5000/api/v1/casts/docs"
             curl $(docker exec dm-jenkins-cpa-movie_service-1 hostname -i):5000/api/v1/movies/docs
