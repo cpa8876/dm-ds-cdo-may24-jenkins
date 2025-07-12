@@ -464,7 +464,7 @@ pipeline {
                       cd "$URL_REPO_GH_LOCAL/dm-jenkins-cpa/movie-service/helm/movie-db";
                       pwd;
 
-                      echo  "\n\n### 50_2"_02) Delete the helm chart movie-db-$name_branch deployment on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$:helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE uninstall movie-db-$name_branch --namespace $name_branch;sleep 10; ";
+                      echo  "\n\n### 50_23_02) Delete the helm chart movie-db-$name_branch deployment on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$:helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE uninstall movie-db-$name_branch --namespace $name_branch;sleep 10; ";
                       echo "helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE uninstall movie-db-$name_branch --namespace $name_branch;"
                       echo "sleep 10;"
                       
