@@ -24,6 +24,8 @@ pipeline {
     URL_REP_HELM_FAT_MOVIE_SERVICE="$URL_REP_HELM_FAT/movie-service/helm/movie-fastapi"      // Directory containned chart helm of fastapi-movie_service 
     URL_FILE_CONFIG_MINIKUBE="/home/jenkins/.minikube/config"              // Url file of config to enable connect on minikube cluster
     name_branch0="${env.ref}"
+    podPortNginx="80"
+    nodePortNginx="30000"
     // KUBE_CONTEXT="devops-$name_branch"
     // KUBE_NAMESPACE="$name_branch"
     // HELM_VALUES_FILE="value-$name_branch.yaml"
@@ -431,14 +433,18 @@ pipeline {
                       echo  "\n\n### 50_15_03) List all deployments on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls -n develop;";
                       helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls -n develop;
 
-                      echo  "\n\n### 50_15_04) Test with a cmd curl after to have deployed nginx-$name_branch on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: kubectl run --rm -it  --tty pingkungcurl3 --image=curlimages/curl --namespace develop --restart=Never -- nginx-$name_branch-svc:80/";
-                      kubectl run --rm -it  --tty pingkungcurl3 --image=curlimages/curl --namespace develop --restart=Never -- nginx-$name_branch-svc:80/
-
-                      echo  "\n\n### 50_15_05) Test with a cmd curl after to have deployed nginx-$name_branch on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: kubectl run --rm -it  --tty pingkungcurl3 --image=curlimages/curl --namespace develop --restart=Never -- nginx-svc:80/api/v1/casts/docs/";
-                      kubectl run --rm -it  --tty pingkungcurl4 --image=curlimages/curl --namespace develop --restart=Never -- nginx-$name_branch-svc:80/api/v1/casts/docs/
+                      echo  "\n\n### 50_15_04) Test with a cmd curl after to have deployed nginx-$name_branch on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: kubectl run --rm -it  --tty pingkungcurl3 --image=curlimages/curl --namespace develop --restart=Never -- nginx-$name_branch-svc$podPortNginx/";
+                      kubectl run --rm -it  --tty pingkungcurl3 --image=curlimages/curl --namespace develop --restart=Never -- nginx-$name_branch-svc$podPortNginx/
                       
-                      echo  "\n\n### 50_15_06) Test with a cmd curl after to have deployed nginx-$name_branch on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: kubectl run --rm -it  --tty pingkungcurl3 --image=curlimages/curl --namespace develop --restart=Never -- nginx-svc:80//api/v1/movies/docs/";
-                      kubectl run --rm -it  --tty pingkungcurl5 --image=curlimages/curl --namespace develop --restart=Never -- nginx-$name_branch-svc:80/api/v1/movies/docs/
+                      echo  "\n\n### 50_15_05) Test with a cmd curl after to have deployed nginx-$name_branch on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: kubectl run --rm -it  --tty pingkungcurl3 --image=curlimages/curl --namespace develop --restart=Never -- nginx-$name_branch-svc$podPortNginx/";
+                      ip_minikube="$(kubectl get nodes -o wide --no-headers=true | awk '{ print $6 }')"
+                      curl -Lk $ip_minikube:$nodePortNginx/
+
+                      echo  "\n\n### 50_15_06) Test with a cmd curl after to have deployed nginx-$name_branch on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: kubectl run --rm -it  --tty pingkungcurl3 --image=curlimages/curl --namespace develop --restart=Never -- nginx-svc$podPortNginx/api/v1/casts/docs/";
+                      kubectl run --rm -it  --tty pingkungcurl4 --image=curlimages/curl --namespace develop --restart=Never -- nginx-$name_branch-svc$podPortNginx/api/v1/casts/docs/
+                      
+                      echo  "\n\n### 50_15_07) Test with a cmd curl after to have deployed nginx-$name_branch on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: kubectl run --rm -it  --tty pingkungcurl3 --image=curlimages/curl --namespace develop --restart=Never -- nginx-svc$podPortNginx//api/v1/movies/docs/";
+                      kubectl run --rm -it  --tty pingkungcurl5 --image=curlimages/curl --namespace develop --restart=Never -- nginx-$name_branch-svc$podPortNginx/api/v1/movies/docs/
 
                       echo  "\n\n######################## 50_20) DELETE ALL HELM DEPLOYMENT #####################################"
                       
