@@ -28,7 +28,8 @@ castFastApiService:
   path: /api/v1/casts
 
 # Default values for nginx-proxy.
-##  Minikube-B12-03)  TUTORIAL > How to Create and Deploy an NGINX Proxy Helm Chart on Kubernetes > How to Create and Deploy an NGINX Proxy Helm Chart on Kubernetes; Posted on 01 August 2024; 
+##  Minikube-B12-03)  TUTORIAL > How to Create and Deploy an NGINX Proxy Helm Chart 
+# on Kubernetes > How to Create and Deploy an NGINX Proxy Helm Chart on Kubernetes; Posted on 01 August 2024; 
 # https://vsys.host/how-to/how-to-create-and-deploy-an-nginx-proxy-helm-chart-on-kubernetes
 proxyUrl: "http://default.proxy.url"
 nodePort: 30000
