@@ -30,3 +30,13 @@ service:
 
 proxyUrl: "http://default.proxy.url"
 nodePort: 30000
+
+movieFastApiService:
+  host: movie-fastapi-service
+  port: 5000
+  path: /api/v1/movies
+
+castFastApiService:
+  host: cast-fastapi-service
+  port: 5001
+  path: /api/v1/casts
