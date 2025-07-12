@@ -1,9 +1,13 @@
+# /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins/dm-jenkins-cpa/web/helm/nginx-chart/templates/service.yaml
+# Minikube_B09) Deploying Nginx on Kubernetes: Exploring Various Methods > 7. Helm; Mastering Nginx Deployment in Kubernetes: A Comprehensive Guide to Pods, Deployments, and Beyond; Anvesh Muppeda; Anvesh Muppeda; 12 min read; Jan 13, 2024
+## https://medium.com/@muppedaanvesh/deploying-nginx-on-kubernetes-a-quick-guide-04d533414967 
+---
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "fastapi.fullname" . }}
+  name: {{ .Release.Name }}-svc
   labels:
-    {{- include "fastapi.labels" . | nindent 4 }}
+    {{- include "nginx-chart.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
   ports:
@@ -12,4 +16,5 @@ spec:
       protocol: TCP
       name: http
   selector:
-    {{- include "fastapi.selectorLabels" . | nindent 4 }}
+    {{- include "nginx-chart.selectorLabels" . | nindent 4 }}
+---
