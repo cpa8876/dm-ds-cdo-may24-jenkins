@@ -1,2 +1,6 @@
 1. Get the application URL by running these commands:
   minikube service {{ .Release.Name }}-svc --url
+  
+2.  Install the Chart:
+   Run the following command to deploy the Helm chart:
+```helm install my-nginx-proxy ./nginx-proxy --set proxyUrl="http://your.proxy.url" --set nodePort=32000```

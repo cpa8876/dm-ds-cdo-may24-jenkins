@@ -1,4 +1,5 @@
 # /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins/dm-jenkins-cpa/web/helm/nginx-chart/values-develop.yml
+# 
 # ################################################################
 # ################################ BIBLIO
 # ################ # Minikube_B12-02) Deploying Nginx on Kubernetes: Exploring Various Methods > 7. Helm; Mastering Nginx Deployment in Kubernetes: A Comprehensive Guide to Pods, Deployments, and Beyond; Anvesh Muppeda; Anvesh Muppeda; 12 min read; Jan 13, 2024
@@ -6,27 +7,24 @@
 ################################
 ################ #  Minikube_B12-03) How to Create and Deploy an NGINX Proxy Helm Chart on Kubernetes; Posted on 01 August 2024
 ### https://vsys.host/how-to/how-to-create-and-deploy-an-nginx-proxy-helm-chart-on-kubernetes
-#### 4. Update Values File:    Edit values.yaml to include default values for proxyUrl and nodePort:
+#### 1. Create a ConfigMap for NGINX Configuration: Create a file named `configmap.yaml` in the `nginx-proxy/templates` directory:
 # ################################################################
+---
+apiVersion: v1
+   kind: ConfigMap
+   metadata:
+     name: nginx-config
+   data:
+     nginx.conf: |
+       server {
+           listen 80;
 
-# Default values for nginx-chart.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
-
-replicaCount: 1
-
-image:
-  repository: nginx
-  pullPolicy: IfNotPresent
-  # Overrides the image tag whose default is the chart appVersion.
-  tag: ""
-
-service:
-  type: NodePort
-  port: 80
-
-
-# Default values for nginx-proxy.
-
-proxyUrl: "http://default.proxy.url"
-nodePort: 30000
+           location / {
+               proxy_pass $PROXY_URL;
+               proxy_set_header Host $host;
+               proxy_set_header X-Real-IP $remote_addr;
+               proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+               proxy_set_header X-Forwarded-Proto $scheme;
+           }
+       }
+---
