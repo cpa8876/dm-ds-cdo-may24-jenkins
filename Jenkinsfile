@@ -36,7 +36,7 @@ pipeline {
     buildDiscarder logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '5', daysToKeepStr: '', numToKeepStr: '5')
    }
   stages {
-    stage('Docker Build'){
+    stage('10_Docker Build'){
       steps {
           //echo  "\n\n### Building branch: ${env.BRANCH_NAME}"
           // https://search.brave.com/search?q=sed+caract%C3%A8re+sp%C3%A9ciaux+%2F&source=desktop&summary=1&conversation=bc5fb68b4e385ab86446da
@@ -77,7 +77,7 @@ pipeline {
             }
          }
       }
-    stage('Test Acceptance'){ // we launch the curl command to validate that the container responds to the request
+    stage('20_Test Acceptance'){ // we launch the curl command to validate that the container responds to the request
       steps {
         script {//curl localhost or curl 127.0.0.1:8480 "curl -svo /dev/null http://localhost" or docker exec -it my-ctnr-ds-fastapi curl localhost
           sh '''
@@ -252,7 +252,7 @@ pipeline {
           }
         }
       }
-    stage('Docker Push'){ //we pass the built image to our docker hub account
+    stage('30_Docker Push'){ //we pass the built image to our docker hub account
       environment
         {
           DOCKER_PASS = credentials("DOCKER_HUB_PASS") // we retrieve  docker password from secret text called docker_hub_pass saved on jenkins
@@ -280,7 +280,7 @@ pipeline {
           }
         }
       }
-     stage('Deploy') {
+     stage('40_Deploy') {
             environment {
                       KUBECONFIG = credentials("config") // we retrieve  kubeconfig from secret file called config saved on jenkins
                     }
@@ -434,6 +434,11 @@ pipeline {
                       echo  "\n\n### Test with a cmd curl after to have deployed nginx-$name_branch on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: kubectl run --rm -it  --tty pingkungcurl3 --image=curlimages/curl --namespace develop --restart=Never -- nginx-svc:80/";
                       kubectl run --rm -it  --tty pingkungcurl3 --image=curlimages/curl --namespace develop --restart=Never -- nginx-svc:80/
 
+                      echo  "\n\n### Test with a cmd curl after to have deployed nginx-$name_branch on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: kubectl run --rm -it  --tty pingkungcurl3 --image=curlimages/curl --namespace develop --restart=Never -- nginx-svc:80/api/v1/casts/docs/";
+                      kubectl run --rm -it  --tty pingkungcurl3 --image=curlimages/curl --namespace develop --restart=Never -- nginx-svc:80/api/v1/casts/docs/
+                      
+                      echo  "\n\n### Test with a cmd curl after to have deployed nginx-$name_branch on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: kubectl run --rm -it  --tty pingkungcurl3 --image=curlimages/curl --namespace develop --restart=Never -- nginx-svc:80//api/v1/movies/docs/";
+                      kubectl run --rm -it  --tty pingkungcurl3 --image=curlimages/curl --namespace develop --restart=Never -- nginx-svc:80/api/v1/movies/docs/
 
                       echo  "\n\n######################## DELETE ALL HELM DEPLOYMENT #####################################"
                       
