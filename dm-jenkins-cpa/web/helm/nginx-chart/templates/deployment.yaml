@@ -1,6 +1,17 @@
 # /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins/dm-jenkins-cpa/web/helm/nginx-chart/templates/deployment.yaml
-#  Minikube_B09) Deploying Nginx on Kubernetes: Exploring Various Methods > 7. Helm; Mastering Nginx Deployment in Kubernetes: A Comprehensive Guide to Pods, Deployments, and Beyond; Anvesh Muppeda; Anvesh Muppeda; 12 min read; Jan 13, 2024
+# ##########################
+# BIBLIO
+# #############
+##  Minikube_B09) Deploying Nginx on Kubernetes: Exploring Various Methods > 7. Helm; Mastering Nginx Deployment in Kubernetes: A Comprehensive Guide to Pods, Deployments, and Beyond; Anvesh Muppeda; Anvesh Muppeda; 12 min read; Jan 13, 2024
 ## https://medium.com/@muppedaanvesh/deploying-nginx-on-kubernetes-a-quick-guide-04d533414967 
+# #############
+##  Minikube-B12-03)  TUTORIAL > How to Create and Deploy an NGINX Proxy Helm Chart on Kubernetes > How to Create and Deploy an NGINX Proxy Helm Chart on Kubernetes; Posted on 01 August 2024; 
+## https://vsys.host/how-to/how-to-create-and-deploy-an-nginx-proxy-helm-chart-on-kubernetes
+###  > Create a file named `configmap.yaml` in the `nginx-proxy/templates` directory:
+#### 2. Update Deployment Template:
+##### This deployment makes use of the nginx image and configures the PROXY_URL environment variable according to the Helm value proxyUrl. It sets up the NGINX configuration by linking the ConfigMap to /etc/nginx/nginx.conf.
+# #############
+# ##########################
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -26,4 +37,16 @@ spec:
             - name: http
               containerPort: {{ .Values.service.port }}
               protocol: TCP
+          env:
+           - name: PROXY_URL
+             value: {{ .Values.proxyUrl | quote }}
+           volumeMounts:
+           - name: nginx-config-volume
+             mountPath: /etc/nginx/nginx.conf
+             subPath: nginx.conf
+         volumes:
+         - name: nginx-config-volume
+           configMap:
+             name: nginx-config
+
 ---

@@ -15,6 +15,29 @@ image:
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
+  
+movieFastApiService:
+  host: movie-fastapi-service
+  port: 5000
+  path: /api/v1/movies
+
+castFastApiService:
+  host: cast-fastapi-service
+  port: 5001
+  path: /api/v1/casts
+
+
+server: {
+    listen 80;
+
+    location /api/v1/movies {
+        proxy_pass http://{{ .Values.movieFastApiService.host }}:{{ .Values.movieFastApiService.port }}{{ .Values.movieFastApiService.path }};
+    }
+
+    location /api/v1/casts {
+        proxy_pass http://{{ .Values.castFastApiService.host }}:{{ .Values.castFastApiService.port }}{{ .Values.castFastApiService.path }};
+    }
+}
 
 # This is for the secrets for pulling an image from a private repository more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
 imagePullSecrets: []
@@ -125,4 +148,5 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
 ---

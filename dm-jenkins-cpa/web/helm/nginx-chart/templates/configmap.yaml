@@ -1,0 +1,40 @@
+# /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins/dm-jenkins-cpa/web/helm/nginx-chart/templates/configmap.yaml
+# ##########################
+# BIBLIO
+# #############
+##  Minikube-B12-03)  TUTORIAL > How to Create and Deploy an NGINX Proxy Helm Chart on Kubernetes > How to Create and Deploy an NGINX Proxy Helm Chart on Kubernetes; Posted on 01 August 2024; 
+## https://vsys.host/how-to/how-to-create-and-deploy-an-nginx-proxy-helm-chart-on-kubernetes
+###  > Create a file named `configmap.yaml` in the `nginx-proxy/templates` directory:
+#### This configuration establishes an NGINX server that operates on port 80 and forwards requests to the designated URL indicated by the PROXY_URL environment variable. Forward requests to a backend server using the proxy_pass directive, and keep the original request headers intact with the proxy_set_header directives.
+# #############
+## B12-04) Brave search : server { listen 80; location /api/v1/movies { proxy_pass http://movie-fastapi-service:5000/api/v1/movies; } location /api/v1/casts { proxy_pass http://cast-fastapi-service:5001/api/v1/casts; } } helm
+### https://search.brave.com/search?q=server+%7B+listen+80%3B+location+%2Fapi%2Fv1%2Fmovies+%7B+proxy_pass+http%3A%2F%2Fmovie-fastapi-service%3A5000%2Fapi%2Fv1%2Fmovies%3B+%7D+location+%2Fapi%2Fv1%2Fcasts+%7B+proxy_pass+http%3A%2F%2Fcast-fastapi-service%3A5001%2Fapi%2Fv1%2Fcasts%3B+%7D+%7D+helm&summary=1&conversation=a6208e2eb897c94241b849
+#### In this example, {{ .Values.movieFastApiService.host }}, {{ .Values.movieFastApiService.port }}, and {{ .Values.movieFastApiService.path }} are placeholders for the actual values defined in your values.yaml file. You would need to define these values in your values.yaml file to specify the host, port, and path for each FastAPI service.
+# ##########################
+
+---
+yaml
+   apiVersion: v1
+   kind: ConfigMap
+   metadata:
+     name: nginx-config
+   data:
+     nginx.conf: |
+       server {
+           listen 80;
+
+           location / {
+               proxy_pass $PROXY_URL;
+               proxy_set_header Host $host;
+               proxy_set_header X-Real-IP $remote_addr;
+               proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+               proxy_set_header X-Forwarded-Proto $scheme;
+           }
+           location /api/v1/movies {
+               proxy_pass http://{{ .Values.movieFastApiService.host }}:{{ .Values.movieFastApiService.port }}{{ .Values.movieFastApiService.path }};
+           }
+           location /api/v1/casts {
+               proxy_pass http://{{ .Values.castFastApiService.host }}:{{ .Values.castFastApiService.port }}{{ .Values.castFastApiService.path }};
+           }
+       }
+---

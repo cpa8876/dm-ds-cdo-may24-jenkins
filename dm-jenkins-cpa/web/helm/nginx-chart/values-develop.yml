@@ -17,6 +17,22 @@ image:
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
 
+movieFastApiService:
+  host: movie-fastapi-service
+  port: 5000
+  path: /api/v1/movies
+
+castFastApiService:
+  host: cast-fastapi-service
+  port: 5001
+  path: /api/v1/casts
+
+# Default values for nginx-proxy.
+##  Minikube-B12-03)  TUTORIAL > How to Create and Deploy an NGINX Proxy Helm Chart on Kubernetes > How to Create and Deploy an NGINX Proxy Helm Chart on Kubernetes; Posted on 01 August 2024; 
+# https://vsys.host/how-to/how-to-create-and-deploy-an-nginx-proxy-helm-chart-on-kubernetes
+proxyUrl: "http://default.proxy.url"
+nodePort: 30000
+
 # This is for the secrets for pulling an image from a private repository more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
 imagePullSecrets: []
 # This is to override the chart name.
