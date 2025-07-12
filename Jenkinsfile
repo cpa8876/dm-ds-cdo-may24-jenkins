@@ -84,24 +84,24 @@ pipeline {
             name_branch=$(echo $name_branch0 | sed "s#refs/heads/##g")
             echo  "\n\n ### Test acceptance on contenair docker crezated with image fastapi-cast and fastapi-movie applications built with dockerfile of the branch: $name_branch"
             echo  "\n\n -------------------------------------------------------------------"
-            echo  "Tests acceptance access on contenaires  cast_db, movie_db, cast _service, movie_service and loadbalancer\n  "
+            echo  "30_00) Tests acceptance access on contenaires  cast_db, movie_db, cast _service, movie_service and loadbalancer\n  "
             echo  "\n\n ------------------------------------------"
-            echo  "\n Test-01 : Sql query on cast_db : select * from pg_database :"
+            echo  "\n 30_01) Test-01 : Sql query on cast_db : select * from pg_database :"
             docker exec dm-jenkins-cpa-cast_db-1 psql -h localhost -p 5432 -U cast_db_username -d cast_db_dev -c "select * from pg_database"
-            echo  "\n\n Test-02 : curl on dm-jenkins-cpa-cast_service-1:5000/api/v1/casts/docs"
+            echo  "\n\n 30_02) Test-02 : curl on dm-jenkins-cpa-cast_service-1:5000/api/v1/casts/docs"
             curl $(docker exec dm-jenkins-cpa-cast_service-1 hostname -i):5000/api/v1/casts/docs
-            echo  "\n Test-03 : Sql query on dm-jenkins-cpa-movie_db-1 : select * from pg_database :"
+            echo  "\n 30_0") Test-03 : Sql query on dm-jenkins-cpa-movie_db-1 : select * from pg_database :"
             docker exec dm-jenkins-cpa-movie_db-1 psql -h localhost -p 5432 -U movie_db_username -d movie_db_dev -c "select * from pg_database"
-            echo  "\n\n Test-04 : curl on dm-jenkins-cpa-movie_service-1:5000/api/v1/casts/docs"
+            echo  "\n\n 30_04) Test-04 : curl on dm-jenkins-cpa-movie_service-1:5000/api/v1/casts/docs"
             curl $(docker exec dm-jenkins-cpa-movie_service-1 hostname -i):5000/api/v1/movies/docs
-            echo  "\n\n Test-05 : curl on dm-jenkins-cpa-nginx-1:8080/api/v1/movies/docs"
+            echo  "\n\n 30_05) Test-05 : curl on dm-jenkins-cpa-nginx-1:8080/api/v1/movies/docs"
             curl $(docker exec dm-jenkins-cpa-nginx-1 hostname -i):8080/api/v1/movies/docs
-            echo  "\n\n Test-06 : curl on dm-jenkins-cpa-nginx-1:8080/api/v1/casts/docs"
+            echo  "\n\n 30_06) Test-06 : curl on dm-jenkins-cpa-nginx-1:8080/api/v1/casts/docs"
             curl $(docker exec dm-jenkins-cpa-nginx-1 hostname -i):8080/api/v1/casts/docs
             echo  "\n\n -------------------------------------------------------------------"
             echo  "Tests acceptance CRUD movies fastapi with contenair nginx (loadbalancer) application\n  "
             echo  "\n\n ------------------------------------------"
-            echo  "\n\n Test-07 : curl -X POST on dm-jenkins-cpa-nginx-1:8080/api/v1/movies/ for id=1 Star wars IX"
+            echo  "\n\n 30_07) Test-07 : curl -X POST on dm-jenkins-cpa-nginx-1:8080/api/v1/movies/ for id=1 Star wars IX"
             curl -X 'POST'   $(docker exec dm-jenkins-cpa-nginx-1 hostname -i):8080/api/v1/movies/   -H 'accept: application/json'   -H 'Content-Type: application/json'   -d '{
   "id": 1,
   "name": "Star Wars: Episode IX - The Rise of Skywalker",
@@ -119,7 +119,7 @@ pipeline {
    5
   ]
 }'
-            echo  "\n\n Test-08 : curl -X POST on ip-nginx:8080/api/v1/movies/ for id=2 Star wars VI"
+            echo  "\n\n 30_08) Test-08 : curl -X POST on ip-nginx:8080/api/v1/movies/ for id=2 Star wars VI"
             curl -X 'POST'   $(docker exec dm-jenkins-cpa-nginx-1 hostname -i):8080/api/v1/movies/   -H 'accept: application/json'   -H 'Content-Type: application/json'   -d '{
   "id": 2,
   "name": "Star Wars: Episode VI - Return of the Jedi",
@@ -135,7 +135,7 @@ pipeline {
    5
   ]
 }'
-            echo  "\n\n Test-09 : curl -X POST on dm-jenkins-cpa-nginx-1:8080/api/v1/movies/ for id=3 Star wars V"
+            echo  "\n\n 30_09) Test-09 : curl -X POST on dm-jenkins-cpa-nginx-1:8080/api/v1/movies/ for id=3 Star wars V"
             curl -X 'POST'   $(docker exec dm-jenkins-cpa-nginx-1 hostname -i):8080/api/v1/movies/   -H 'accept: application/json'   -H 'Content-Type: application/json'   -d '{
  "id": 3,
   "name": "Star Wars: Episode V - The Empire Strikes Back",
@@ -151,15 +151,15 @@ pipeline {
     5
   ]
 }'
-            echo  "\n\n Test-10 : curl -X GET ALL on dm-jenkins-cpa-nginx-1:8080/api/v1/movies/"
+            echo  "\n\n 30_10) Test-10 : curl -X GET ALL on dm-jenkins-cpa-nginx-1:8080/api/v1/movies/"
             curl -X 'GET' \
   $(docker exec dm-jenkins-cpa-nginx-1 hostname -i):8080/api/v1/movies/ \
   -H 'accept: application/json'
-            echo  "\n\n Test-11 : curl -X GET id=1 on dm-jenkins-cpa-nginx-1:8080/api/v1/movies/1"
+            echo  "\n\n 30_11) Test-11 : curl -X GET id=1 on dm-jenkins-cpa-nginx-1:8080/api/v1/movies/1"
             curl -X 'GET' \
   $(docker exec dm-jenkins-cpa-nginx-1 hostname -i):8080/api/v1/movies/1/ \
   -H 'accept: application/json'
-            echo  "\n\n Test-12 : curl -X PUT update id=1 on dm-jenkins-cpa-nginx-1:8080/api/v1/movies/1"
+            echo  "\n\n 30_12) Test-12 : curl -X PUT update id=1 on dm-jenkins-cpa-nginx-1:8080/api/v1/movies/1"
             curl -X 'PUT' \
   $(docker exec dm-jenkins-cpa-nginx-1 hostname -i):8080/api/v1/movies/1 \
   -H 'accept: application/json' \
@@ -177,22 +177,22 @@ pipeline {
    1
   ]
 }'
-            echo  "\n\n Test-13 : curl -X GET ALL on dm-jenkins-cpa-nginx-1:8080/api/v1/movies/"
+            echo  "\n\n 30_13)  Test-13 : curl -X GET ALL on dm-jenkins-cpa-nginx-1:8080/api/v1/movies/"
             curl -X 'GET' \
   $(docker exec dm-jenkins-cpa-nginx-1 hostname -i):8080/api/v1/movies/ \
   -H 'accept: application/json'
-            echo  "\n\n Test-14 : curl -X DELETE id=1 on dm-jenkins-cpa-nginx-1:8080/api/v1/movies/1"
+            echo  "\n\n 30_14)  Test-14 : curl -X DELETE id=1 on dm-jenkins-cpa-nginx-1:8080/api/v1/movies/1"
             curl -X 'DELETE' \
   $(docker exec dm-jenkins-cpa-nginx-1 hostname -i):8080/api/v1/movies/1 \
   -H 'accept: application/json'
-            echo  "\n\n Test-15 : curl -X GET ALL on dm-jenkins-cpa-nginx-1:8080/api/v1/movies/"
+            echo  "\n\n 30_15) Test-15 : curl -X GET ALL on dm-jenkins-cpa-nginx-1:8080/api/v1/movies/"
             curl -X 'GET' \
   $(docker exec dm-jenkins-cpa-nginx-1 hostname -i):8080/api/v1/movies/ \
   -H 'accept: application/json'
             echo  "\n\n -------------------------------------------------------------------"
             echo  "Tests acceptance CRUD casts fastapi application\n  "
             echo  "\n\n ------------------------------------------"
-            echo  "\n\n Test-16 : curl -X GET ALL on dm-jenkins-cpa-nginx-1:8080/api/v1/casts/"
+            echo  "\n\n 30_16) Test-16 : curl -X GET ALL on dm-jenkins-cpa-nginx-1:8080/api/v1/casts/"
             curl -X 'POST' \
   http://$(docker exec dm-jenkins-cpa-nginx-1 hostname -i):8080/api/v1/casts/ \
   -H 'accept: application/json' \
@@ -201,7 +201,7 @@ pipeline {
   "name": "Adam Driver",
   "nationality": "USA"
 }'
-            echo  "\n\n Test-17 : curl -X GET POST  create id=1 cast on dm-jenkins-cpa-nginx-1:8080/api/v1/casts/"
+            echo  "\n\n 30_17) Test-17 : curl -X GET POST  create id=1 cast on dm-jenkins-cpa-nginx-1:8080/api/v1/casts/"
             curl -X 'POST' \
   http://$(docker exec dm-jenkins-cpa-nginx-1 hostname -i):8080/api/v1/casts/ \
   -H 'accept: application/json' \
@@ -210,7 +210,7 @@ pipeline {
   "name": "Daisy Ridley",
   "nationality": "USA"
 }'
-            echo  "\n\n Test-18 : curl -X POST create id=2 cast ALL on dm-jenkins-cpa-nginx-1:8080/api/v1/casts/"
+            echo  "\n\n 30_18) Test-18 : curl -X POST create id=2 cast ALL on dm-jenkins-cpa-nginx-1:8080/api/v1/casts/"
            curl -X 'POST' \
   http://$(docker exec dm-jenkins-cpa-nginx-1 hostname -i):8080/api/v1/casts/ \
   -H 'accept: application/json' \
@@ -219,29 +219,29 @@ pipeline {
   "name": "Carrie FISHER",
   "nationality": "USA"
 }'
-            echo  "\n\n Test-19 : curl -X POST create id=3 cast on dm-jenkins-cpa-nginx-1:8080/api/v1/casts/"
+            echo  "\n\n 30_19) Test-19 : curl -X POST create id=3 cast on dm-jenkins-cpa-nginx-1:8080/api/v1/casts/"
             curl -X 'POST'   http://$(docker exec dm-jenkins-cpa-nginx-1 hostname -i):8080/api/v1/casts/   -H 'accept: application/json'   -H 'Content-Type: application/json'   -d '{
   "name": "Mark HAMILL",
   "nationality": "USA"
 }'
-            echo  "\n\n Test-20 : curl -X POST create id=4 cast on dm-jenkins-cpa-nginx-1:8080/api/v1/casts/"
+            echo  "\n\n 30_20) Test-20 : curl -X POST create id=4 cast on dm-jenkins-cpa-nginx-1:8080/api/v1/casts/"
             curl -X 'POST'   http://$(docker exec dm-jenkins-cpa-nginx-1 hostname -i):8080/api/v1/casts/   -H 'accept: application/json'   -H 'Content-Type: application/json'   -d '{
   "name": "Harisson FORD",
   "nationality": "USA"
 }'
-            echo  "\n\n Test-21 : curl -X GET ALL on dm-jenkins-cpa-nginx-1:8080/api/v1/casts/"
+            echo  "\n\n 30_21)  Test-21 : curl -X GET ALL on dm-jenkins-cpa-nginx-1:8080/api/v1/casts/"
             curl -X 'GET' \
   http://$(docker exec dm-jenkins-cpa-nginx-1 hostname -i):8080/api/v1/casts/ \
   -H 'accept: application/json'
-            echo  "\n\n Test-22 : curl -X GET id=1 on dm-jenkins-cpa-nginx-1:8080/api/v1/casts/1"
+            echo  "\n\n 30_22) Test-22 : curl -X GET id=1 on dm-jenkins-cpa-nginx-1:8080/api/v1/casts/1"
             curl -X 'GET' \
   http://$(docker exec dm-jenkins-cpa-nginx-1 hostname -i):8080/api/v1/casts/1/ \
   -H 'accept: application/json'
-            echo  "\n\n Test-23 : curl -X DELETE id=1 on dm-jenkins-cpa-nginx-1:8080/api/v1/casts/"
+            echo  "\n\n 3à_23) Test-23 : curl -X DELETE id=1 on dm-jenkins-cpa-nginx-1:8080/api/v1/casts/"
             curl -X 'DELETE' \
   http://$(docker exec dm-jenkins-cpa-nginx-1 hostname -i):8080/api/v1/casts/1 \
   -H 'accept: application/json'
-            echo  "\n\n Test-24 : curl -X GET ALL on dm-jenkins-cpa-nginx-1:8080/api/v1/casts/"
+            echo  "\n\n  30_24) Test-24 : curl -X GET ALL on dm-jenkins-cpa-nginx-1:8080/api/v1/casts/"
             curl -X 'GET' \
   http://$(docker exec dm-jenkins-cpa-nginx-1 hostname -i):8080/api/v1/casts/ \
   -H 'accept: application/json'
@@ -269,7 +269,7 @@ pipeline {
                 docker rm -f $(docker ps -aq)
                 docker ps -a
                 name_branch=$(echo $name_branch0 | sed "s#refs/heads/##g")
-                echo  "\n\n ### Push docker images fastapi-cast and fastapi-movie with dockerfile of the branch: $name_branch"
+                echo  "\n\n ### 40_01) Push docker images fastapi-cast and fastapi-movie with dockerfile of the branch: $name_branch"
                 docker login -u $USERNAME -p $PASSWORD
                 docker push $DOCKER_ID/$DOCKER_IMAGE1-$name_branch:$DOCKER_TAG
                 docker push $DOCKER_ID/$DOCKER_IMAGE1-$name_branch:latest
@@ -289,11 +289,11 @@ pipeline {
                 // initialisation of kubeconfig file on jenkins server to enalble to access minikube cluster
                 // K8s/Kubectl/B12-01/Kode cloud; Kubectl / How to Use Kubectl Config Set-Context; https://kodekloud.com/blog/kubectl-change-context/
                   sh '''
-                      echo "\n\n### initialisation of kubeconfig file on jenkins server to enalble to access minikube cluster"
+                      echo "\n\n### 50_01) initialisation of kubeconfig file on jenkins server to enalble to access minikube cluster"
                       mkdir -p /home/jenkins/.minikube/profiles/minikube/;
                       ls -lha /home/jenkins/.minikube/profiles/minikube/;
                       cat $KUBECONFIG > $URL_FILE_CONFIG_MINIKUBE;
-                      echo $URL_FILE_CONFIG_MINIKUBE;
+                      echo " 50_02) $URL_FILE_CONFIG_MINIKUBE";
                       cat $URL_FILE_CONFIG_MINIKUBE;
                       pwd;
                    '''
@@ -306,10 +306,10 @@ pipeline {
                   //           \}"
                   sh '''
                      name_branch=$(echo $name_branch0 | sed 's#refs/heads/##g')
-                     echo  "\n\n ### Deploy on the cluster minikube fastapi-cast and fastapi-movie application with chart helms of the branch: $name_branch"
+                     echo  "\n\n ### 50_00) Deploy on the cluster minikube fastapi-cast and fastapi-movie application with chart helms of the branch: $name_branch"
                      if [ "$name_branch"=="develop" ]; 
                      then                      
-                        echo  "\n### Déploiement sur l'environnement DEV";
+                        echo  "\n### 50_01) Déploiement sur l'environnement DEV";
                         echo  "\n\n### Choose context deops-$name_branch defined on kubeconfig file of the cluster minikube with user minikube";
                         kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE config use-context devops-$name_branch;
                         kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE config get-contexts;
@@ -318,7 +318,7 @@ pipeline {
                         pwd;
                      elif [ "$name_branch"=="qa" ]; 
                      then    
-                        echo  "\n\n### Déploiement sur l'environnement QA";
+                        echo  "\n\n### 50_02)) Déploiement sur l'environnement QA";
                         echo  "\n\n### Choose context deops-$name_branch defined on kubeconfig file of the cluster minikube with user minikube";
                         kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE config use-context devops-$name_branch;
                         kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE config get-contexts;
@@ -327,7 +327,7 @@ pipeline {
                         pwd;
                      elif [ "$name_branch"=="staging" ]; 
                      then  
-                        echo  "\n\n### Déploiement sur l'environnement STAGING";
+                        echo  "\n\n### 50_03) Déploiement sur l'environnement STAGING";
                         echo  "\n\n### Choose context deops-$name_branch defined on kubeconfig file of the cluster minikube with user minikube";
                         kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE config use-context devops-$name_branch;
                         kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE config get-contexts;
@@ -336,7 +336,7 @@ pipeline {
                         pwd;
                      elif [ "$name_branch"=="main" ]; 
                      then  
-                        echo  "\n\n### Déploiement sur l'environnement PROD";
+                        echo  "\n\n### 50_04) Déploiement sur l'environnement PROD";
                         echo  "\n\n###// Create an Approval Button with a timeout of 15minutes.";
                         echo  "\n\n###// this require a manuel validation in order to deploy on production environment";
                         echo  "\n\n### Choose context deops-$name_branch defined on kubeconfig file of the cluster minikube with user minikube";
@@ -346,139 +346,139 @@ pipeline {
                         hostname -I;
                         pwd;
                       else
-                        echo  "\n\n### Branche $name_branch non configurée pour ce pipeline de déploiement"
+                        echo  "\n\n### 50_05) Branche $name_branch non configurée pour ce pipeline de déploiement"
                       fi
 
-                      echo  "\n\n################### DEPLOY ALL CHARTS HELM ON ENVIRONMENT ON RIGHT BRANCH ##############################"
+                      echo  "\n\n################### 50_10) DEPLOY ALL CHARTS HELM ON ENVIRONMENT ON RIGHT BRANCH ##############################"
 
 
-                      echo  "\n\n######################## DEPLOY CAST-DB" 
-                      echo  "\n\n### Before to deploy cast-db-$name_branch on the branch: $name_branch on the environment:  $name_branch, list nodes and all elements existant on the minikube cluster  with cmd : \n$: kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get nodes; kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get all -n $name_branch -o wide;";
+                      echo  "\n\n######################## 50_11_00) DEPLOY CAST-DB" 
+                      echo  "\n\n### 50_11_01) Before to deploy cast-db-$name_branch on the branch: $name_branch on the environment:  $name_branch, list nodes and all elements existant on the minikube cluster  with cmd : \n$: kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get nodes; kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get all -n $name_branch -o wide;";
                       kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get nodes;
                       kubectl --kubeconfig $URL_FILE_CONFIG_MINIKUBE get all -n $name_branch -o wide;
 
-                      echo  "\n\n### Place on the right directory before to deploy cast-db on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: cd \"$URL_REPO_GH_LOCAL/dm-jenkins-cpa/cast-service/helm/cast-db\"; pwd;";
+                      echo  "\n\n### 50_11_02) Place on the right directory before to deploy cast-db on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: cd \"$URL_REPO_GH_LOCAL/dm-jenkins-cpa/cast-service/helm/cast-db\"; pwd;";
                       cd "$URL_REPO_GH_LOCAL/dm-jenkins-cpa/cast-service/helm/cast-db";
                       pwd;
                       
-                      echo  "\n\n### Deploy cast-db on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE upgrade --install cast-db-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml; sleep 10;";
+                      echo  "\n\n### 50_11_03) Deploy cast-db on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE upgrade --install cast-db-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml; sleep 10;";
                       helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE upgrade --install cast-db-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml .;
                       sleep 10;
 
-                      echo  "\n\n###  List all deployments on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls -n develop;";
+                      echo  "\n\n### 50_11_04) List all deployments on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls -n develop;";
                       helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls -A;
 
-                      echo  "\n\n### Test with a sql query after to have deployed cast-db on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: kubectl exec -t cast-db-postgres-0 -n $name_branch -- /bin/bash -c \"psql -h localhost -p 5432 -U fastapi_user -d fastapi_db -c \'select * from pg_database\'\"";
+                      echo  "\n\n### 50_11_05) Test with a sql query after to have deployed cast-db on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: kubectl exec -t cast-db-postgres-0 -n $name_branch -- /bin/bash -c \"psql -h localhost -p 5432 -U fastapi_user -d fastapi_db -c \'select * from pg_database\'\"";
                       kubectl exec -t cast-db-$name_branch-0 -n $name_branch -- /bin/bash -c "psql -h localhost -p 5432 -U cast_fastapi_user_$name_branch -d cast_fastapi_db_$name_branch -c 'select * from pg_database'"
                      
 
-                      echo  "\n\n######################## DEPLOY CAST-FASTAPI"
-                      echo  "\n\n### Place on the right directory before to deploy cast-fastapi-$name_branch on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: cd \"$URL_REPO_GH_LOCAL/dm-jenkins-cpa/cast-service/helm/cast-fastapi\"; pwd;";
+                      echo  "\n\n######################## 50_12_00) DEPLOY CAST-FASTAPI"
+                      echo  "\n\n###  50_12_01) Place on the right directory before to deploy cast-fastapi-$name_branch on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: cd \"$URL_REPO_GH_LOCAL/dm-jenkins-cpa/cast-service/helm/cast-fastapi\"; pwd;";
                       cd "$URL_REPO_GH_LOCAL/dm-jenkins-cpa/cast-service/helm/cast-fastapi";
                       pwd;
                       
-                      echo  "\n\n### Deploy cast-fastapi on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE upgrade --install cast-fastapi-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml; sleep 10;";
+                      echo  "\n\n### 50_12_02) Deploy cast-fastapi on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE upgrade --install cast-fastapi-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml; sleep 10;";
                       helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE upgrade --install cast-fastapi-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml .;
                       sleep 10;
 
-                      echo  "\n\n###  List all deployments on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls -n develop;";
+                      echo  "\n\n### 50_12_03)  List all deployments on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls -n develop;";
                       helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls -n develop;
 
-                      echo  "\n\n### Test with a cmd curl after to have deployed cast-FASTAPI on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: kubectl run --rm -it  --tty pingkungcurl1 --image=curlimages/curl --namespace develop --restart=Never -- cast-fastapi-service:5001/api/v1/casts/docs";
+                      echo  "\n\n### 50_12_04) Test with a cmd curl after to have deployed cast-FASTAPI on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: kubectl run --rm -it  --tty pingkungcurl1 --image=curlimages/curl --namespace develop --restart=Never -- cast-fastapi-service:5001/api/v1/casts/docs";
                       kubectl run --rm -it  --tty pingkungcurl1 --image=curlimages/curl --namespace develop --restart=Never -- cast-fastapi-service:5001/api/v1/casts/docs
                       
                       
-                      echo  "\n\n######################## DEPLOY MOVIE-DB "
-                      echo  "\n\n### Place on the right directory before to deploy movie-db-$name_branch on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: cd \"$URL_REPO_GH_LOCAL/dm-jenkins-cpa/movie-service/helm/movie-db\"; pwd;";
+                      echo  "\n\n######################## 50_13_00) DEPLOY MOVIE-DB "
+                      echo  "\n\n### 50_30_01) Place on the right directory before to deploy movie-db-$name_branch on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: cd \"$URL_REPO_GH_LOCAL/dm-jenkins-cpa/movie-service/helm/movie-db\"; pwd;";
                       cd "$URL_REPO_GH_LOCAL/dm-jenkins-cpa/movie-service/helm/movie-db";
                       pwd;
                       
-                      echo  "\n\n### Deploy movie-db on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE upgrade --install movie-db-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml; sleep 10;";
+                      echo  "\n\n### 50_13_02) Deploy movie-db on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE upgrade --install movie-db-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml; sleep 10;";
                       helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE upgrade --install movie-db-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml .;
                       sleep 10;
 
-                      echo  "\n\n###  List all deployments on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls -n develop;";
+                      echo  "\n\n### 50_13_03) List all deployments on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls -n develop;";
                       helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls -n develop;
 
-                      echo  "\n\n### Test with a sql query after to have deployed movie-db on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: kubectl exec -t movie-db-postgres-0 -n $name_branch -- /bin/bash -c \"psql -h localhost -p 5432 -U fastapi_user -d fastapi_db -c \'select * from pg_database\'\"";
+                      echo  "\n\n### 50_13_04) Test with a sql query after to have deployed movie-db on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: kubectl exec -t movie-db-postgres-0 -n $name_branch -- /bin/bash -c \"psql -h localhost -p 5432 -U fastapi_user -d fastapi_db -c \'select * from pg_database\'\"";
                       kubectl exec -t movie-db-$name_branch-0 -n $name_branch -- /bin/bash -c "psql -h localhost -p 5432 -U movie_fastapi_user_$name_branch -d movie_fastapi_db_$name_branch -c 'select * from pg_database'"
 
 
-                      echo  "\n\n######################## DEPLOY MOVIE-FASTAPI"
-                      echo  "\n\n### Place on the right directory before to deploy movie-fastapi on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: cd \"$URL_REPO_GH_LOCAL/dm-jenkins-cpa/movie-service/helm/movie-fastapi\"; pwd;";
+                      echo  "\n\n######################## 50_14_00) DEPLOY MOVIE-FASTAPI"
+                      echo  "\n\n### 50_14_01) Place on the right directory before to deploy movie-fastapi on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: cd \"$URL_REPO_GH_LOCAL/dm-jenkins-cpa/movie-service/helm/movie-fastapi\"; pwd;";
                       cd "$URL_REPO_GH_LOCAL/dm-jenkins-cpa/movie-service/helm/movie-fastapi";
                       pwd;
                       
-                      echo  "\n\n### Deploy movie-fastapi on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE upgrade --install movie-fastapi-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml; sleep 10;";
+                      echo  "\n\n### 50_14_02) Deploy movie-fastapi on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE upgrade --install movie-fastapi-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml; sleep 10;";
                       helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE upgrade --install movie-fastapi-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml .;
                       sleep 10;
 
-                      echo  "\n\n###  List all deployments on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls -n develop;";
+                      echo  "\n\n### 50_14_03) List all deployments on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls -n develop;";
                       helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls -n develop;
 
-                      echo  "\n\n### Test with a cmd curl after to have deployed movie-fastapi-$name_branch on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: kubectl run --rm -it  --tty pingkungcurl2 --image=curlimages/curl --namespace develop --restart=Never -- movie-fastapi-service:5000/api/v1/movies/docs";
+                      echo  "\n\n### 50_14_04) Test with a cmd curl after to have deployed movie-fastapi-$name_branch on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: kubectl run --rm -it  --tty pingkungcurl2 --image=curlimages/curl --namespace develop --restart=Never -- movie-fastapi-service:5000/api/v1/movies/docs";
                       kubectl run --rm -it  --tty pingkungcurl2 --image=curlimages/curl --namespace develop --restart=Never -- movie-fastapi-service:5000/api/v1/movies/docs
 
-                      echo  "\n\n######################## DEPLOY NGINX-WEB"
-                      echo  "\n\n### Place on the right directory before to deploy nginx-web on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: cd \"$URL_REPO_GH_LOCAL/dm-jenkins-cpa/movie-service/helm/movie-fastapi\"; pwd;";
+                      echo  "\n\n######################## 50_15_00) DEPLOY NGINX-WEB"
+                      echo  "\n\n### 50_15_01) Place on the right directory before to deploy nginx-web on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: cd \"$URL_REPO_GH_LOCAL/dm-jenkins-cpa/movie-service/helm/movie-fastapi\"; pwd;";
                       cd "$URL_REPO_GH_LOCAL/dm-jenkins-cpa/web/helm/nginx-chart";
                       pwd;
                       
-                       echo  "\n\n### Deploy nginx on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE upgrade --install nginx-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml; sleep 10;";
+                       echo  "\n\n### 50_15_02) Deploy nginx on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE upgrade --install nginx-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml; sleep 10;";
                       helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE upgrade --install nginx-$name_branch --namespace $name_branch --create-namespace --values=values-$name_branch.yml .;
                       sleep 10;
 
-                      echo  "\n\n###  List all deployments on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls -n develop;";
+                      echo  "\n\n### 50_15_03) List all deployments on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls -n develop;";
                       helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls -n develop;
 
-                      echo  "\n\n### Test with a cmd curl after to have deployed nginx-$name_branch on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: kubectl run --rm -it  --tty pingkungcurl3 --image=curlimages/curl --namespace develop --restart=Never -- nginx-svc:80/";
+                      echo  "\n\n### 50_15_04) Test with a cmd curl after to have deployed nginx-$name_branch on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: kubectl run --rm -it  --tty pingkungcurl3 --image=curlimages/curl --namespace develop --restart=Never -- nginx-svc:80/";
                       kubectl run --rm -it  --tty pingkungcurl3 --image=curlimages/curl --namespace develop --restart=Never -- nginx-svc:80/
 
-                      echo  "\n\n### Test with a cmd curl after to have deployed nginx-$name_branch on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: kubectl run --rm -it  --tty pingkungcurl3 --image=curlimages/curl --namespace develop --restart=Never -- nginx-svc:80/api/v1/casts/docs/";
+                      echo  "\n\n### 50_15_05) Test with a cmd curl after to have deployed nginx-$name_branch on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: kubectl run --rm -it  --tty pingkungcurl3 --image=curlimages/curl --namespace develop --restart=Never -- nginx-svc:80/api/v1/casts/docs/";
                       kubectl run --rm -it  --tty pingkungcurl3 --image=curlimages/curl --namespace develop --restart=Never -- nginx-svc:80/api/v1/casts/docs/
                       
-                      echo  "\n\n### Test with a cmd curl after to have deployed nginx-$name_branch on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: kubectl run --rm -it  --tty pingkungcurl3 --image=curlimages/curl --namespace develop --restart=Never -- nginx-svc:80//api/v1/movies/docs/";
+                      echo  "\n\n### 50_15_06) Test with a cmd curl after to have deployed nginx-$name_branch on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: kubectl run --rm -it  --tty pingkungcurl3 --image=curlimages/curl --namespace develop --restart=Never -- nginx-svc:80//api/v1/movies/docs/";
                       kubectl run --rm -it  --tty pingkungcurl3 --image=curlimages/curl --namespace develop --restart=Never -- nginx-svc:80/api/v1/movies/docs/
 
-                      echo  "\n\n######################## DELETE ALL HELM DEPLOYMENT #####################################"
+                      echo  "\n\n######################## 50_20) DELETE ALL HELM DEPLOYMENT #####################################"
                       
-                      echo  "\n\n######################## DELETE CAST-DB" 
-                      echo  "\n\n### Place at the right directory before deploying cast-db on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: cd \"$URL_REPO_GH_LOCAL/dm-jenkins-cpa/cast-service/helm/cast-db\"; pwd;";
+                      echo  "\n\n######################## 50_21_00) DELETE CAST-DB" 
+                      echo  "\n\n### 50_21_01) Place at the right directory before deploying cast-db on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: cd \"$URL_REPO_GH_LOCAL/dm-jenkins-cpa/cast-service/helm/cast-db\"; pwd;";
                       cd "$URL_REPO_GH_LOCAL/dm-jenkins-cpa/cast-service/helm/cast-db";
                       pwd;
 
-                      echo  "\n\n### Delete the helm chart cast-db-$name_branch deployment on the branch: $name_branch on the environement:  $name_branch, with cmd : \n$:helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE uninstall cast-db-$name_branch --namespace $name_branch;sleep 10; ";
+                      echo  "\n\n### 50_21_02) Delete the helm chart cast-db-$name_branch deployment on the branch: $name_branch on the environement:  $name_branch, with cmd : \n$:helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE uninstall cast-db-$name_branch --namespace $name_branch;sleep 10; ";
                       echo "helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE uninstall cast-db-$name_branch --namespace $name_branch;"
                       echo "sleep 10;"
                       
-                      echo  "\n\n### Verify deleting the helm chart cast-db-$name_branch on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls -n develop;";
+                      echo  "\n\n### 50_21_03) Verify deleting the helm chart cast-db-$name_branch on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls -n develop;";
                       helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls -n develop;
 
 
-                      echo  "\n\n######################## DELETE CAST-FASTAPI"
+                      echo  "\n\n########################  50_22_00) DELETE CAST-FASTAPI"
                       
                       	
                       
-                      echo  "\n\n######################## DELETE MOVIE-DB" 
-                      echo  "\n\n### Place on the right directory before to deploy movie-db on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: cd \"$URL_REPO_GH_LOCAL/dm-jenkins-cpa/movie-service/helm/movie-db\"; pwd;";
+                      echo  "\n\n######################## 50_23_00) DELETE MOVIE-DB" 
+                      echo  "\n\n### 50_23_01) Place on the right directory before to deploy movie-db on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: cd \"$URL_REPO_GH_LOCAL/dm-jenkins-cpa/movie-service/helm/movie-db\"; pwd;";
                       cd "$URL_REPO_GH_LOCAL/dm-jenkins-cpa/movie-service/helm/movie-db";
                       pwd;
 
-                      echo  "\n\n### Delete the helm chart movie-db-$name_branch deployment on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$:helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE uninstall movie-db-$name_branch --namespace $name_branch;sleep 10; ";
+                      echo  "\n\n### 50_2"_02) Delete the helm chart movie-db-$name_branch deployment on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$:helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE uninstall movie-db-$name_branch --namespace $name_branch;sleep 10; ";
                       echo "helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE uninstall movie-db-$name_branch --namespace $name_branch;"
                       echo "sleep 10;"
                       
-                      echo  "\n\n### Verify deleting the helm chart movie-db-$name_branch on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls -n develop;";
+                      echo  "\n\n### 50_23_03) Verify deleting the helm chart movie-db-$name_branch on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls -n develop;";
                       helm --kubeconfig $URL_FILE_CONFIG_MINIKUBE ls -n develop;
                       
                       
                       
-                      echo  "\n\n######################## DELETE MOVIE-FASTAPI"
+                      echo  "\n\n######################## 50_24_00) DELETE MOVIE-FASTAPI"
                       
                       
                       
                       
-                      echo  "\n\n######################## DELETE PROXY-NGINX-WEB" 
+                      echo  "\n\n######################## 50_25_00)  DELETE PROXY-NGINX-WEB" 
 
                       '''
                     }
