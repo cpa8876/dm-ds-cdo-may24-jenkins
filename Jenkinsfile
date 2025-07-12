@@ -65,7 +65,7 @@ pipeline {
           '''
         }
       }
-    stage('Docker run'){ // run container from our builded image
+    stage('20_Docker run'){ // run container from our builded image
       steps {
         script {// docker run --network=dm-jenkins-cpa-infra_my-net -d -p 8800:5000 --name my-ctnr-ds-fastapi $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG
                     // docker rm -f $(docker ps -aq); docker network rm dm-jenkins-cpa-infra_my-net
@@ -77,7 +77,7 @@ pipeline {
             }
          }
       }
-    stage('20_Test Acceptance'){ // we launch the curl command to validate that the container responds to the request
+    stage('30_Test Acceptance'){ // we launch the curl command to validate that the container responds to the request
       steps {
         script {//curl localhost or curl 127.0.0.1:8480 "curl -svo /dev/null http://localhost" or docker exec -it my-ctnr-ds-fastapi curl localhost
           sh '''
@@ -252,7 +252,7 @@ pipeline {
           }
         }
       }
-    stage('30_Docker Push'){ //we pass the built image to our docker hub account
+    stage('40_Docker Push'){ //we pass the built image to our docker hub account
       environment
         {
           DOCKER_PASS = credentials("DOCKER_HUB_PASS") // we retrieve  docker password from secret text called docker_hub_pass saved on jenkins
@@ -280,7 +280,7 @@ pipeline {
           }
         }
       }
-     stage('40_Deploy') {
+     stage('50_Deploy') {
             environment {
                       KUBECONFIG = credentials("config") // we retrieve  kubeconfig from secret file called config saved on jenkins
                     }
