@@ -3,10 +3,20 @@
 ### https://stackoverflow.com/questions/56243121/can-i-set-custom-ports-for-a-kubernetes-ingress-to-listen-on-besides-80-443
 #### If you're using Helm to deploy the Kubernetes ingress-nginx controller, 
 #### you can do this to change the ports from their defaults of 80 and 443 in a Helm values override file:
-ingress-nginx:
-  enabled: true
-  controller:
-    service:
-      ports:
-        http: 8080
-        https: 8443
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: example-ingress
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: nginx-develop-svc
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: web
+            port:
+              number: 8080
