@@ -1,0 +1,46 @@
+# /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins/dm-jenkins-cpa/web/helm/nginx-chart/templates/ingress.yaml
+##
+# /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins/dm-jenkins-cpa/web/helm/nginx-chart/templates/deployment.yaml
+# ################################################################
+# ################################ BIBLIO
+# ################ #  Medium B12-11-01) Unlocking the Magic: Setting Up Ingress on Minikube with NGINX Ingress Controller 🚀; Saurabh-DevOpsVoyager77; Saurabh-DevOpsVoyager77; Follow; 6 min read; · ;Oct 30, 2023
+### https://medium.com/@saurabh_adhau/unlocking-the-magic-setting-up-ingress-on-minikube-with-nginx-ingress-controller-520ce1c3c3bc
+#### curl - resolve "hello-world.info:80:$(minikube ip)" -i http://hello-world.info
+#### curl --resolve "dm-jenkins.info:80:$(minikube ip)" -i http://dm-jenkins.info
+################################
+# ################################################################
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: example-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+  namespace: develop
+spec:
+  rules:
+    - host: dm-jenkins.info
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: nginx-develop-svc
+                port:
+                  number: 80
+          - path: /api/v1/casts/
+            pathType: Prefix
+            backend:
+              service:
+                name: cast-fastapi-service
+                port:
+                  number: 5001
+          - path: /api/v1/movies/
+            pathType: Prefix
+            backend:
+              service:
+                name: movie-fastapi-service
+                port:
+                  number: 5000

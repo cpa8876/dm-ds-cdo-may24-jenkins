@@ -23,6 +23,7 @@ cast_fastapi:
 
 services:
   cast_fastapi:
+    typeport: NodePort  # ClusterIP
     port: 5001
   cast_db:
     port: 5432
