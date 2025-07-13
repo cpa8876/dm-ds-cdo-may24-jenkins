@@ -439,12 +439,12 @@ pipeline {
                       echo  "\n\n### 50_15_04) Test with a cmd curl after to have deployed nginx-$name_branch on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: kubectl run --rm -it  --tty pingkungcurl3 --image=curlimages/curl --namespace develop --restart=Never -- nginx-$name_branch-svc:$podPortNginx/";
                       kubectl run --rm -it  --tty pingkungcurl3 --image=curlimages/curl --namespace develop --restart=Never -- nginx-$name_branch-svc:$podPortNginx/
                       
-                     echo  "\n\n### 50_15_05) Test with a cmd curl after to have deployed cast-fastapi-$name_branch on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: kubectl run --rm -it  --tty pingkungcurl4 --image=curlimages/curl --namespace develop --restart=Never -- cast-fastapi-service:$podPortcast/";
-                      kubectl run --rm -it  --tty pingkungcurl4 --image=curlimages/curl --namespace develop --restart=Never -- cast-fastapi-service:$podPortcast/
+                     echo  "\n\n### 50_15_05) Test with a cmd curl after to have deployed cast-fastapi-$name_branch on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: kubectl run --rm -it  --tty pingkungcurl4 --image=curlimages/curl --namespace develop --restart=Never -- cast-fastapi-service:$podPort/casts/api/v1/casts/docs";
+                      kubectl run --rm -it  --tty pingkungcurl4 --image=curlimages/curl --namespace develop --restart=Never -- cast-fastapi-service:$podPort/api/v1/casts/docs
                       
 
-                     echo  "\n\n### 50_15_06) Test with a cmd curl after to have deployed movie-fastapi-$name_branch on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: kubectl run --rm -it  --tty pingkungcurl5 --image=curlimages/curl --namespace develop --restart=Never -- movie-fastapi-service:$podPortmovie/";
-                      kubectl run --rm -it  --tty pingkungcurl5 --image=curlimages/curl --namespace develop --restart=Never -- movie-fastapi-service:$podPortmovie/
+                     echo  "\n\n### 50_15_06) Test with a cmd curl after to have deployed movie-fastapi-$name_branch on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: kubectl run --rm -it  --tty pingkungcurl5 --image=curlimages/curl --namespace develop --restart=Never -- movie-fastapi-service:$podPortmovie/api/v1/movies/docs";
+                      kubectl run --rm -it  --tty pingkungcurl5 --image=curlimages/curl --namespace develop --restart=Never -- movie-fastapi-service:$podPortmovie/api/v1/movies/docs
                      
                       
                       echo  "\n\n### 50_15_07) Pour aller plus loin : Test depuis la VM mlinikube  with a cmd curl after to have deployed nginx-$name_branch on the branch: $name_branch on the environment:  $name_branch, Execute on the VM minikube execute the follow cmd : \n$: curl --resolve "dm-jenkins.info:80:$(minikube ip)" -i http://dm-jenkins.info/";
