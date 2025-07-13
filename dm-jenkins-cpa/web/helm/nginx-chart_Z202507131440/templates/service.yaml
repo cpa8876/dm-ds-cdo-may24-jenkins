@@ -1,0 +1,28 @@
+# /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins/dm-jenkins-cpa/web/helm/nginx-chart/templates/service.yaml
+# ################################################################
+# ################################ BIBLIO
+# ################ # Minikube_B12-02) Deploying Nginx on Kubernetes: Exploring Various Methods > 7. Helm; Mastering Nginx Deployment in Kubernetes: A Comprehensive Guide to Pods, Deployments, and Beyond; Anvesh Muppeda; Anvesh Muppeda; 12 min read; Jan 13, 2024
+## https://medium.com/@muppedaanvesh/deploying-nginx-on-kubernetes-a-quick-guide-04d533414967 
+################################
+################ #  Minikube_B12-03) How to Create and Deploy an NGINX Proxy Helm Chart on Kubernetes; Posted on 01 August 2024
+### https://vsys.host/how-to/how-to-create-and-deploy-an-nginx-proxy-helm-chart-on-kubernetes
+#### 3. Update Service Template:    Replace the content of `templates/service.yaml` with the following:
+# ################################################################
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-svc
+  labels:
+    {{- include "nginx-chart.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+      # nodePort: {{ .Values.nodePort }}
+  selector:
+    {{- include "nginx-chart.selectorLabels" . | nindent 4 }}
+---
