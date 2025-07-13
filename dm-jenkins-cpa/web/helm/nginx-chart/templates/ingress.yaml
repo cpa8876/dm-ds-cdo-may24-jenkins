@@ -1,22 +1,23 @@
 # /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins/dm-jenkins-cpa/web/helm/nginx-chart/templates/ingress.yaml
-## Can I set custom ports for a Kubernetes ingress to listen on besides 80 / 443?
-### https://stackoverflow.com/questions/56243121/can-i-set-custom-ports-for-a-kubernetes-ingress-to-listen-on-besides-80-443
-#### If you're using Helm to deploy the Kubernetes ingress-nginx controller, 
-#### you can do this to change the ports from their defaults of 80 and 443 in a Helm values override file:
+## Search Brave with words : Deploy nginx on port 8080 helm
+### https://search.brave.com/search?q=Deploy+nginx+on+port+8080+helm&summary=1&conversation=d49e0204c1c20b7bb0fb8c
+#### Create an Ingress resource: Create an Ingress resource to route traffic to your application. 
+#### For example, create a file named nginx-ingress.yaml with the following content:
+---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: example-ingress
+  name: ingress-develop
 spec:
   ingressClassName: nginx
   rules:
-  - host: nginx-develop-svc
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: web
-            port:
-              number: 8080
+    - http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: nginx-develop-svc
+                port:
+                  number: 80
+---

@@ -24,7 +24,7 @@ pipeline {
     URL_REP_HELM_FAT_MOVIE_SERVICE="$URL_REP_HELM_FAT/movie-service/helm/movie-fastapi"      // Directory containned chart helm of fastapi-movie_service 
     URL_FILE_CONFIG_MINIKUBE="/home/jenkins/.minikube/config"              // Url file of config to enable connect on minikube cluster
     name_branch0="${env.ref}"
-    podPortNginx="8080"
+    podPortNginx="80"
     nodePortNginx="30000"
     // KUBE_CONTEXT="devops-$name_branch"
     // KUBE_NAMESPACE="$name_branch"
