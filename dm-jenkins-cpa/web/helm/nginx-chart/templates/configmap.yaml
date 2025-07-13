@@ -4,17 +4,26 @@ kind: ConfigMap
 metadata:
   name: nginx-default-conf
 data:
-  default.conf: |-
+  default.conf: |
     server {
         listen 80;
         server_name example.com;
-
+        proxy_hide_header Server;
+        add_header Server nginx always;
+        
+        location /api/v1/movies {
+            proxy_pass http://movie-develop-service:5000/api/v1/movies/;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
+        
         location / {
             root /usr/share/nginx/html;
             index index.html;
             try_files $uri $uri/ =404;
         }
-        location /api/v1/movies {
-            proxy_pass http://movie-develop-service:5000/api/v1/movies;
-        }
-  }
+
+    }
+
