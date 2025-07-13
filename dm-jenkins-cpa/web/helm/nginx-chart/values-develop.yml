@@ -1,11 +1,7 @@
 # /home/cpa/Documents/CPA/44_JENKINS/DM.JENKINS/DM-SP04-C04-JENKINS-CPA-MAY2024/dm-ds-cdo-may24-jenkins/dm-jenkins-cpa/web/helm/nginx-chart/values-develop.yml
 # Minikube_B09) Deploying Nginx on Kubernetes: Exploring Various Methods > 7. Helm; Mastering Nginx Deployment in Kubernetes: A Comprehensive Guide to Pods, Deployments, and Beyond; Anvesh Muppeda; Anvesh Muppeda; 12 min read; Jan 13, 2024
 ## https://medium.com/@muppedaanvesh/deploying-nginx-on-kubernetes-a-quick-guide-04d533414967 
-################################
-################ #  Minikube_B12-10-04) github/charts/stable/nextcloud/values.yaml
-### https://github.com/helm/charts/blob/master/stable/nextcloud/values.yaml
-#### values.yaml
-# ################################################################
+### 
 
 # Default values for nginx-chart.
 # This is a YAML-formatted file.
@@ -22,29 +18,3 @@ image:
 service:
   type: NodePort
   port: 80
-  
-movie_service:
-  host: movie-fastapi-service
-  port: 5000
-  path: /api/v1/movies
-
-cast_service:
-  host: cast-fastapi-service
-  port: 5001
-  path: /api/v1/casts
-
-nginx:
-  ## You need to set an fpm version of the image for nextcloud if you want to use nginx!
-  enabled: true
-  image:
-    repository: nginx
-    tag: alpine
-    pullPolicy: IfNotPresent
-
-  config:
-    # This generates the default nginx config as per the nextcloud documentation
-    default: true
-    # custom: |-
-    #     worker_processes  1;..
-
-  resources: {}
