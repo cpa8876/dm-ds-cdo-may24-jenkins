@@ -6,7 +6,7 @@ metadata:
   name: cast-fastapi-service
   namespace: {{ .Values.environment | quote }}
 spec:
-  type:  {{ .Values.services.cast_fastapi.typeport }}
+  type: ClusterIP
   selector:
     matchLabels:
       app: {{ .Release.Name }}-app

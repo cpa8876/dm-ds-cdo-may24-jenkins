@@ -14,11 +14,12 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: example-ingress
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /$1
+  name: dm-jenkins-ingress
+  # annotations:
+    # nginx.ingress.kubernetes.io/rewrite-target: /$1
   namespace: develop
 spec:
+  ingressClassName: nginx
   rules:
     - host: dm-jenkins.info
       http:
