@@ -13,8 +13,6 @@
 #### nginx-config.yaml
 ################################
 # ################################################################
----
-{{- if .Values.nginx.enabled -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -75,8 +73,3 @@ data:
            #    deny  all;
            #}
      }
-{{- else }}
-{{ .Values.nginx.config.custom | indent 4 }}
-{{- end }}
-{{- end }}
----
