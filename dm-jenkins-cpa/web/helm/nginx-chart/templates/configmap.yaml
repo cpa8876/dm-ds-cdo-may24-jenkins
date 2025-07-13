@@ -18,4 +18,3 @@ data:
             proxy_pass http://movie-develop-service:5000/api/v1/movies;
         }
   }
-    }
