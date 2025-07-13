@@ -16,6 +16,6 @@ image:
   tag: ""
 
 service:
-  type: NodePort
+  type: ClusterIP
   port: 8080
   targetport: 8080
