@@ -25,7 +25,10 @@ pipeline {
     URL_FILE_CONFIG_MINIKUBE="/home/jenkins/.minikube/config"              // Url file of config to enable connect on minikube cluster
     name_branch0="${env.ref}"
     podPortNginx="80"
+    podPortcast="5001"
+    podPortmovie="5000"
     nodePortNginx="30000"
+    
     // KUBE_CONTEXT="devops-$name_branch"
     // KUBE_NAMESPACE="$name_branch"
     // HELM_VALUES_FILE="value-$name_branch.yaml"
@@ -436,14 +439,130 @@ pipeline {
                       echo  "\n\n### 50_15_04) Test with a cmd curl after to have deployed nginx-$name_branch on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: kubectl run --rm -it  --tty pingkungcurl3 --image=curlimages/curl --namespace develop --restart=Never -- nginx-$name_branch-svc:$podPortNginx/";
                       kubectl run --rm -it  --tty pingkungcurl3 --image=curlimages/curl --namespace develop --restart=Never -- nginx-$name_branch-svc:$podPortNginx/
                       
-                      echo  "\n\n### 50_15_05) Test with a cmd curl after to have deployed nginx-$name_branch on the branch: $name_branch on the environment:  $name_branch, Execute on the VM hosted minikube the follow cmd : \n$: ip_minikube=\"$(kubectl get nodes -o wide --no-headers=true | awk '{ print $6 }')\"; \n curl -Lk "$(kubectl get nodes -o wide --no-headers=true | awk '{ print $6 }')\":$nodePortNginx/";
+                     echo  "\n\n### 50_15_05) Test with a cmd curl after to have deployed cast-fastapi-$name_branch on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: kubectl run --rm -it  --tty pingkungcurl4 --image=curlimages/curl --namespace develop --restart=Never -- cast-fastapi-service:$podPortcast/";
+                      kubectl run --rm -it  --tty pingkungcurl4 --image=curlimages/curl --namespace develop --restart=Never -- cast-fastapi-service:$podPortcast/
                       
 
-                      echo  "\n\n### 50_15_06) Test with a cmd curl after to have deployed nginx-$name_branch on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: kubectl run --rm -it  --tty pingkungcurl3 --image=curlimages/curl --namespace develop --restart=Never -- nginx-svc:$podPortNginx/api/v1/casts/docs/";
-                      kubectl run --rm -it  --tty pingkungcurl4 --image=curlimages/curl --namespace develop --restart=Never -- nginx-$name_branch-svc:$podPortNginx/api/v1/casts/docs/
+                     echo  "\n\n### 50_15_06) Test with a cmd curl after to have deployed movie-fastapi-$name_branch on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: kubectl run --rm -it  --tty pingkungcurl5 --image=curlimages/curl --namespace develop --restart=Never -- movie-fastapi-service:$podPortmovie/";
+                      kubectl run --rm -it  --tty pingkungcurl5 --image=curlimages/curl --namespace develop --restart=Never -- movie-fastapi-service:$podPortmovie/
+                     
                       
-                      echo  "\n\n### 50_15_07) Test with a cmd curl after to have deployed nginx-$name_branch on the branch: $name_branch on the environment:  $name_branch, with cmd : \n$: kubectl run --rm -it  --tty pingkungcurl3 --image=curlimages/curl --namespace develop --restart=Never -- nginx-svc:$podPortNginx//api/v1/movies/docs/";
-                      kubectl run --rm -it  --tty pingkungcurl5 --image=curlimages/curl --namespace develop --restart=Never -- nginx-$name_branch-svc:$podPortNginx/api/v1/movies/docs/
+                      echo  "\n\n### 50_15_07) Pour aller plus loin : Test depuis la VM mlinikube  with a cmd curl after to have deployed nginx-$name_branch on the branch: $name_branch on the environment:  $name_branch, Execute on the VM minikube execute the follow cmd : \n$: curl --resolve "dm-jenkins.info:80:$(minikube ip)" -i http://dm-jenkins.info/";
+                      echo -e "\n\n###Reponse attendue : \n     cpa@debian-pve:~$ curl --resolve "dm-jenkins.info:80:$(minikube ip)" -i http://dm-jenkins.info/
+HTTP/1.1 200 OK
+Date: Sun, 13 Jul 2025 23:03:47 GMT
+Content-Type: text/html
+Content-Length: 615
+Connection: keep-alive
+Last-Modified: Tue, 24 Jun 2025 17:22:41 GMT
+ETag: "685adee1-267"
+Accept-Ranges: bytes
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+<style>
+html { color-scheme: light dark; }
+body { width: 35em; margin: 0 auto;
+font-family: Tahoma, Verdana, Arial, sans-serif; }
+</style>
+</head>
+<body>
+<h1>Welcome to nginx!</h1>
+<p>If you see this page, the nginx web server is successfully installed and
+working. Further configuration is required.</p>
+
+<p>For online documentation and support please refer to
+<a href="http://nginx.org/">nginx.org</a>.<br/>
+Commercial support is available at
+<a href="http://nginx.com/">nginx.com</a>.</p>
+
+<p><em>Thank you for using nginx.</em></p>
+</body>
+</html>
+"
+                      
+
+                      echo  "\n\n### 50_15_08) Pour aller plus loin : Test depuis la VM mlinikube  with a cmd curl after to have deployed nginx-$name_branch on the branch: $name_branch on the environment:  $name_branch, Execute on the VM minikube execute the follow cmd : \n$:curl --resolve "dm-jenkins.info:80:$(minikube ip)" -i http://dm-jenkins.info/api/v1/movies/docs
+";
+                      echo -e "\n\n###Reponse attendue : \n    cpa@debian-pve:~$ curl --resolve "dm-jenkins.info:80:$(minikube ip)" -i http://dm-jenkins.info/api/v1/movies/docs
+HTTP/1.1 200 OK
+Date: Sun, 13 Jul 2025 23:05:20 GMT
+Content-Type: text/html; charset=utf-8
+Content-Length: 912
+Connection: keep-alive
+
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swagger-ui-dist@3/swagger-ui.css">
+    <link rel="shortcut icon" href="https://fastapi.tiangolo.com/img/favicon.png">
+    <title>FastAPI - Swagger UI</title>
+    </head>
+    <body>
+    <div id="swagger-ui">
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@3/swagger-ui-bundle.js"></script>
+    <!-- `SwaggerUIBundle` is now available on the page -->
+    <script>
+    const ui = SwaggerUIBundle({
+        url: '/api/v1/movies/openapi.json',
+    oauth2RedirectUrl: window.location.origin + '/docs/oauth2-redirect',
+        dom_id: '#swagger-ui',
+        presets: [
+        SwaggerUIBundle.presets.apis,
+        SwaggerUIBundle.SwaggerUIStandalonePreset
+        ],
+        layout: "BaseLayout",
+        deepLinking: true
+    })
+    </script>
+    </body>
+    </html>
+"
+                      
+
+                     echo  "\n\n### 50_15_09) Pour aller plus loin : Test depuis la VM mlinikube  with a cmd curl after to have deployed nginx-$name_branch on the branch: $name_branch on the environment:  $name_branch, Execute on the VM minikube execute the follow cmd : \n$: curl --resolve "dm-jenkins.info:80:$(minikube ip)" -i http://dm-jenkins.info/api/v1/casts/docs";
+                      echo -e "\n\n###Reponse attendue : \n        cpa@debian-pve:~$ curl --resolve "dm-jenkins.info:80:$(minikube ip)" -i http://dm-jenkins.info/api/v1/casts/docs
+HTTP/1.1 200 OK
+Date: Sun, 13 Jul 2025 23:05:59 GMT
+Content-Type: text/html; charset=utf-8
+Content-Length: 911
+Connection: keep-alive
+
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swagger-ui-dist@3/swagger-ui.css">
+    <link rel="shortcut icon" href="https://fastapi.tiangolo.com/img/favicon.png">
+    <title>FastAPI - Swagger UI</title>
+    </head>
+    <body>
+    <div id="swagger-ui">
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@3/swagger-ui-bundle.js"></script>
+    <!-- `SwaggerUIBundle` is now available on the page -->
+    <script>
+    const ui = SwaggerUIBundle({
+        url: '/api/v1/casts/openapi.json',
+    oauth2RedirectUrl: window.location.origin + '/docs/oauth2-redirect',
+        dom_id: '#swagger-ui',
+        presets: [
+        SwaggerUIBundle.presets.apis,
+        SwaggerUIBundle.SwaggerUIStandalonePreset
+        ],
+        layout: "BaseLayout",
+        deepLinking: true
+    })
+    </script>
+    </body>
+    </html>
+    cpa@debian-pve:~$ 
+
+"
 
                       echo  "\n\n######################## 50_20) DELETE ALL HELM DEPLOYMENT #####################################"
                       
