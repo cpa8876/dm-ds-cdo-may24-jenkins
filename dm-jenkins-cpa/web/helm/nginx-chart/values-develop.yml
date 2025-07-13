@@ -18,3 +18,13 @@ image:
 service:
   type: NodePort
   port: 80
+  
+movie_service:
+  host: movie-fastapi-service
+  port: 5000
+  path: /api/v1/movies
+
+cast_service:
+  host: cast-fastapi-service
+  port: 5001
+  path: /api/v1/casts
